@@ -10,6 +10,8 @@ namespace MobileSupport
 {
     public static class Storage
     {
+        private static readonly string JavaClassName = "jp.co.cyberagent.unitysupport.Storage";
+
         /// <summary>
         ///     Get usable space of internal storage.
         /// </summary>
@@ -23,7 +25,7 @@ namespace MobileSupport
 #endif
 
             using var activity = GetActivity();
-            using var storageClass = new AndroidJavaClass("jp.co.cyberagent.unity_mobile_support.Storage");
+            using var storageClass = new AndroidJavaClass(JavaClassName);
             return storageClass.CallStatic<long>("getInternalUsableSpace", activity, isAccurate, wantSpace);
         }
 
