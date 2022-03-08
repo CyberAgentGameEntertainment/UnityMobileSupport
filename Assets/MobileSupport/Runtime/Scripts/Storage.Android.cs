@@ -17,7 +17,7 @@ namespace MobileSupport
         /// </summary>
         /// <param name="isAccurate">set true for safe and accurate calculation, but pretty slow (for Android 8.0 or later)</param>
         /// <param name="wantSpace">delete caches for desired space (should also set isAccurate to true)</param>
-        /// <returns>bytes of usable space</returns>
+        /// <returns>Bytes of usable space. It will return -1 for internal error and in Unity editor.</returns>
         public static long GetInternalUsableSpace(bool isAccurate = false, long wantSpace = -1)
         {
 #if UNITY_EDITOR
