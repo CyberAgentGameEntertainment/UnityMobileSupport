@@ -1,0 +1,20 @@
+{
+  "name": "jp.co.cyberagent.sge.unity-mobile-support",
+  "displayName": "Mobile Support",
+  "version": "0.1.0",
+  "unity": "2019.4",
+  "description": "Tools to support mobile like iOS/Android.",
+  "keywords": [
+    "ios",
+    "android",
+    "mobile"
+  ],
+  "dependencies": {
+  },
+  "repository": {
+    "url": "https://github.com/SGE-CoreTech/unity-mobile-support",
+    "type": "git"
+  },
+  "samples": [
+  ]
+}
