@@ -1,1 +1,1 @@
-Assets/MobileSupport/CHANGELOG.md
+Packages/MobileSupport/CHANGELOG.md

@@ -1,1 +1,1 @@
-Assets/MobileSupport/README.md
+Packages/MobileSupport/README.md
