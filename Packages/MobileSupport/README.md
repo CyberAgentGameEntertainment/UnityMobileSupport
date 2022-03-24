@@ -20,7 +20,6 @@ To support iOS/Android native features in Unity, this will provide variety funct
 - [Setup](#setup)
   - [Requirements](#requirements)
   - [Install](#install)
-- [About Lit Shader](#about-lit-shader)
 - [Licenses](#licenses)
 
 </details>
@@ -75,7 +74,7 @@ If you don't want to specify a version, you can also update the version by editi
 ```json
 {
   "dependencies": {
-      "jp.co.cyberagent.nova": {
+      "jp.co.cyberagent.sge.unity-mobile-support": {
       "version": "https://github.com/CyberAgentGameEntertainment/unity-mobile-support.git?path=/Packages/MobileSupport",
       "depth": 0,
       "source": "git",
