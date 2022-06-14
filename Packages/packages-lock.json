@@ -171,7 +171,7 @@
       }
     },
     "jp.co.cyberagent.sge.unity-mobile-support": {
-      "version": "file:MobileSupport",
+      "version": "file:MobileSupportStorage",
       "depth": 0,
       "source": "embedded",
       "dependencies": {}
