@@ -170,7 +170,7 @@
         "com.unity.modules.imgui": "1.0.0"
       }
     },
-    "jp.co.cyberagent.sge.unity-mobile-support": {
+    "jp.co.cyberagent.sge.unity-mobile-support-storage": {
       "version": "file:MobileSupportStorage",
       "depth": 0,
       "source": "embedded",

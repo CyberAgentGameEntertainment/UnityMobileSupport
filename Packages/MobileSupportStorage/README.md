@@ -1,4 +1,4 @@
-# Unity Mobile Support
+# Unity Mobile Support - Stroage
 
 [![license](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![license](https://img.shields.io/badge/PR-welcome-green.svg)](https://github.com/CyberAgentGameEntertainment/unity-mobile-support/pulls)
@@ -9,6 +9,7 @@
 They may be destructive change with future development.
 
 To support iOS/Android native features in Unity, this will provide variety functions.
+This package provide functions to interact with storage.
 
 ## Table of Contents
 
@@ -25,8 +26,6 @@ To support iOS/Android native features in Unity, this will provide variety funct
 </details>
 
 ## Supported Functions
-
-### Storage
 
 | Method | Description | Note | Editor Behaviour |
 |--------|-------------|------|------------------|

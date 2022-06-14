@@ -1,18 +1,19 @@
 {
-  "name": "jp.co.cyberagent.sge.unity-mobile-support",
-  "displayName": "Mobile Support",
+  "name": "jp.co.cyberagent.sge.unity-mobile-support-storage",
+  "displayName": "Mobile Support - Storage",
   "version": "0.1.0",
   "unity": "2019.4",
-  "description": "Tools to support mobile like iOS/Android.",
+  "description": "Tools to support storage of mobile like iOS/Android.",
   "keywords": [
     "ios",
     "android",
-    "mobile"
+    "mobile",
+    "storage"
   ],
   "dependencies": {
   },
   "repository": {
-    "url": "https://github.com/SGE-CoreTech/unity-mobile-support",
+    "url": "https://github.com/CyberAgentGameEntertainment/UnityMobileSupport",
     "type": "git"
   },
   "samples": [
