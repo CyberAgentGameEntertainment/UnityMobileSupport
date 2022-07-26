@@ -14,4 +14,6 @@ dependencyResolutionManagement {
 }
 rootProject.name = "UnityMobileSupport"
 include ':app'
-include ':lib'
+
+include ':MobileSupportStorage.androidlib'
+project(':MobileSupportStorage.androidlib').projectDir = new File(settingsDir, '../Packages/MobileSupportStorage/Runtime/Plugins/Android/MobileSupportStorage.androidlib')
