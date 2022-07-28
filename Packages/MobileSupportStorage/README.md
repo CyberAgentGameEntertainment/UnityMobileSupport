@@ -1,7 +1,7 @@
 # Unity Mobile Support - Stroage
 
 [![license](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
-[![license](https://img.shields.io/badge/PR-welcome-green.svg)](https://github.com/CyberAgentGameEntertainment/unity-mobile-support/pulls)
+[![license](https://img.shields.io/badge/PR-welcome-green.svg)](https://github.com/CyberAgentGameEntertainment/UnityMobileSupport/pulls)
 [![license](https://img.shields.io/badge/Unity-2019.4-green.svg)](#Requirements)
 
 
@@ -45,7 +45,7 @@ To install the software, follow the steps below.
 1. Open the Package Manager from `Window > Package Manager`
 2. `"+" button > Add package from git URL`
 3. Enter the following
-   * https://github.com/CyberAgentGameEntertainment/unity-mobile-support.git?path=/Packages/MobileSupport
+   * https://github.com/CyberAgentGameEntertainment/UnityMobileSupport.git?path=/Packages/MobileSupport
 
 <p align="center">
   <img width=500 src="https://user-images.githubusercontent.com/47441314/143533003-177a51fc-3d11-4784-b9d2-d343cc622841.png" alt="Package Manager">
@@ -56,14 +56,14 @@ Or, open `Packages/manifest.json` and add the following to the dependencies bloc
 ```json
 {
     "dependencies": {
-        "jp.co.cyberagent.sge.unity-mobile-support": "https://github.com/CyberAgentGameEntertainment/unity-mobile-support.git?path=/Packages/MobileSupport"
+        "jp.co.cyberagent.sge.unity-mobile-support": "https://github.com/CyberAgentGameEntertainment/UnityMobileSupport.git?path=/Packages/MobileSupport"
     }
 }
 ```
 
 If you want to set the target version, write as follows.
 
-- https://github.com/CyberAgentGameEntertainment/unity-mobile-support.git?path=/Packages/MobileSupport#0.1.0
+- https://github.com/CyberAgentGameEntertainment/UnityMobileSupport.git?path=/Packages/MobileSupport#0.1.0
 
 Note that if you get a message like `No 'git' executable was found. Please install Git on your system and restart Unity`, you will need to set up Git on your machine.
 
@@ -74,7 +74,7 @@ If you don't want to specify a version, you can also update the version by editi
 {
   "dependencies": {
       "jp.co.cyberagent.sge.unity-mobile-support": {
-      "version": "https://github.com/CyberAgentGameEntertainment/unity-mobile-support.git?path=/Packages/MobileSupport",
+      "version": "https://github.com/CyberAgentGameEntertainment/UnityMobileSupport.git?path=/Packages/MobileSupport",
       "depth": 0,
       "source": "git",
       "dependencies": {},
