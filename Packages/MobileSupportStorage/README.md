@@ -45,7 +45,7 @@ To install the software, follow the steps below.
 1. Open the Package Manager from `Window > Package Manager`
 2. `"+" button > Add package from git URL`
 3. Enter the following
-   * https://github.com/CyberAgentGameEntertainment/UnityMobileSupport.git?path=/Packages/MobileSupport
+   * https://github.com/CyberAgentGameEntertainment/UnityMobileSupport.git?path=/Packages/MobileSupportStorage
 
 <p align="center">
   <img width=500 src="https://user-images.githubusercontent.com/47441314/143533003-177a51fc-3d11-4784-b9d2-d343cc622841.png" alt="Package Manager">
