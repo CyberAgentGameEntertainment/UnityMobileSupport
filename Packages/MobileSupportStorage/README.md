@@ -56,14 +56,14 @@ Or, open `Packages/manifest.json` and add the following to the dependencies bloc
 ```json
 {
     "dependencies": {
-        "jp.co.cyberagent.sge.unity-mobile-support": "https://github.com/CyberAgentGameEntertainment/UnityMobileSupport.git?path=/Packages/MobileSupport"
+        "jp.co.cyberagent.unity-mobile-support-storage": "https://github.com/CyberAgentGameEntertainment/UnityMobileSupport.git?path=/Packages/MobileSupportStorage"
     }
 }
 ```
 
 If you want to set the target version, write as follows.
 
-- https://github.com/CyberAgentGameEntertainment/UnityMobileSupport.git?path=/Packages/MobileSupport#0.1.0
+- https://github.com/CyberAgentGameEntertainment/UnityMobileSupport.git?path=/Packages/MobileSupportStorage#0.1.0
 
 Note that if you get a message like `No 'git' executable was found. Please install Git on your system and restart Unity`, you will need to set up Git on your machine.
 
@@ -73,8 +73,8 @@ If you don't want to specify a version, you can also update the version by editi
 ```json
 {
   "dependencies": {
-      "jp.co.cyberagent.sge.unity-mobile-support": {
-      "version": "https://github.com/CyberAgentGameEntertainment/UnityMobileSupport.git?path=/Packages/MobileSupport",
+      "jp.co.cyberagent.unity-mobile-support-storage": {
+      "version": "https://github.com/CyberAgentGameEntertainment/UnityMobileSupport.git?path=/Packages/MobileSupportStorage",
       "depth": 0,
       "source": "git",
       "dependencies": {},
