@@ -19,7 +19,7 @@ namespace MobileSupport
         /// Get usable space of internal storage.
         /// </summary>
         /// <returns>Bytes of usable space. It will return -1 for internal error and in Unity editor.</returns>
-        private static long GetInternalUsableSpace()
+        public static long GetInternalUsableSpace()
         {
 #if UNITY_EDITOR
             if (Application.isEditor)
