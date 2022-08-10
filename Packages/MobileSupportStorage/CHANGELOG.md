@@ -1,5 +1,10 @@
 # Release notes
 
+## v0.1.2 - 2022/08/10
+
+- Bug Fixes :bug:
+  - Downgraded Android library target api level to 30
+
 ## v0.1.1 - 2022/08/09
 
 - Bug Fixes :bug:

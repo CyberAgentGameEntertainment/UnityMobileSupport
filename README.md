@@ -10,4 +10,4 @@ Scripts ars splitted into multiple packages, so choose packages what you only ne
 
 | Package | Description | Latest Version | Readme Link | Changelog Link |
 | --- | --- | --- | --- | --- |
-| Storage | Functions to retrive information about storage | v0.1.0 | [README.md](Packages/MobileSupportStorage/README.md) | [CHANGELOG.md](Packages/MobileSupportStorage/CHANGELOG.md) |
+| Storage | Functions to retrive information about storage | v0.1.2 | [README.md](Packages/MobileSupportStorage/README.md) | [CHANGELOG.md](Packages/MobileSupportStorage/CHANGELOG.md) |
