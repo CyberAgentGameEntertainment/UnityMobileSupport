@@ -1,5 +1,10 @@
 # Release notes
 
+## v0.2.0 - 2022/08/16
+
+- New Features :rocket:
+  - iOS: Added option to get free space with deletable caches
+
 ## v0.1.2 - 2022/08/10
 
 - Bug Fixes :bug:
