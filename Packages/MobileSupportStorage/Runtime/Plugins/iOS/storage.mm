@@ -2,7 +2,7 @@
 
 extern "C" {
 long storage_getFreeDiskSpace(bool includeDeletableCaches) {
-    if ([UIDevice currentDevice].systemVersion.floatValue >= 11.0) {
+    if (@available(iOS 11.0, *)) {
         NSURLResourceKey resourceKey = NSURLVolumeAvailableCapacityKey; // real free space
         if (includeDeletableCaches) {
             // value similar to showed in System
