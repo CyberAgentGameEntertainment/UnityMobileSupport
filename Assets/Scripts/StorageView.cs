@@ -15,7 +15,8 @@ public class StorageView : MonoBehaviour
         Debug.LogFormat("Available disk space (accurate): {0}", Storage.GetInternalUsableSpace(true));
 #endif
 #if UNITY_IOS
-        Debug.LogFormat("Available disk space: {0}", Storage.GetInternalUsableSpace());
+        Debug.LogFormat("Available disk space: {0}", Storage.GetInternalUsableSpace(false));
+        Debug.LogFormat("Available disk space (includeDeletableCaches): {0}", Storage.GetInternalUsableSpace(true));
 #endif
     }
 }
