@@ -5,7 +5,6 @@
 #if UNITY_ANDROID
 
 using System;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 
 namespace MobileSupport
