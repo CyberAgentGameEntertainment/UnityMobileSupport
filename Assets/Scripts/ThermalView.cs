@@ -11,7 +11,7 @@ public class ThermalView : MonoBehaviour
     {
 #if UNITY_ANDROID
         Thermal.OnThermalStatusChanged += status => Debug.Log($"Thermal Status: {status}");
-        Thermal.Setup();
+        Thermal.StartMonitoring();
 #endif
     }
 }

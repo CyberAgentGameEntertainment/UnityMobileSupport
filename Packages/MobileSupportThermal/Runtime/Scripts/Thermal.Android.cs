@@ -51,20 +51,38 @@ namespace MobileSupport
         public static event Action<int> OnThermalStatusChanged;
         
         /// <summary>
-        ///     Setup thermal status monitoring.
+        ///     Start thermal status monitoring.
         /// </summary>
-        public static void Setup()
+        public static void StartMonitoring()
         {
 #if UNITY_EDITOR
             if (Application.isEditor) return;
 #endif
+
+            CallPowerManagerMethod("addThermalStatusListener", JavaCallbackListener);
+        }
+
+        /// <summary>
+        ///     Stop thermal status monitoring.
+        /// </summary>
+        public static void StopMonitoring()
+        {
+#if UNITY_EDITOR
+            if (Application.isEditor) return;
+#endif
+            
+            CallPowerManagerMethod("removeThermalStatusListener", JavaCallbackListener);
+        }
+
+        private static void CallPowerManagerMethod(string methodName, params object[] args)
+        {
             using var playerClass = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
             using var activity = playerClass.GetStatic<AndroidJavaObject>("currentActivity");
             using var staticContext = new AndroidJavaClass("android.content.Context");
             using var service = staticContext.GetStatic<AndroidJavaObject>("POWER_SERVICE");
             using var powerManager = activity.Call<AndroidJavaObject>("getSystemService", service);
             
-            powerManager.Call("addThermalStatusListener", JavaCallbackListener);
+            powerManager.Call(methodName, args);
         }
 
         private static void OnThermalStatusChangedCallback(int status)
