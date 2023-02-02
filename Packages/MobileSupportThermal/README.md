@@ -8,7 +8,7 @@
 :warning: This project is under hard construction. :warning:
 They may be destructive change with future development.
 
-To support Android native features in Unity, this will provide variety functions.
+To support iOS/Android native features in Unity, this will provide variety functions.
 This package provide functions to retrive information about thermal.
 
 ## Table of Contents
@@ -27,20 +27,22 @@ This package provide functions to retrive information about thermal.
 
 ## Usage
 
-Please see the example code.
-
 1. Add a event handler for thermal status change.
-2. Setup thermal status monitoring.
+2. Start thermal status monitoring.
+
+Below is an example.
 
 ```C#
     private void StartThermalMonitoring()
     {
-#if UNITY_ANDROID
+#if UNITY_ANDROID || UNITY_IOS
         Thermal.OnThermalStatusChanged += status => Debug.Log($"Thermal Status: {status}");
-        Thermal.Setup();
+        Thermal.StartMonitoring();
 #endif
     }
 ```
+
+If you want to stop monitoring, call `Thermal.StopStopMonitoring()`
 
 ## Setup
 
