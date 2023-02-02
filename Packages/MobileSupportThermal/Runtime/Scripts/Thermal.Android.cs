@@ -48,6 +48,8 @@ namespace MobileSupport
         /// </summary>
         /// <returns>The raw value of android.os.PowerManager.THERMAL_STATUS_XXX (0~7).</returns>
         public static event Action<int> OnThermalStatusChanged;
+
+        private static bool IsMonitoring;
         
         /// <summary>
         ///     Start thermal status monitoring.
@@ -58,7 +60,10 @@ namespace MobileSupport
             if (Application.isEditor) return;
 #endif
 
+            if (IsMonitoring) return;
+
             CallPowerManagerMethod("addThermalStatusListener", JavaCallbackListener);
+            IsMonitoring = true;
         }
 
         /// <summary>
@@ -69,8 +74,11 @@ namespace MobileSupport
 #if UNITY_EDITOR
             if (Application.isEditor) return;
 #endif
+
+            if (IsMonitoring == false) return;
             
             CallPowerManagerMethod("removeThermalStatusListener", JavaCallbackListener);
+            IsMonitoring = false;
         }
 
         private static void CallPowerManagerMethod(string methodName, params object[] args)
