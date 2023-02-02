@@ -13,5 +13,9 @@ public class ThermalView : MonoBehaviour
         Thermal.OnThermalStatusChanged += status => Debug.Log($"Thermal Status: {status}");
         Thermal.StartMonitoring();
 #endif
+#if UNITY_IOS
+        Thermal.OnThermalStatusChanged += status => Debug.Log($"Thermal Status: {status}");
+        Thermal.StartMonitoring();
+#endif
     }
 }
