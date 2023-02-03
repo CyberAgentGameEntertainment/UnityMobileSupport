@@ -6,10 +6,10 @@ extern "C" {
 
 typedef void (*Callback)(int);
 
-static NSObject* s_observer = Nil;
+static NSObject* s_observer = nil;
 
 void thermal_startMonitoring(Callback callback) {
-    if (s_observer != Nil) return;
+    if (s_observer != nil) return;
     
     s_observer = [[NSNotificationCenter defaultCenter] addObserverForName:NSProcessInfoThermalStateDidChangeNotification
                                                                    object:nil
@@ -25,10 +25,10 @@ void thermal_startMonitoring(Callback callback) {
 }
 
 void thermal_stopMonitoring() {
-    if (s_observer == Nil) return;
+    if (s_observer == nil) return;
     
     [[NSNotificationCenter defaultCenter] removeObserver:s_observer name:NSProcessInfoThermalStateDidChangeNotification object:nil];
-    s_observer = Nil;
+    s_observer = nil;
 }
 
 #ifdef __cplusplus
