@@ -5,6 +5,7 @@
 #if UNITY_ANDROID
 
 using System;
+using System.Threading;
 using UnityEngine;
 
 namespace MobileSupport
@@ -42,6 +43,8 @@ namespace MobileSupport
         }
 
         private static readonly ThermalStatusListener JavaCallbackListener = new ThermalStatusListener(OnThermalStatusChangedCallback);
+
+        private static readonly SynchronizationContext MainThreadContext = SynchronizationContext.Current;
         
         /// <summary>
         ///     Event that is sent when the thermal status is changed.
@@ -50,7 +53,7 @@ namespace MobileSupport
         public static event Action<int> OnThermalStatusChanged;
 
         private static bool IsMonitoring;
-        
+
         /// <summary>
         ///     Start thermal status monitoring.
         /// </summary>
@@ -61,7 +64,7 @@ namespace MobileSupport
 #endif
 
             if (IsMonitoring) return;
-
+            
             CallPowerManagerMethod("addThermalStatusListener", JavaCallbackListener);
             IsMonitoring = true;
         }
@@ -94,8 +97,11 @@ namespace MobileSupport
 
         private static void OnThermalStatusChangedCallback(int status)
         {
-            // May be converted to an enum.
-            OnThermalStatusChanged?.Invoke(status);
+            MainThreadContext.Post(_ =>
+            {
+                // May be converted to an enum.
+                OnThermalStatusChanged?.Invoke(status);
+            }, null);
         }
     }
 }
