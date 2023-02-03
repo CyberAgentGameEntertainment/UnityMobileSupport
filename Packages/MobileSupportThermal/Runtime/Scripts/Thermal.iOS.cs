@@ -29,6 +29,11 @@ namespace MobileSupport
         /// <returns>The raw value of android.os.PowerManager.THERMAL_STATUS_XXX (0~3).</returns>
         public static event Action<int> OnThermalStatusChanged;
 
+        /// <summary>
+        ///     The latest thermal status.
+        /// </summary>
+        public static int? LatestThermalStatus { get; private set; }
+
         private static bool _isMonitoring;
         
         /// <summary>
@@ -64,6 +69,8 @@ namespace MobileSupport
         [MonoPInvokeCallback(typeof(CallBackDelegate))]
         private static void OnThermalStatusChangedCallback(int status)
         {
+            LatestThermalStatus = status;
+
             // May be converted to an enum.
             OnThermalStatusChanged?.Invoke(status);
         }
