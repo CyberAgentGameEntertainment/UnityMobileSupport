@@ -16,7 +16,7 @@ This package provide functions to retrive information about thermal.
 <details>
 <summary>Details</summary>
 
-- [Supported Functions](#supported-functions)
+- [Usage](#usage)
   - [Thermal](#thermal)
 - [Setup](#setup)
   - [Requirements](#requirements)
