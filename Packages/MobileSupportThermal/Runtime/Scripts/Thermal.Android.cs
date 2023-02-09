@@ -44,7 +44,7 @@ namespace MobileSupport
 
         private static readonly ThermalStatusListener JavaCallbackListener = new ThermalStatusListener(OnThermalStatusChangedCallback);
 
-        private static readonly SynchronizationContext MainThreadContext = SynchronizationContext.Current;
+        private static SynchronizationContext _mainThreadContext;
         
         /// <summary>
         ///     Event that is sent when the thermal status is changed.
@@ -58,6 +58,12 @@ namespace MobileSupport
         public static int? LatestThermalStatus { get; private set; }
 
         private static bool _isMonitoring;
+
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+        private static void Init()
+        {
+            _mainThreadContext = SynchronizationContext.Current;
+        }
 
         /// <summary>
         ///     Start thermal status monitoring.
@@ -102,7 +108,7 @@ namespace MobileSupport
 
         private static void OnThermalStatusChangedCallback(int status)
         {
-            MainThreadContext.Post(_ =>
+            _mainThreadContext.Post(_ =>
             {
                 LatestThermalStatus = status;
                 
