@@ -1,4 +1,4 @@
-# Unity Mobile Support - Stroage
+# Unity Mobile Support - Storage
 
 [![license](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![license](https://img.shields.io/badge/PR-welcome-green.svg)](https://github.com/CyberAgentGameEntertainment/UnityMobileSupport/pulls)
