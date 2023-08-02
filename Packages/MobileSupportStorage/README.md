@@ -4,10 +4,6 @@
 [![license](https://img.shields.io/badge/PR-welcome-green.svg)](https://github.com/CyberAgentGameEntertainment/UnityMobileSupport/pulls)
 [![license](https://img.shields.io/badge/Unity-2019.4-green.svg)](#Requirements)
 
-
-:warning: This project is under hard construction. :warning:
-They may be destructive change with future development.
-
 To support iOS/Android native features in Unity, this will provide variety functions.
 This package provide functions to interact with storage.
 
@@ -16,12 +12,13 @@ This package provide functions to interact with storage.
 <details>
 <summary>Details</summary>
 
-- [Supported Functions](#supported-functions)
-  - [Storage](#storage)
-- [Setup](#setup)
-  - [Requirements](#requirements)
-  - [Install](#install)
-- [Licenses](#licenses)
+- [Unity Mobile Support - Storage](#unity-mobile-support---storage)
+  - [Table of Contents](#table-of-contents)
+  - [Supported Functions](#supported-functions)
+  - [Setup](#setup)
+    - [Requirements](#requirements)
+    - [Install](#install)
+  - [Licenses](#licenses)
 
 </details>
 

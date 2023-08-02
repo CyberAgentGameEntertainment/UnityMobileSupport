@@ -4,10 +4,6 @@
 [![license](https://img.shields.io/badge/PR-welcome-green.svg)](https://github.com/CyberAgentGameEntertainment/UnityMobileSupport/pulls)
 [![license](https://img.shields.io/badge/Unity-2019.4-green.svg)](#Requirements)
 
-
-:warning: This project is under hard construction. :warning:
-They may be destructive change with future development.
-
 To support iOS/Android native features in Unity, this will provide variety functions.
 This package provide functions to retrive information about thermal.
 
@@ -16,12 +12,13 @@ This package provide functions to retrive information about thermal.
 <details>
 <summary>Details</summary>
 
-- [Usage](#usage)
-  - [Thermal](#thermal)
-- [Setup](#setup)
-  - [Requirements](#requirements)
-  - [Install](#install)
-- [Licenses](#licenses)
+- [Unity Mobile Support - Thermal](#unity-mobile-support---thermal)
+  - [Table of Contents](#table-of-contents)
+  - [Usage](#usage)
+  - [Setup](#setup)
+    - [Requirements](#requirements)
+    - [Install](#install)
+  - [Licenses](#licenses)
 
 </details>
 
