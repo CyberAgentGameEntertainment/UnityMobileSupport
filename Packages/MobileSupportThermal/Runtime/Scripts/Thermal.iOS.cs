@@ -26,7 +26,7 @@ namespace MobileSupport
         /// <summary>
         ///     Event that is sent when the thermal status is changed.
         /// </summary>
-        /// <returns>The raw value of android.os.PowerManager.THERMAL_STATUS_XXX (0~3).</returns>
+        /// <returns>The raw value of NSProcessInfoThermalStateXXX (0~3).</returns>
         public static event Action<int> OnThermalStatusChanged;
 
         /// <summary>
