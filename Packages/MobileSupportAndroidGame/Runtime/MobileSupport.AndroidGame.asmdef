@@ -1,0 +1,16 @@
+{
+    "name": "MobileSupport.AndroidGame",
+    "rootNamespace": "",
+    "references": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [
+        "!UNITY_2023_1_OR_NEWER"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

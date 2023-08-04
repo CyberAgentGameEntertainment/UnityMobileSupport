@@ -177,6 +177,12 @@
         "com.unity.modules.imgui": "1.0.0"
       }
     },
+    "jp.co.cyberagent.unity-mobile-support-android-game": {
+      "version": "file:MobileSupportAndroidGame",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "jp.co.cyberagent.unity-mobile-support-storage": {
       "version": "file:MobileSupportStorage",
       "depth": 0,
