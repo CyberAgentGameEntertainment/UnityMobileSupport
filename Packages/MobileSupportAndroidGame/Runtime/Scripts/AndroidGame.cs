@@ -75,6 +75,12 @@ namespace MobileSupport
 
     public static class AndroidGame
     {
+        // Build.VERSION_CODES.S (Android 12)
+        private const int ANDROID_VERSION_CODES_S = 31;
+
+        // Build.VERSION_CODES.TIRAMISU (Android 13)
+        private const int ANDROID_VERSION_CODES_TIRAMISU = 33;
+
         private static AndroidJavaObject _gameManager;
         private static int _sdkVersion;
 
@@ -101,7 +107,7 @@ namespace MobileSupport
             try
             {
                 // GameManager is available from API level 31
-                if (GetAndroidSdkVersion() < 31) return null;
+                if (GetAndroidSdkVersion() < ANDROID_VERSION_CODES_S) return null;
 
                 using var unityActivity = GetUnityActivity();
                 if (unityActivity == null) return null;
@@ -147,7 +153,7 @@ namespace MobileSupport
         /// <param name="gameState">The game state mode.</param>
         public static void SetGameState(bool isLoading, AndroidGameState gameState)
         {
-            if (GetAndroidSdkVersion() < 33) return;
+            if (GetAndroidSdkVersion() < ANDROID_VERSION_CODES_TIRAMISU) return;
 
             var gameManager = GetGameManager();
             if (gameManager == null) return;
@@ -166,7 +172,7 @@ namespace MobileSupport
         /// <param name="quality">An optional developer-supplied enum, e.g. for the current quality level.</param>
         public static void SetGameState(bool isLoading, AndroidGameState gameState, int label, int quality)
         {
-            if (GetAndroidSdkVersion() < 33) return;
+            if (GetAndroidSdkVersion() < ANDROID_VERSION_CODES_TIRAMISU) return;
 
             var gameManager = GetGameManager();
             if (gameManager == null) return;
