@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+        package="jp.co.cyberagent.android.res">
+    <uses-sdk android:targetSdkVersion="33" />
+    <application android:appCategory="game">
+            <meta-data android:name="android.game_mode_config"
+                    android:resource="@xml/game_mode_config" />
+    </application>
+</manifest>
