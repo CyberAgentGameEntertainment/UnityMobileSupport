@@ -79,7 +79,7 @@ Or, open `Packages/manifest.json` and add the following to the dependencies bloc
 
 If you want to set the target version, write as follows.
 
-- https://github.com/CyberAgentGameEntertainment/UnityMobileSupport.git?path=/Packages/MobileSupportAndroidGame#1.0.0
+- https://github.com/CyberAgentGameEntertainment/UnityMobileSupport.git?path=/Packages/MobileSupportAndroidGame#androidgame/1.0.0
 
 To update the version, rewrite the version as described above.
 If you don't want to specify a version, you can also update the version by editing the hash of this library in the

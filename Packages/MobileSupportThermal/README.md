@@ -71,7 +71,7 @@ Or, open `Packages/manifest.json` and add the following to the dependencies bloc
 
 If you want to set the target version, write as follows.
 
-- https://github.com/CyberAgentGameEntertainment/UnityMobileSupport.git?path=/Packages/MobileSupportThermal#0.1.0
+- https://github.com/CyberAgentGameEntertainment/UnityMobileSupport.git?path=/Packages/MobileSupportThermal#thermal/0.1.0
 
 Note that if you get a message like `No 'git' executable was found. Please install Git on your system and restart Unity`, you will need to set up Git on your machine.
 
