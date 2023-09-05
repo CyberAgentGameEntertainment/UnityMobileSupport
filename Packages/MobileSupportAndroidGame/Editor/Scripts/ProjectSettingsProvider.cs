@@ -43,7 +43,8 @@ namespace MobileSupport.AndroidGame.Editor
 
             EditorGUI.BeginChangeCheck();
             _editor.OnInspectorGUI();
-            if (EditorGUI.EndChangeCheck()) AndroidGameEditorSettings.instance.Save();
+            if (EditorGUI.EndChangeCheck())
+                AndroidGameEditorSettings.instance.Save();
         }
     }
 }

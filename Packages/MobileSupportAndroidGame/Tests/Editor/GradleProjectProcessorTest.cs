@@ -74,6 +74,20 @@ namespace MobileSupport.AndroidGame.EditorTests
     <meta-data android:name=""android.game_mode_config"" android:resource=""@xml/game_mode_config"" />
   </application>
 </manifest>")]
+        [TestCase(@"<?xml version=""1.0"" encoding=""utf-8""?>
+<manifest xmlns:android=""http://schemas.android.com/apk/res/android"">
+    <application android:appCategory=""game"">
+        <meta-data android:name=""android.game_mode_config"" android:resource=""@xml/foo"" />
+        <meta-data android:name=""android.game_mode_config"" android:resource=""@xml/bar"" />
+    </application>
+</manifest>",
+            true,
+            @"<?xml version=""1.0"" encoding=""utf-8""?>
+<manifest xmlns:android=""http://schemas.android.com/apk/res/android"">
+  <application android:appCategory=""game"">
+    <meta-data android:name=""android.game_mode_config"" android:resource=""@xml/game_mode_config"" />
+  </application>
+</manifest>")]
         public void ProcessAndroidManifestTest(string xml, bool enableGameApp, string expected)
         {
             var testAndroidManifest = new XmlDocument();

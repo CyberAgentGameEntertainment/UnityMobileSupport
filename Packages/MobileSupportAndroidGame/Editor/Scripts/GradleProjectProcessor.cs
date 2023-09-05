@@ -11,7 +11,8 @@ namespace MobileSupport.AndroidGame.Editor
         public void OnPostGenerateGradleAndroidProject(string path)
         {
             var settings = AndroidGameEditorSettings.instance;
-            if (!settings.enableAutomaticConfiguration) return;
+            if (!settings.enableAutomaticConfiguration)
+                return;
 
             // set appCategory and game mode config
             ProcessAndroidManifest(path, settings.setGameAppCategoryGame);
@@ -26,7 +27,8 @@ namespace MobileSupport.AndroidGame.Editor
             // load xml
             var doc = new XmlDocument();
             doc.Load(androidManifestPath);
-            if (!ProcessAndroidManifest(doc, enableGameApp)) return;
+            if (!ProcessAndroidManifest(doc, enableGameApp))
+                return;
 
             // save xml
             doc.Save(androidManifestPath);
@@ -36,7 +38,8 @@ namespace MobileSupport.AndroidGame.Editor
         {
             var manifest = doc.DocumentElement;
             var application = manifest.SelectSingleNode("application");
-            if (application == null) return false;
+            if (application == null)
+                return false;
 
             if (enableGameApp)
             {
@@ -90,8 +93,10 @@ namespace MobileSupport.AndroidGame.Editor
             if (!string.IsNullOrEmpty(prefix))
                 namespaceManager.AddNamespace(prefix, nameAttribute.NamespaceURI);
 
-            var childNode = node.SelectSingleNode(xpath, namespaceManager);
-            if (childNode != null) node.RemoveChild(childNode);
+            var childNodes = node.SelectNodes(xpath, namespaceManager);
+            if (childNodes != null)
+                foreach (XmlNode childNode in childNodes)
+                    node.RemoveChild(childNode);
 
             node.AppendChild(element);
         }
@@ -101,7 +106,8 @@ namespace MobileSupport.AndroidGame.Editor
         {
             var xmlPath = Path.Combine(path, "src/main/res/xml/game_mode_config.xml");
             var dirName = Path.GetDirectoryName(xmlPath);
-            if (dirName == null) return;
+            if (dirName == null)
+                return;
             Directory.CreateDirectory(dirName);
 
             var xml = $@"<?xml version=""1.0"" encoding=""UTF-8""?>
