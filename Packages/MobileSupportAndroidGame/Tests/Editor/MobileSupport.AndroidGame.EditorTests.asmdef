@@ -1,5 +1,5 @@
 {
-    "name": "MobileSupport.AndroidGame.EditorTests",
+    "name": "MobileSupport.AndroidGame.Editor.Tests",
     "rootNamespace": "",
     "references": [
         "GUID:5cda504a6da1d4e5f8b475de1621d3ae",

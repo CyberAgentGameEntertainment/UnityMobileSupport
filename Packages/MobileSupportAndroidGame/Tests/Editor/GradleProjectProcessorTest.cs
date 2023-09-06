@@ -1,9 +1,8 @@
 using System.IO;
 using System.Xml;
-using MobileSupport.AndroidGame.Editor;
 using NUnit.Framework;
 
-namespace MobileSupport.AndroidGame.EditorTests
+namespace MobileSupport.AndroidGame.Editor.Tests
 {
     public class GradleProjectProcessorTest
     {
