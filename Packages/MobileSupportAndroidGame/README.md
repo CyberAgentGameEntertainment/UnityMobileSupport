@@ -18,20 +18,22 @@ Interface of this library is same as Unity's one, you can easily migrate.
 <summary>Details</summary>
 
 - [Usage](#usage)
-    - [Sample](#sample)
+  - [Sample](#sample)
 - [Setup](#setup)
-    - [Requirements](#requirements)
-    - [Install](#install)
+  - [Requirements](#requirements)
+  - [Install](#install)
 - [Licenses](#licenses)
 
 </details>
 
 ## Usage
 
-1. Setup AndroidManifest.xml described in [here](https://developer.android.com/games/gamemode/gamemode-api#setup).
-    - Sample AndroidLibrary for Unity is [here](../../Assets/Plugins/Android/GameModeConfig.androidlib).
+1. Configuration of AndroidManifest.xml described in [here](https://developer.android.com/games/gamemode/gamemode-api#setup) is automatically done by this library when building app.
+    - You can configure finely via `Mobile Support > Android Game` inside `Project Settings` window.
 2. Call `MobileSupport.AndroidGame.GameMode` inside `OnApplicationPause` to get current game mode.
 3. You can call `MobileSupport.AndroidGame.SetGameState` to tell the system what state your game is in.
+
+![Project Settings](Documentation~/images/android_game_project_settings.png)
 
 ### Sample
 
