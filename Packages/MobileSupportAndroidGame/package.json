@@ -1,7 +1,7 @@
 {
   "name": "jp.co.cyberagent.unity-mobile-support-android-game",
   "displayName": "Mobile Support - Android Game",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "unity": "2020.3",
   "unityRelease": "0f1",
   "description": "Support package to integrate with Android GameMode and GameState APIs.",
