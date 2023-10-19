@@ -1,5 +1,6 @@
 package jp.co.cyberagent.unitysupport;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
 import android.os.storage.StorageManager;
@@ -26,6 +27,7 @@ public class Storage {
         return usableSpace;
     }
 
+    @TargetApi(Build.VERSION_CODES.O)
     public static long getInternalUsableSpaceAboveO(Context context, long wantSpace) {
         try {
             StorageManager storageManager = context.getSystemService(StorageManager.class);
