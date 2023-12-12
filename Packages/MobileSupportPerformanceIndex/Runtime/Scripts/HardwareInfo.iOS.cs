@@ -11,25 +11,26 @@ namespace MobileSupport
             if (Application.isEditor)
                 return;
 #endif
-            stats.GpuSeries = ParseGpuSeries(stats.GpuName);
+            stats.GpuMajorSeries = GpuMajorSeries.Apple;
+            stats.GpuMinorSeries = ParseGpuMinorSeries(stats.GpuName);
             stats.GpuSeriesNumber = ParseAppleGpuSeriesNumber(stats.GpuName);
         }
 
-        public static GpuSeries ParseGpuSeries(string gpuName)
+        public static GpuMinorSeries ParseGpuMinorSeries(string gpuName)
         {
             // parse GPU series by StartsWith
             return gpuName switch
             {
-                { } when gpuName.StartsWith("Apple A") => GpuSeries.AppleA,
-                { } when gpuName.StartsWith("Apple M") => GpuSeries.AppleM,
-                _ => GpuSeries.Unknown
+                { } when gpuName.StartsWith("Apple A") => GpuMinorSeries.AppleA,
+                { } when gpuName.StartsWith("Apple M") => GpuMinorSeries.AppleM,
+                _ => GpuMinorSeries.Unknown
             };
         }
 
         public static int ParseAppleGpuSeriesNumber(string gpuName)
         {
             // parse Apple GPU series number by regex
-            // Apple A8 GPU, Apple A10 GPU, Apple M1
+            // ex: Apple A8 GPU, Apple A10 GPU, Apple M1
             var match = Regex.Match(gpuName, @"Apple [AM](\d+)");
             if (match.Success)
                 return int.Parse(match.Groups[1].Value);

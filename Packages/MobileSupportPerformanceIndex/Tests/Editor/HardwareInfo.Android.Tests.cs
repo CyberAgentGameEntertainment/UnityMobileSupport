@@ -1,41 +1,89 @@
+using System.Collections;
 using NUnit.Framework;
 
 namespace MobileSupport.PerformanceIndex.Editor.Tests
 {
     public class HardwareInfoAndroidTests
     {
-        [TestCase("Adreno (TM) 308", ExpectedResult = 308)]
-        [TestCase("Adreno (TM) 418", ExpectedResult = 418)]
-        [TestCase("Adreno (TM) 508", ExpectedResult = 508)]
-        [TestCase("Adreno (TM) 630", ExpectedResult = 630)]
-        [TestCase("Adreno (TM) 642L", ExpectedResult = 642)]
-        [TestCase("Adreno (TM) 650 (RADV NAVI23)", ExpectedResult = 650)]
-        [TestCase("Adreno (TM) 725", ExpectedResult = 725)]
-        public int HardwareInfoAndroid_ParseAdrenoGpuSeriesNumber_Tests(string gpuName)
+        private static IEnumerable AdrenoTestCases
         {
-            return HardwareInfoAndroid.ParseAdrenoGpuSeriesNumber(gpuName);
+            get
+            {
+                yield return new TestCaseData("Adreno (TM) 308").Returns((GpuMinorSeries.Adreno300, 308));
+                yield return new TestCaseData("Adreno (TM) 418").Returns((GpuMinorSeries.Adreno400, 418));
+                yield return new TestCaseData("Adreno (TM) 508").Returns((GpuMinorSeries.Adreno500, 508));
+                yield return new TestCaseData("Adreno (TM) 630").Returns((GpuMinorSeries.Adreno600, 630));
+                yield return new TestCaseData("Adreno (TM) 642L").Returns((GpuMinorSeries.Adreno600, 642));
+                yield return new TestCaseData("Adreno (TM) 650 (RADV NAVI23)").Returns((GpuMinorSeries.Adreno600, 650));
+                yield return new TestCaseData("Adreno (TM) 725").Returns((GpuMinorSeries.Adreno700, 725));
+            }
         }
 
-        [TestCase("Mali-G52", ExpectedResult = 52)]
-        [TestCase("Mali-G76", ExpectedResult = 76)]
-        [TestCase("Mali-G610", ExpectedResult = 610)]
-        [TestCase("Mali-G715-Immortalis", ExpectedResult = 715)]
-        [TestCase("Mali-T720", ExpectedResult = 720)]
-        [TestCase("Mali-T880", ExpectedResult = 880)]
-        [TestCase("Mali-400", ExpectedResult = 400)]
-        public int HardwareInfoAndroid_ParseMaliGpuSeriesNumber_Tests(string gpuName)
+        private static IEnumerable MaliTestCases
         {
-            return HardwareInfoAndroid.ParseMaliGpuSeriesNumber(gpuName);
+            get
+            {
+                yield return new TestCaseData("Mali-G52").Returns((GpuMinorSeries.MaliG, 52));
+                yield return new TestCaseData("Mali-G76").Returns((GpuMinorSeries.MaliG, 76));
+                yield return new TestCaseData("Mali-G610").Returns((GpuMinorSeries.MaliG, 610));
+                yield return new TestCaseData("Mali-G715-Immortalis").Returns((GpuMinorSeries.MaliG, 715));
+                yield return new TestCaseData("Mali-T720").Returns((GpuMinorSeries.MaliT, 720));
+                yield return new TestCaseData("Mali-T880").Returns((GpuMinorSeries.MaliT, 880));
+                yield return new TestCaseData("Mali-400").Returns((GpuMinorSeries.Mali, 400));
+            }
         }
 
-        [TestCase("PowerVR Rogue GE8300", ExpectedResult = 8300)]
-        [TestCase("PowerVR Rogue GE8320", ExpectedResult = 8320)]
-        [TestCase("PowerVR Rogue GE8322", ExpectedResult = 8322)]
-        [TestCase("PowerVR Rogue GM9446", ExpectedResult = 9446)]
-        [TestCase("PowerVR Rogue GX6250", ExpectedResult = 6250)]
-        public int HardwareInfoAndroid_ParsePowerVRGpuSeriesNumber_Tests(string gpuName)
+        private static IEnumerable PowerVRTestCases
         {
-            return HardwareInfoAndroid.ParsePowerVRGpuSeriesNumber(gpuName);
+            get
+            {
+                yield return new TestCaseData("PowerVR Rogue GX6250").Returns((GpuMinorSeries.PowerVR6XT, 6250));
+                yield return new TestCaseData("PowerVR Rogue GE8300").Returns((GpuMinorSeries.PowerVR8XE, 8300));
+                yield return new TestCaseData("PowerVR Rogue GE8320").Returns((GpuMinorSeries.PowerVR8XE, 8320));
+                yield return new TestCaseData("PowerVR Rogue GE8322").Returns((GpuMinorSeries.PowerVR8XE, 8322));
+                yield return new TestCaseData("PowerVR Rogue GM9446").Returns((GpuMinorSeries.PowerVR9XM, 9446));
+                yield return new TestCaseData("PowerVR B-Series BXM-8-256").Returns((GpuMinorSeries.Unknown, 0));
+            }
+        }
+
+        private static IEnumerable XclipseTestCases
+        {
+            get { yield return new TestCaseData("Samsung Xclipse 920").Returns((GpuMinorSeries.Xclipse, 920)); }
+        }
+
+        private static IEnumerable MaleoonTestCases
+        {
+            get { yield return new TestCaseData("Maleoon 910").Returns((GpuMinorSeries.Maleoon, 910)); }
+        }
+
+        [TestCaseSource(typeof(HardwareInfoAndroidTests), nameof(AdrenoTestCases))]
+        public (GpuMinorSeries, int) ParseAdrenoGpuSeries_Tests(string gpuName)
+        {
+            return HardwareInfoAndroid.ParseAdrenoGpuSeries(gpuName);
+        }
+
+        [TestCaseSource(typeof(HardwareInfoAndroidTests), nameof(MaliTestCases))]
+        public (GpuMinorSeries, int) ParseMaliGpuSeries_Tests(string gpuName)
+        {
+            return HardwareInfoAndroid.ParseMaliGpuSeries(gpuName);
+        }
+
+        [TestCaseSource(typeof(HardwareInfoAndroidTests), nameof(PowerVRTestCases))]
+        public (GpuMinorSeries, int) ParsePowerVRGpuSeries_Tests(string gpuName)
+        {
+            return HardwareInfoAndroid.ParsePowerVRGpuSeries(gpuName);
+        }
+
+        [TestCaseSource(typeof(HardwareInfoAndroidTests), nameof(XclipseTestCases))]
+        public (GpuMinorSeries, int) ParseXclipseGpuSeries_Tests(string gpuName)
+        {
+            return HardwareInfoAndroid.ParseXclipseGpuSeries(gpuName);
+        }
+
+        [TestCaseSource(typeof(HardwareInfoAndroidTests), nameof(MaleoonTestCases))]
+        public (GpuMinorSeries, int) ParseMaleoonGpuSeries_Tests(string gpuName)
+        {
+            return HardwareInfoAndroid.ParseMaleoonGpuSeries(gpuName);
         }
     }
 }

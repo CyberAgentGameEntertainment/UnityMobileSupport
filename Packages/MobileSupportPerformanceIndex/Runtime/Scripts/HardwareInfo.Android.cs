@@ -17,61 +17,137 @@ namespace MobileSupport
             if (Application.isEditor)
                 return;
 #endif
-            stats.GpuSeries = ParseGpuSeries(stats.GpuName);
-            stats.GpuSeriesNumber = stats.GpuSeries switch
+            var gpuName = stats.GpuName;
+            stats.GpuMajorSeries = ParseGpuMajorSeries(gpuName);
+            (stats.GpuMinorSeries, stats.GpuSeriesNumber) = stats.GpuMajorSeries switch
             {
-                GpuSeries.Adreno => ParseAdrenoGpuSeriesNumber(stats.GpuName),
-                GpuSeries.Mali or GpuSeries.MaliG or GpuSeries.MaliT => ParseMaliGpuSeriesNumber(stats.GpuName),
-                _ => 0
+                GpuMajorSeries.Adreno => ParseAdrenoGpuSeries(gpuName),
+                GpuMajorSeries.Mali => ParseMaliGpuSeries(gpuName),
+                GpuMajorSeries.PowerVR => ParsePowerVRGpuSeries(gpuName),
+                GpuMajorSeries.Xclipse => ParseXclipseGpuSeries(gpuName),
+                GpuMajorSeries.Maleoon => ParseMaleoonGpuSeries(gpuName),
+                _ => (GpuMinorSeries.Unknown, 0)
             };
             stats.SocName = GetSocName();
         }
 
-        public static GpuSeries ParseGpuSeries(string gpuName)
+        public static GpuMajorSeries ParseGpuMajorSeries(string gpuName)
         {
             // parse GPU series by StartsWith
             return gpuName switch
             {
-                { } when gpuName.StartsWith("Adreno") => GpuSeries.Adreno,
-                { } when gpuName.StartsWith("Mali-G") => GpuSeries.MaliG,
-                { } when gpuName.StartsWith("Mali-T") => GpuSeries.MaliT,
-                { } when gpuName.StartsWith("Mali-") => GpuSeries.Mali,
-                { } when gpuName.StartsWith("PowerVR") => GpuSeries.PowerVR,
-                _ => GpuSeries.Unknown
+                { } when gpuName.StartsWith("Adreno") => GpuMajorSeries.Adreno,
+                { } when gpuName.StartsWith("Mali") => GpuMajorSeries.Mali,
+                { } when gpuName.StartsWith("PowerVR") => GpuMajorSeries.PowerVR,
+                { } when gpuName.StartsWith("Samsung Xclipse") => GpuMajorSeries.Xclipse,
+                { } when gpuName.StartsWith("Maleoon") => GpuMajorSeries.Maleoon,
+                _ => GpuMajorSeries.Unknown
             };
         }
 
-        public static int ParseAdrenoGpuSeriesNumber(string gpuName)
+        public static (GpuMinorSeries, int) ParseAdrenoGpuSeries(string gpuName)
         {
             // parse Adreno GPU series number by regex
-            // Adreno (TM) xxx
+            // ex: Adreno (TM) xxx
             var match = Regex.Match(gpuName, @"Adreno \(TM\) (\d+)");
             if (match.Success)
-                return int.Parse(match.Groups[1].Value);
+            {
+                var number = int.Parse(match.Groups[1].Value);
+                switch (number / 100)
+                {
+                    case 1:
+                        return (GpuMinorSeries.Adreno100, number);
+                    case 2:
+                        return (GpuMinorSeries.Adreno200, number);
+                    case 3:
+                        return (GpuMinorSeries.Adreno300, number);
+                    case 4:
+                        return (GpuMinorSeries.Adreno400, number);
+                    case 5:
+                        return (GpuMinorSeries.Adreno500, number);
+                    case 6:
+                        return (GpuMinorSeries.Adreno600, number);
+                    case 7:
+                        return (GpuMinorSeries.Adreno700, number);
+                    case 8:
+                        return (GpuMinorSeries.Adreno800, number);
+                    case 9:
+                        return (GpuMinorSeries.Adreno900, number);
+                    default:
+                        return (GpuMinorSeries.Unknown, number);
+                }
+            }
 
-            return 0;
+            return (GpuMinorSeries.Unknown, 0);
         }
 
-        public static int ParseMaliGpuSeriesNumber(string gpuName)
+        public static (GpuMinorSeries, int) ParseMaliGpuSeries(string gpuName)
         {
             // parse Mali GPU series number by regex
-            // Mali-Gxx, Mali-Txxx
-            var match = Regex.Match(gpuName, @"Mali-[GT]*(\d+)");
+            // ex: Mali-Gxx, Mali-Txxx
+            var match = Regex.Match(gpuName, @"Mali-([GT]?)(\d+)");
             if (match.Success)
-                return int.Parse(match.Groups[1].Value);
+            {
+                var number = int.Parse(match.Groups[2].Value);
+                return match.Groups[1].Value switch
+                {
+                    "G" => (GpuMinorSeries.MaliG, number),
+                    "T" => (GpuMinorSeries.MaliT, number),
+                    "" => (GpuMinorSeries.Mali, number),
+                    _ => (GpuMinorSeries.Unknown, number)
+                };
+            }
 
-            return 0;
+            return (GpuMinorSeries.Unknown, 0);
         }
 
-        public static int ParsePowerVRGpuSeriesNumber(string gpuName)
+        public static (GpuMinorSeries, int) ParsePowerVRGpuSeries(string gpuName)
         {
             // parse PowerVR GPU series number by regex
-            // PowerVR Rogue GExxxx, PowerVR Rogue G?xxxx
-            var match = Regex.Match(gpuName, @"PowerVR Rogue G[A-Z](\d+)");
+            // ex: PowerVR Rogue GExxxx, PowerVR Rogue G?xxxx
+            var match = Regex.Match(gpuName, @"PowerVR Rogue (G[A-Z])(\d)(\d+)");
             if (match.Success)
-                return int.Parse(match.Groups[1].Value);
+            {
+                var number = int.Parse(match.Groups[2].Value + match.Groups[3].Value);
+                return (match.Groups[1].Value + match.Groups[2].Value) switch
+                {
+                    "GX6" => (GpuMinorSeries.PowerVR6XT, number),
+                    "GE8" => (GpuMinorSeries.PowerVR8XE, number),
+                    "GM9" => (GpuMinorSeries.PowerVR9XM, number),
+                    _ => (GpuMinorSeries.Unknown, number)
+                };
+            }
 
-            return 0;
+
+            return (GpuMinorSeries.Unknown, 0);
+        }
+
+        public static (GpuMinorSeries, int) ParseXclipseGpuSeries(string gpuName)
+        {
+            // parse Samsung Xclipse GPU series number by regex
+            // ex: Samsung Xclipse xxx
+            var match = Regex.Match(gpuName, @"Samsung Xclipse (\d+)");
+            if (match.Success)
+            {
+                var number = int.Parse(match.Groups[1].Value);
+                return (GpuMinorSeries.Xclipse, number);
+            }
+
+            return (GpuMinorSeries.Unknown, 0);
+        }
+
+        public static (GpuMinorSeries, int) ParseMaleoonGpuSeries(string gpuName)
+        {
+            // parse Huawei Maleoon GPU series number by regex
+            // ex: Maleoon xxx
+            var match = Regex.Match(gpuName, @"Maleoon (\d+)");
+            if (match.Success)
+            {
+                var number = int.Parse(match.Groups[1].Value);
+                return (GpuMinorSeries.Maleoon, number);
+            }
+
+            return (GpuMinorSeries.Unknown, 0);
         }
 
         public static string GetSocName()

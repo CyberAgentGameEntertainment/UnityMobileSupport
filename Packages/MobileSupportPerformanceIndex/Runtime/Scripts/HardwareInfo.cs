@@ -5,7 +5,45 @@ namespace MobileSupport
     /// <summary>
     ///     Enum of GPU series
     /// </summary>
-    public enum GpuSeries
+    public enum GpuMajorSeries
+    {
+        /// <summary>
+        ///     Unknown
+        /// </summary>
+        Unknown,
+
+        /// <summary>
+        ///     Apple X-series
+        /// </summary>
+        Apple,
+
+        /// <summary>
+        ///     Qualcomm Adreno series
+        /// </summary>
+        Adreno,
+
+        /// <summary>
+        ///     ARM Mali series
+        /// </summary>
+        Mali,
+
+        /// <summary>
+        ///     PowerVR series
+        /// </summary>
+        PowerVR,
+
+        /// <summary>
+        ///     Samsung Xclipse series
+        /// </summary>
+        Xclipse,
+
+        /// <summary>
+        ///     Huawei Maleoon series
+        /// </summary>
+        Maleoon
+    }
+
+    public enum GpuMinorSeries
     {
         /// <summary>
         ///     Unknown
@@ -23,9 +61,49 @@ namespace MobileSupport
         AppleM,
 
         /// <summary>
-        ///     Qualcomm Adreno series
+        ///     Qualcomm Adreno 100 series
         /// </summary>
-        Adreno,
+        Adreno100,
+
+        /// <summary>
+        ///     Qualcomm Adreno 200 series
+        /// </summary>
+        Adreno200,
+
+        /// <summary>
+        ///     Qualcomm Adreno 300 series
+        /// </summary>
+        Adreno300,
+
+        /// <summary>
+        ///     Qualcomm Adreno 400 series
+        /// </summary>
+        Adreno400,
+
+        /// <summary>
+        ///     Qualcomm Adreno 500 series
+        /// </summary>
+        Adreno500,
+
+        /// <summary>
+        ///     Qualcomm Adreno 600 series
+        /// </summary>
+        Adreno600,
+
+        /// <summary>
+        ///     Qualcomm Adreno 700 series
+        /// </summary>
+        Adreno700,
+
+        /// <summary>
+        ///     Qualcomm Adreno 800 series
+        /// </summary>
+        Adreno800,
+
+        /// <summary>
+        ///     Qualcomm Adreno 900 series
+        /// </summary>
+        Adreno900,
 
         /// <summary>
         ///     ARM Mali series
@@ -43,9 +121,29 @@ namespace MobileSupport
         MaliG,
 
         /// <summary>
-        ///     PowerVR series
+        ///     PowerVR 6XT series
         /// </summary>
-        PowerVR
+        PowerVR6XT,
+
+        /// <summary>
+        ///     PowerVR 8XE series
+        /// </summary>
+        PowerVR8XE,
+
+        /// <summary>
+        ///     PowerVR 9XM series
+        /// </summary>
+        PowerVR9XM,
+
+        /// <summary>
+        ///     Samsung Xclipse series
+        /// </summary>
+        Xclipse,
+
+        /// <summary>
+        ///     Huawei Maleoon series
+        /// </summary>
+        Maleoon
     }
 
     /// <summary>
@@ -72,9 +170,14 @@ namespace MobileSupport
         public string GpuName { get; internal set; }
 
         /// <summary>
-        ///     Series of GPU
+        ///     Major series of GPU
         /// </summary>
-        public GpuSeries GpuSeries { get; internal set; }
+        public GpuMajorSeries GpuMajorSeries { get; internal set; }
+
+        /// <summary>
+        ///     Major series of GPU
+        /// </summary>
+        public GpuMinorSeries GpuMinorSeries { get; internal set; }
 
         /// <summary>
         ///     Series number of GPU
@@ -100,7 +203,8 @@ namespace MobileSupport
                 DeviceModel = SystemInfo.deviceModel,
                 GpuName = SystemInfo.graphicsDeviceName,
                 GpuMemorySizeMb = SystemInfo.graphicsMemorySize,
-                GpuSeries = GpuSeries.Unknown,
+                GpuMajorSeries = GpuMajorSeries.Unknown,
+                GpuMinorSeries = GpuMinorSeries.Unknown,
                 GpuSeriesNumber = 0,
                 SocName = "",
                 SystemMemorySizeMb = SystemInfo.systemMemorySize
