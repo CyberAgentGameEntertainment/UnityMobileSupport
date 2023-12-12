@@ -28,7 +28,7 @@ namespace MobileSupport
 
         public static int ParseAppleGpuSeriesNumber(string gpuName)
         {
-            // parse Adreno GPU series number by regex
+            // parse Apple GPU series number by regex
             // Apple A8 GPU, Apple A10 GPU, Apple M1
             var match = Regex.Match(gpuName, @"Apple [AM](\d+)");
             if (match.Success)

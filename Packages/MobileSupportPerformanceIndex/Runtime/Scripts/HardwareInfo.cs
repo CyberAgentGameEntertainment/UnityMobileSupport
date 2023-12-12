@@ -15,7 +15,7 @@ namespace MobileSupport
         /// <summary>
         ///     Apple A-series
         /// </summary>
-        AppleA, // Apple A-series
+        AppleA,
 
         /// <summary>
         ///     Apple M-series
