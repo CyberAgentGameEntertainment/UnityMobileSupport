@@ -183,6 +183,12 @@
       "source": "embedded",
       "dependencies": {}
     },
+    "jp.co.cyberagent.unity-mobile-support-performance-index": {
+      "version": "file:MobileSupportPerformanceIndex",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "jp.co.cyberagent.unity-mobile-support-storage": {
       "version": "file:MobileSupportStorage",
       "depth": 0,

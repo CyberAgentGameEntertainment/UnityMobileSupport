@@ -1,0 +1,46 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbdbc7b9b2a5e46ab9f0091774f6e7bb, type: 3}
+  m_Name: SamplePerformanceIndexData
+  m_EditorClassIdentifier: 
+  devicePerformanceIndexIndices: []
+  gpuPerformanceIndices:
+  - gpuMajorSeries: 2
+    gpuMinorSeries: 0
+    gpuSeriesNumberMin: 0
+    gpuSeriesNumberMax: 540
+    performanceLevel: 0
+  - gpuMajorSeries: 2
+    gpuMinorSeries: 0
+    gpuSeriesNumberMin: 541
+    gpuSeriesNumberMax: 629
+    performanceLevel: 1
+  - gpuMajorSeries: 2
+    gpuMinorSeries: 0
+    gpuSeriesNumberMin: 630
+    gpuSeriesNumberMax: 999
+    performanceLevel: 2
+  - gpuMajorSeries: 1
+    gpuMinorSeries: 1
+    gpuSeriesNumberMin: 0
+    gpuSeriesNumberMax: 10
+    performanceLevel: 1
+  - gpuMajorSeries: 1
+    gpuMinorSeries: 1
+    gpuSeriesNumberMin: 11
+    gpuSeriesNumberMax: 2147483647
+    performanceLevel: 2
+  - gpuMajorSeries: 1
+    gpuMinorSeries: 2
+    gpuSeriesNumberMin: 0
+    gpuSeriesNumberMax: 2147483647
+    performanceLevel: 2
