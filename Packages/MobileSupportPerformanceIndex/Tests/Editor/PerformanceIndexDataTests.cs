@@ -1,3 +1,7 @@
+// --------------------------------------------------------------
+// Copyright 2023 CyberAgent, Inc.
+// --------------------------------------------------------------
+
 using NUnit.Framework;
 
 namespace MobileSupport.PerformanceIndex.Editor.Tests
