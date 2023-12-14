@@ -11,11 +11,20 @@ namespace MobileSupport.PerformanceIndex.Editor.Tests
     public class PerformanceIndexDataTests
     {
         [Test]
-        public void PerformanceIndexDataTests_OnlyDeviceData()
+        [TestCase("iPhone 10", true, 3)]
+        [TestCase("iPhone 12", true, 5)]
+        [TestCase("iPhone 12 Pro Max", true, 1)]
+        [TestCase("iPhone 13 Pro Max", true, 2)]
+        [TestCase("iPhone 12 Pro", false, 0)]
+        [TestCase("iPhone 1", false, 0)]
+        [TestCase("iPhone 100", false, 0)]
+        [TestCase("", false, 0)]
+        public void PerformanceIndexDataTests_OnlyDeviceData(string deviceModel, bool expectedResult,
+            int expectedPerformanceLevel)
         {
             var stats = new HardwareStats
             {
-                DeviceModel = "iPhone 12 Pro Max"
+                DeviceModel = deviceModel
             };
 
             var data = ScriptableObject.CreateInstance<TestPerformanceIndexData>();
@@ -44,8 +53,8 @@ namespace MobileSupport.PerformanceIndex.Editor.Tests
             };
 
             var performanceLevel = 0;
-            Assert.IsTrue(data.GetPerformanceLevel(stats, ref performanceLevel));
-            Assert.AreEqual(1, performanceLevel);
+            Assert.AreEqual(expectedResult, data.GetPerformanceLevel(stats, ref performanceLevel));
+            Assert.AreEqual(expectedPerformanceLevel, performanceLevel);
         }
 
 

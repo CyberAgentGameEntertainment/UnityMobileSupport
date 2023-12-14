@@ -39,7 +39,7 @@ namespace MobileSupport.PerformanceIndex
         }
     }
 
-    public class PerformanceIndexData<T> : ScriptableObject
+    public abstract class PerformanceIndexData<T> : ScriptableObject
     {
         public DevicePerformanceIndex<T>[] devicePerformanceIndexIndices;
         public GpuPerformanceIndex<T>[] gpuPerformanceIndices;
