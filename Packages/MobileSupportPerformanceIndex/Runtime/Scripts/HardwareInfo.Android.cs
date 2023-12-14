@@ -36,11 +36,11 @@ namespace MobileSupport
             // parse GPU series by StartsWith
             return gpuName switch
             {
-                { } when gpuName.StartsWith("Adreno") => GpuMajorSeries.Adreno,
-                { } when gpuName.StartsWith("Mali") => GpuMajorSeries.Mali,
-                { } when gpuName.StartsWith("PowerVR") => GpuMajorSeries.PowerVR,
-                { } when gpuName.StartsWith("Samsung Xclipse") => GpuMajorSeries.Xclipse,
-                { } when gpuName.StartsWith("Maleoon") => GpuMajorSeries.Maleoon,
+                { } when gpuName.StartsWith("Adreno", StringComparison.Ordinal) => GpuMajorSeries.Adreno,
+                { } when gpuName.StartsWith("Mali", StringComparison.Ordinal) => GpuMajorSeries.Mali,
+                { } when gpuName.StartsWith("PowerVR", StringComparison.Ordinal) => GpuMajorSeries.PowerVR,
+                { } when gpuName.StartsWith("Samsung Xclipse", StringComparison.Ordinal) => GpuMajorSeries.Xclipse,
+                { } when gpuName.StartsWith("Maleoon", StringComparison.Ordinal) => GpuMajorSeries.Maleoon,
                 _ => GpuMajorSeries.Unknown
             };
         }

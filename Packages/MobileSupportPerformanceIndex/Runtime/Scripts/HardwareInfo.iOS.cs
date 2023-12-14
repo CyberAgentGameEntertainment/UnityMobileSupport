@@ -1,3 +1,4 @@
+using System;
 using System.Text.RegularExpressions;
 
 namespace MobileSupport
@@ -21,8 +22,8 @@ namespace MobileSupport
             // parse GPU series by StartsWith
             return gpuName switch
             {
-                { } when gpuName.StartsWith("Apple A") => GpuMinorSeries.AppleA,
-                { } when gpuName.StartsWith("Apple M") => GpuMinorSeries.AppleM,
+                { } when gpuName.StartsWith("Apple A", StringComparison.Ordinal) => GpuMinorSeries.AppleA,
+                { } when gpuName.StartsWith("Apple M", StringComparison.Ordinal) => GpuMinorSeries.AppleM,
                 _ => GpuMinorSeries.Unknown
             };
         }
