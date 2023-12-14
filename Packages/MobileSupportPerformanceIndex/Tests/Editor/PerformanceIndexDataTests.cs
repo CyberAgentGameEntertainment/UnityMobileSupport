@@ -26,7 +26,7 @@ namespace MobileSupport.PerformanceIndex.Editor.Tests
             };
 
             var data = new CombinedPerformanceIndexData<int>();
-            data.devicePerformanceIndexIndices = new[]
+            data.devicePerformanceIndices = new[]
             {
                 new DevicePerformanceIndex<int>
                 {

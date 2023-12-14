@@ -184,7 +184,8 @@ namespace MobileSupport
         public GpuMinorSeries GpuMinorSeries { get; internal set; }
 
         /// <summary>
-        ///     Series number of GPU
+        ///     Series number of GPU.
+        ///     ex: Adreno 650 -> 650
         /// </summary>
         public int GpuSeriesNumber { get; internal set; }
 

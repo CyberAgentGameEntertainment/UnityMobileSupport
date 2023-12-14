@@ -10,8 +10,10 @@ namespace MobileSupport.PerformanceIndex
     [Serializable]
     public sealed class DevicePerformanceIndex<T>
     {
+        [Tooltip("Device model name returned by SystemInfo.deviceModel (exact match)")]
         public string deviceModel;
 
+        [Tooltip("Performance level for the device that match")]
         public T performanceLevel;
 
         public bool Match(string deviceModel)
@@ -23,11 +25,19 @@ namespace MobileSupport.PerformanceIndex
     [Serializable]
     public sealed class GpuPerformanceIndex<T>
     {
+        [Tooltip("GPU major series that match")]
         public GpuMajorSeries gpuMajorSeries;
+
+        [Tooltip("GPU minor series that match, set to Unknown to ignore")]
         public GpuMinorSeries gpuMinorSeries;
+
+        [Tooltip("Minimum of GPU series number that match (inclusive)")]
         public int gpuSeriesNumberMin;
+
+        [Tooltip("Mamimum of GPU series number that match (inclusive)")]
         public int gpuSeriesNumberMax;
 
+        [Tooltip("Performance level for the device that match")]
         public T performanceLevel;
 
         public bool Match(GpuMajorSeries gpuMajorSeries, GpuMinorSeries gpuMinorSeries, int gpuSeriesNumber)
@@ -46,14 +56,17 @@ namespace MobileSupport.PerformanceIndex
     [Serializable]
     public sealed class CombinedPerformanceIndexData<T>
     {
-        public DevicePerformanceIndex<T>[] devicePerformanceIndexIndices;
+        [Tooltip("Performance index table by device model name")]
+        public DevicePerformanceIndex<T>[] devicePerformanceIndices;
+
+        [Tooltip("Performance index table by GPU series")]
         public GpuPerformanceIndex<T>[] gpuPerformanceIndices;
 
         public bool GetPerformanceLevel(HardwareStats stats, ref T performanceLevel)
         {
             // search device name first
-            if (devicePerformanceIndexIndices != null)
-                foreach (var devicePerformanceIndex in devicePerformanceIndexIndices)
+            if (devicePerformanceIndices != null)
+                foreach (var devicePerformanceIndex in devicePerformanceIndices)
                     if (devicePerformanceIndex.Match(stats.DeviceModel))
                     {
                         performanceLevel = devicePerformanceIndex.performanceLevel;
@@ -75,7 +88,10 @@ namespace MobileSupport.PerformanceIndex
 
     public abstract class PerformanceIndexData<T> : ScriptableObject
     {
+        [Tooltip("Combined performance index table for iOS")]
         public CombinedPerformanceIndexData<T> iosPerformanceIndexData;
+
+        [Tooltip("Combined performance index table for Android")]
         public CombinedPerformanceIndexData<T> androidPerformanceIndexData;
 
         public bool GetPerformanceLevel(HardwareStats stats, ref T performanceLevel)
