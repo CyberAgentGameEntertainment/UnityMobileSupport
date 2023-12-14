@@ -39,7 +39,8 @@ namespace MobileSupport.PerformanceIndex
         }
     }
 
-    public abstract class PerformanceIndexData<T> : ScriptableObject
+    [Serializable]
+    public sealed class CombinedPerformanceIndexData<T>
     {
         public DevicePerformanceIndex<T>[] devicePerformanceIndexIndices;
         public GpuPerformanceIndex<T>[] gpuPerformanceIndices;
@@ -65,6 +66,23 @@ namespace MobileSupport.PerformanceIndex
                     }
 
             return false;
+        }
+    }
+
+    public abstract class PerformanceIndexData<T> : ScriptableObject
+    {
+        public CombinedPerformanceIndexData<T> iosPerformanceIndexData;
+        public CombinedPerformanceIndexData<T> androidPerformanceIndexData;
+
+        public bool GetPerformanceLevel(HardwareStats stats, ref T performanceLevel)
+        {
+#if UNITY_IOS
+            return iosPerformanceIndexData.GetPerformanceLevel(stats, ref performanceLevel);
+#elif UNITY_ANDROID
+            return androidPerformanceIndexData.GetPerformanceLevel(stats, ref performanceLevel);
+#else
+            return false;
+#endif
         }
     }
 }

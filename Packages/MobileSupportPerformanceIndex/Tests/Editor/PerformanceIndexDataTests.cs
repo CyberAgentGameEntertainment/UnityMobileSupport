@@ -1,13 +1,7 @@
 using NUnit.Framework;
-using UnityEngine;
 
 namespace MobileSupport.PerformanceIndex.Editor.Tests
 {
-    // need to define a class to test generic ScriptableObject
-    internal class TestPerformanceIndexData : PerformanceIndexData<int>
-    {
-    }
-
     public class PerformanceIndexDataTests
     {
         [Test]
@@ -27,7 +21,7 @@ namespace MobileSupport.PerformanceIndex.Editor.Tests
                 DeviceModel = deviceModel
             };
 
-            var data = ScriptableObject.CreateInstance<TestPerformanceIndexData>();
+            var data = new CombinedPerformanceIndexData<int>();
             data.devicePerformanceIndexIndices = new[]
             {
                 new DevicePerformanceIndex<int>
@@ -74,7 +68,7 @@ namespace MobileSupport.PerformanceIndex.Editor.Tests
                 GpuSeriesNumber = gpuSeriesNumber
             };
 
-            var data = ScriptableObject.CreateInstance<TestPerformanceIndexData>();
+            var data = new CombinedPerformanceIndexData<int>();
             data.gpuPerformanceIndices = new[]
             {
                 new GpuPerformanceIndex<int>
