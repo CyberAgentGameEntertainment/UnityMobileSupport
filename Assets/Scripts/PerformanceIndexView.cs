@@ -1,5 +1,5 @@
 using System.Text;
-using MobileSupport;
+using MobileSupport.PerformanceIndex;
 using UnityEngine;
 
 public class PerformanceIndexView : MonoBehaviour

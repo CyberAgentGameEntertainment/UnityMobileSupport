@@ -12,39 +12,48 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbdbc7b9b2a5e46ab9f0091774f6e7bb, type: 3}
   m_Name: SamplePerformanceIndexData
   m_EditorClassIdentifier: 
-  iosPerformanceIndexData:
-    devicePerformanceIndexIndices: []
+  performanceIndexData:
+    devicePerformanceIndices: []
     gpuPerformanceIndices:
-    - gpuMajorSeries: 1
-      gpuMinorSeries: 1
+    - gpuSeries:
+        value: 11
+        gpuMajorSeries: 1
+        gpuMinorSeries: 11
       gpuSeriesNumberMin: 0
       gpuSeriesNumberMax: 10
       performanceLevel: 1
-    - gpuMajorSeries: 1
-      gpuMinorSeries: 1
+    - gpuSeries:
+        value: 11
+        gpuMajorSeries: 1
+        gpuMinorSeries: 11
       gpuSeriesNumberMin: 11
       gpuSeriesNumberMax: 2147483647
       performanceLevel: 2
-    - gpuMajorSeries: 1
-      gpuMinorSeries: 2
+    - gpuSeries:
+        value: 12
+        gpuMajorSeries: 1
+        gpuMinorSeries: 12
       gpuSeriesNumberMin: 0
       gpuSeriesNumberMax: 2147483647
       performanceLevel: 2
-  androidPerformanceIndexData:
-    devicePerformanceIndexIndices: []
-    gpuPerformanceIndices:
-    - gpuMajorSeries: 2
-      gpuMinorSeries: 0
+    - gpuSeries:
+        value: 20
+        gpuMajorSeries: 2
+        gpuMinorSeries: 0
       gpuSeriesNumberMin: 0
       gpuSeriesNumberMax: 540
       performanceLevel: 0
-    - gpuMajorSeries: 2
-      gpuMinorSeries: 0
+    - gpuSeries:
+        value: 20
+        gpuMajorSeries: 2
+        gpuMinorSeries: 0
       gpuSeriesNumberMin: 541
       gpuSeriesNumberMax: 629
       performanceLevel: 1
-    - gpuMajorSeries: 2
-      gpuMinorSeries: 0
+    - gpuSeries:
+        value: 20
+        gpuMajorSeries: 2
+        gpuMinorSeries: 0
       gpuSeriesNumberMin: 630
       gpuSeriesNumberMax: 999
       performanceLevel: 2

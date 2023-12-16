@@ -25,11 +25,8 @@ namespace MobileSupport.PerformanceIndex
     [Serializable]
     public sealed class GpuPerformanceIndex<T>
     {
-        [Tooltip("GPU major series that match")]
-        public GpuMajorSeries gpuMajorSeries;
-
-        [Tooltip("GPU minor series that match, set to Unknown to ignore")]
-        public GpuMinorSeries gpuMinorSeries;
+        [Tooltip("GPU series that match")]
+        public GpuSeriesEnumeration gpuSeries;
 
         [Tooltip("Minimum of GPU series number that match (inclusive)")]
         public int gpuSeriesNumberMin;
@@ -42,10 +39,10 @@ namespace MobileSupport.PerformanceIndex
 
         public bool Match(GpuMajorSeries gpuMajorSeries, GpuMinorSeries gpuMinorSeries, int gpuSeriesNumber)
         {
-            if (gpuMajorSeries != this.gpuMajorSeries)
+            if (gpuMajorSeries != gpuSeries.GpuMajorSeries)
                 return false;
             // don't check gpuMinorSeries if it's unknown
-            if (this.gpuMinorSeries != GpuMinorSeries.Unknown && gpuMinorSeries != this.gpuMinorSeries)
+            if (gpuSeries.GpuMinorSeries != GpuMinorSeries.Unknown && gpuMinorSeries != gpuSeries.GpuMinorSeries)
                 return false;
             if (gpuSeriesNumber < gpuSeriesNumberMin || gpuSeriesNumber > gpuSeriesNumberMax)
                 return false;
@@ -88,18 +85,13 @@ namespace MobileSupport.PerformanceIndex
 
     public abstract class PerformanceIndexData<T> : ScriptableObject
     {
-        [Tooltip("Combined performance index table for iOS")]
-        public CombinedPerformanceIndexData<T> iosPerformanceIndexData;
-
-        [Tooltip("Combined performance index table for Android")]
-        public CombinedPerformanceIndexData<T> androidPerformanceIndexData;
+        [Tooltip("Combined performance index table")]
+        public CombinedPerformanceIndexData<T> performanceIndexData;
 
         public bool GetPerformanceLevel(HardwareStats stats, ref T performanceLevel)
         {
-#if UNITY_IOS
-            return iosPerformanceIndexData.GetPerformanceLevel(stats, ref performanceLevel);
-#elif UNITY_ANDROID
-            return androidPerformanceIndexData.GetPerformanceLevel(stats, ref performanceLevel);
+#if UNITY_IOS || UNITY_ANDROID
+            return performanceIndexData.GetPerformanceLevel(stats, ref performanceLevel);
 #else
             return false;
 #endif
