@@ -60,11 +60,11 @@ namespace MobileSupport.PerformanceIndex
         [Serializable]
         public sealed class SeriesNumberRange
         {
-            [Tooltip("Maximum of GPU series number that match (inclusive)")]
-            public int gpuSeriesNumberMax;
-
             [Tooltip("Minimum of GPU series number that match (inclusive)")]
             public int gpuSeriesNumberMin;
+
+            [Tooltip("Maximum of GPU series number that match (inclusive)")]
+            public int gpuSeriesNumberMax;
 
             [Tooltip("Performance level for the device that match")]
             public T performanceLevel;

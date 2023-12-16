@@ -20,31 +20,31 @@ MonoBehaviour:
         gpuMajorSeries: 1
         gpuMinorSeries: 11
       gpuSeriesNumberRanges:
-      - gpuSeriesNumberMax: 0
-        gpuSeriesNumberMin: 10
+      - gpuSeriesNumberMin: 0
+        gpuSeriesNumberMax: 10
         performanceLevel: 1
-      - gpuSeriesNumberMax: 11
-        gpuSeriesNumberMin: 2147483647
+      - gpuSeriesNumberMin: 11
+        gpuSeriesNumberMax: 2147483647
         performanceLevel: 2
     - gpuSeries:
         value: 12
         gpuMajorSeries: 1
         gpuMinorSeries: 12
       gpuSeriesNumberRanges:
-      - gpuSeriesNumberMax: 0
-        gpuSeriesNumberMin: 2147483647
+      - gpuSeriesNumberMin: 0
+        gpuSeriesNumberMax: 2147483647
         performanceLevel: 2
     - gpuSeries:
         value: 20
         gpuMajorSeries: 2
         gpuMinorSeries: 0
       gpuSeriesNumberRanges:
-      - gpuSeriesNumberMax: 0
-        gpuSeriesNumberMin: 540
+      - gpuSeriesNumberMin: 0
+        gpuSeriesNumberMax: 540
         performanceLevel: 0
-      - gpuSeriesNumberMax: 541
-        gpuSeriesNumberMin: 629
+      - gpuSeriesNumberMin: 541
+        gpuSeriesNumberMax: 629
         performanceLevel: 1
-      - gpuSeriesNumberMax: 630
-        gpuSeriesNumberMin: 999
+      - gpuSeriesNumberMin: 630
+        gpuSeriesNumberMax: 999
         performanceLevel: 2

@@ -9,6 +9,9 @@ using UnityEngine;
 
 namespace MobileSupport.PerformanceIndex.Editor
 {
+    /// <summary>
+    ///     Draw GpuSeriesEnumeration as popup
+    /// </summary>
     [CustomPropertyDrawer(typeof(GpuSeriesEnumeration))]
     public class GpuSeriesEnumerationDrawer : PropertyDrawer
     {
