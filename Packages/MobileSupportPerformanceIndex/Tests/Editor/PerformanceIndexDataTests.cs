@@ -78,30 +78,33 @@ namespace MobileSupport.PerformanceIndex.Editor.Tests
                 new GpuPerformanceIndex<int>
                 {
                     gpuSeries = GpuSeriesEnumeration.AdrenoAny,
-                    gpuSeriesNumberMin = 500,
-                    gpuSeriesNumberMax = 599,
-                    performanceLevel = 5
-                },
-                new GpuPerformanceIndex<int>
-                {
-                    gpuSeries = GpuSeriesEnumeration.AdrenoAny,
-                    gpuSeriesNumberMin = 600,
-                    gpuSeriesNumberMax = 799,
-                    performanceLevel = 10
-                },
-                new GpuPerformanceIndex<int>
-                {
-                    gpuSeries = GpuSeriesEnumeration.AdrenoAny,
-                    gpuSeriesNumberMin = 200,
-                    gpuSeriesNumberMax = 299,
-                    performanceLevel = 1
-                },
-                new GpuPerformanceIndex<int>
-                {
-                    gpuSeries = GpuSeriesEnumeration.AdrenoAny,
-                    gpuSeriesNumberMin = 300,
-                    gpuSeriesNumberMax = 499,
-                    performanceLevel = 3
+                    gpuSeriesNumberRanges = new[]
+                    {
+                        new GpuPerformanceIndex<int>.SeriesNumberRange
+                        {
+                            gpuSeriesNumberMin = 500,
+                            gpuSeriesNumberMax = 599,
+                            performanceLevel = 5
+                        },
+                        new GpuPerformanceIndex<int>.SeriesNumberRange
+                        {
+                            gpuSeriesNumberMin = 600,
+                            gpuSeriesNumberMax = 799,
+                            performanceLevel = 10
+                        },
+                        new GpuPerformanceIndex<int>.SeriesNumberRange
+                        {
+                            gpuSeriesNumberMin = 200,
+                            gpuSeriesNumberMax = 299,
+                            performanceLevel = 1
+                        },
+                        new GpuPerformanceIndex<int>.SeriesNumberRange
+                        {
+                            gpuSeriesNumberMin = 300,
+                            gpuSeriesNumberMax = 499,
+                            performanceLevel = 3
+                        }
+                    }
                 }
             };
 

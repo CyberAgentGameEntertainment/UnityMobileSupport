@@ -16,9 +16,15 @@ namespace MobileSupport.PerformanceIndex
         [Tooltip("Performance level for the device that match")]
         public T performanceLevel;
 
-        public bool Match(string deviceModel)
+        public bool Match(string deviceModel, ref T performanceLevel)
         {
-            return this.deviceModel.Equals(deviceModel, StringComparison.OrdinalIgnoreCase);
+            if (this.deviceModel.Equals(deviceModel, StringComparison.Ordinal))
+            {
+                performanceLevel = this.performanceLevel;
+                return true;
+            }
+
+            return false;
         }
     }
 
@@ -28,25 +34,40 @@ namespace MobileSupport.PerformanceIndex
         [Tooltip("GPU series that match")]
         public GpuSeriesEnumeration gpuSeries;
 
-        [Tooltip("Minimum of GPU series number that match (inclusive)")]
-        public int gpuSeriesNumberMin;
+        public SeriesNumberRange[] gpuSeriesNumberRanges;
 
-        [Tooltip("Mamimum of GPU series number that match (inclusive)")]
-        public int gpuSeriesNumberMax;
-
-        [Tooltip("Performance level for the device that match")]
-        public T performanceLevel;
-
-        public bool Match(GpuMajorSeries gpuMajorSeries, GpuMinorSeries gpuMinorSeries, int gpuSeriesNumber)
+        public bool Match(GpuMajorSeries gpuMajorSeries, GpuMinorSeries gpuMinorSeries, int gpuSeriesNumber,
+            ref T performanceLevel)
         {
             if (gpuMajorSeries != gpuSeries.GpuMajorSeries)
                 return false;
             // don't check gpuMinorSeries if it's unknown
             if (gpuSeries.GpuMinorSeries != GpuMinorSeries.Unknown && gpuMinorSeries != gpuSeries.GpuMinorSeries)
                 return false;
-            if (gpuSeriesNumber < gpuSeriesNumberMin || gpuSeriesNumber > gpuSeriesNumberMax)
-                return false;
-            return true;
+
+            foreach (var range in gpuSeriesNumberRanges)
+            {
+                if (gpuSeriesNumber < range.gpuSeriesNumberMin || gpuSeriesNumber > range.gpuSeriesNumberMax)
+                    continue;
+
+                performanceLevel = range.performanceLevel;
+                return true;
+            }
+
+            return false;
+        }
+
+        [Serializable]
+        public sealed class SeriesNumberRange
+        {
+            [Tooltip("Maximum of GPU series number that match (inclusive)")]
+            public int gpuSeriesNumberMax;
+
+            [Tooltip("Minimum of GPU series number that match (inclusive)")]
+            public int gpuSeriesNumberMin;
+
+            [Tooltip("Performance level for the device that match")]
+            public T performanceLevel;
         }
     }
 
@@ -64,20 +85,15 @@ namespace MobileSupport.PerformanceIndex
             // search device name first
             if (devicePerformanceIndices != null)
                 foreach (var devicePerformanceIndex in devicePerformanceIndices)
-                    if (devicePerformanceIndex.Match(stats.DeviceModel))
-                    {
-                        performanceLevel = devicePerformanceIndex.performanceLevel;
+                    if (devicePerformanceIndex.Match(stats.DeviceModel, ref performanceLevel))
                         return true;
-                    }
 
             // search qpu series second
             if (gpuPerformanceIndices != null)
                 foreach (var gpuPerformanceIndex in gpuPerformanceIndices)
-                    if (gpuPerformanceIndex.Match(stats.GpuMajorSeries, stats.GpuMinorSeries, stats.GpuSeriesNumber))
-                    {
-                        performanceLevel = gpuPerformanceIndex.performanceLevel;
+                    if (gpuPerformanceIndex.Match(stats.GpuMajorSeries, stats.GpuMinorSeries, stats.GpuSeriesNumber,
+                            ref performanceLevel))
                         return true;
-                    }
 
             return false;
         }
