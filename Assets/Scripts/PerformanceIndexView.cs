@@ -1,11 +1,13 @@
 using System.Text;
 using MobileSupport.PerformanceIndex;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class PerformanceIndexView : MonoBehaviour
 {
+    [FormerlySerializedAs("sampleQualityLevelMatcher")]
     [SerializeField]
-    private SamplePerformanceIndexData samplePerformanceIndexData;
+    private SampleQualityLevelSelector sampleQualityLevelSelector;
 
     private void Start()
     {
@@ -21,15 +23,14 @@ public class PerformanceIndexView : MonoBehaviour
         sb.AppendLine($"SystemMemorySizeMb: {stats.SystemMemorySizeMb}");
         Debug.Log(sb.ToString());
 
-        if (samplePerformanceIndexData == null)
+        if (sampleQualityLevelSelector == null)
         {
-            Debug.LogError("SamplePerformanceIndexData is null");
+            Debug.LogError("SampleQualityLevelSelector is null");
         }
         else
         {
-            var performanceLevel = SampleQualityLevel.Medium;
-            if (samplePerformanceIndexData.GetPerformanceLevel(stats, ref performanceLevel))
-                Debug.Log($"PerformanceLevel: {performanceLevel}");
+            if (sampleQualityLevelSelector.GetQualityLevel(stats, out var qualityLevel))
+                Debug.Log($"PerformanceLevel: {qualityLevel}");
             else
                 Debug.Log("PerformanceLevel: Unknown");
         }

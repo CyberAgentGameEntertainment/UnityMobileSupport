@@ -8,49 +8,88 @@ using UnityEngine;
 namespace MobileSupport.PerformanceIndex
 {
     [Serializable]
-    public sealed class DevicePerformanceIndex<T>
+    public abstract class RuleMatcher
     {
-        [Tooltip("Device model name returned by SystemInfo.deviceModel (exact match)")]
-        public string deviceModel;
+        public abstract bool Match(HardwareStats stats, ref int qualityLevel);
 
-        [Tooltip("Performance level for the device that match")]
-        public T performanceLevel;
-
-        public bool Match(string deviceModel, ref T performanceLevel)
+        public bool Match<T>(HardwareStats stats, ref T qualityLevel)
         {
-            if (this.deviceModel.Equals(deviceModel, StringComparison.Ordinal))
+            var matchedQualityLevel = 0;
+            var result = Match(stats, ref matchedQualityLevel);
+            if (result)
             {
-                performanceLevel = this.performanceLevel;
-                return true;
+                if (typeof(T).IsEnum)
+                    qualityLevel = (T)Enum.ToObject(typeof(T), matchedQualityLevel);
+                else
+                    qualityLevel = (T)Convert.ChangeType(matchedQualityLevel, typeof(T));
             }
 
-            return false;
+            return result;
+        }
+
+        protected static int ConvertToInt(object value)
+        {
+            switch (value)
+            {
+                case int intValue:
+                    return intValue;
+                default:
+                    return Convert.ToInt32(value);
+            }
         }
     }
 
     [Serializable]
-    public sealed class GpuPerformanceIndex<T>
+    public class DeviceRuleMatcher<T> : RuleMatcher
+    {
+        public Rule[] rules;
+
+        public override bool Match(HardwareStats stats, ref int qualityLevel)
+        {
+            foreach (var rule in rules)
+                if (rule.deviceModel.Equals(stats.DeviceModel, StringComparison.Ordinal))
+                {
+                    qualityLevel = ConvertToInt(rule.qualityLevel);
+                    return true;
+                }
+
+            return false;
+        }
+
+        [Serializable]
+        public class Rule
+        {
+            [Tooltip("Device model name returned by SystemInfo.deviceModel (exact match)")]
+            public string deviceModel;
+
+            [Tooltip("Quality level for the device that match")]
+            public T qualityLevel;
+        }
+    }
+
+    [Serializable]
+    public class GpuRuleMatcher<T> : RuleMatcher
     {
         [Tooltip("GPU series that match")]
         public GpuSeriesEnumeration gpuSeries;
 
-        public SeriesNumberRange[] gpuSeriesNumberRanges;
+        public Rule[] rule;
 
-        public bool Match(GpuMajorSeries gpuMajorSeries, GpuMinorSeries gpuMinorSeries, int gpuSeriesNumber,
-            ref T performanceLevel)
+        public override bool Match(HardwareStats stats, ref int qualityLevel)
         {
-            if (gpuMajorSeries != gpuSeries.GpuMajorSeries)
+            if (stats.GpuMajorSeries != gpuSeries.GpuMajorSeries)
                 return false;
             // don't check gpuMinorSeries if it's unknown
-            if (gpuSeries.GpuMinorSeries != GpuMinorSeries.Unknown && gpuMinorSeries != gpuSeries.GpuMinorSeries)
+            if (gpuSeries.GpuMinorSeries != GpuMinorSeries.Unknown && stats.GpuMinorSeries != gpuSeries.GpuMinorSeries)
                 return false;
 
-            foreach (var range in gpuSeriesNumberRanges)
+            foreach (var range in rule)
             {
-                if (gpuSeriesNumber < range.gpuSeriesNumberMin || gpuSeriesNumber > range.gpuSeriesNumberMax)
+                if (stats.GpuSeriesNumber < range.gpuSeriesNumberMin ||
+                    stats.GpuSeriesNumber > range.gpuSeriesNumberMax)
                     continue;
 
-                performanceLevel = range.performanceLevel;
+                qualityLevel = ConvertToInt(range.qualityLevel);
                 return true;
             }
 
@@ -58,7 +97,7 @@ namespace MobileSupport.PerformanceIndex
         }
 
         [Serializable]
-        public sealed class SeriesNumberRange
+        public sealed class Rule
         {
             [Tooltip("Minimum of GPU series number that match (inclusive)")]
             public int gpuSeriesNumberMin;
@@ -67,47 +106,72 @@ namespace MobileSupport.PerformanceIndex
             public int gpuSeriesNumberMax;
 
             [Tooltip("Performance level for the device that match")]
-            public T performanceLevel;
+            public T qualityLevel;
         }
     }
 
     [Serializable]
-    public sealed class CombinedPerformanceIndexData<T>
+    public class SystemMemoryRuleMatcher<T> : RuleMatcher
     {
-        [Tooltip("Performance index table by device model name")]
-        public DevicePerformanceIndex<T>[] devicePerformanceIndices;
+        public Rule[] rules;
 
-        [Tooltip("Performance index table by GPU series")]
-        public GpuPerformanceIndex<T>[] gpuPerformanceIndices;
-
-        public bool GetPerformanceLevel(HardwareStats stats, ref T performanceLevel)
+        public override bool Match(HardwareStats stats, ref int qualityLevel)
         {
-            // search device name first
-            if (devicePerformanceIndices != null)
-                foreach (var devicePerformanceIndex in devicePerformanceIndices)
-                    if (devicePerformanceIndex.Match(stats.DeviceModel, ref performanceLevel))
-                        return true;
+            foreach (var range in rules)
+            {
+                if (stats.SystemMemorySizeMb < range.systemMemoryMin ||
+                    stats.SystemMemorySizeMb > range.systemMemoryMax)
+                    continue;
 
-            // search qpu series second
-            if (gpuPerformanceIndices != null)
-                foreach (var gpuPerformanceIndex in gpuPerformanceIndices)
-                    if (gpuPerformanceIndex.Match(stats.GpuMajorSeries, stats.GpuMinorSeries, stats.GpuSeriesNumber,
-                            ref performanceLevel))
-                        return true;
+                qualityLevel = ConvertToInt(range.qualityLevel);
+                return true;
+            }
 
             return false;
         }
+
+        [Serializable]
+        public sealed class Rule
+        {
+            [Tooltip("Minimum of system memory megabytes that match (inclusive)")]
+            public int systemMemoryMin;
+
+            [Tooltip("Maximum of system memory megabytes that match (inclusive)")]
+            public int systemMemoryMax;
+
+            [Tooltip("Performance level for the device that match")]
+            public T qualityLevel;
+        }
     }
 
-    public abstract class PerformanceIndexData<T> : ScriptableObject
+    public abstract class QualityLevelSelector<T> : ScriptableObject
     {
-        [Tooltip("Combined performance index table")]
-        public CombinedPerformanceIndexData<T> performanceIndexData;
+        [Tooltip("Default quality level if no match")]
+        public T defaultQualityLevel;
 
-        public bool GetPerformanceLevel(HardwareStats stats, ref T performanceLevel)
+        [Tooltip("Combined performance index table")]
+        [SerializeReference]
+        [SelectableSerializeReference]
+        public RuleMatcher[] qualityLevelRuleMatchers;
+
+        public bool GetQualityLevel(HardwareStats stats, out T qualityLevel)
         {
 #if UNITY_IOS || UNITY_ANDROID
-            return performanceIndexData.GetPerformanceLevel(stats, ref performanceLevel);
+            T matchedQualityLevel = default;
+            foreach (var matcher in qualityLevelRuleMatchers)
+            {
+                if (matcher == null)
+                    continue;
+
+                if (matcher.Match(stats, ref matchedQualityLevel))
+                {
+                    qualityLevel = matchedQualityLevel;
+                    return true;
+                }
+            }
+
+            qualityLevel = defaultQualityLevel;
+            return false;
 #else
             return false;
 #endif

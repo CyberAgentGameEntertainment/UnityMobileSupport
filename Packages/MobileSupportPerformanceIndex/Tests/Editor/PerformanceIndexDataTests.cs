@@ -25,34 +25,34 @@ namespace MobileSupport.PerformanceIndex.Editor.Tests
                 DeviceModel = deviceModel
             };
 
-            var data = new CombinedPerformanceIndexData<int>();
-            data.devicePerformanceIndices = new[]
+            var matcher = new DeviceRuleMatcher<int>();
+            matcher.rules = new[]
             {
-                new DevicePerformanceIndex<int>
+                new DeviceRuleMatcher<int>.Rule
                 {
                     deviceModel = "iPhone 10",
-                    performanceLevel = 3
+                    qualityLevel = 3
                 },
-                new DevicePerformanceIndex<int>
+                new DeviceRuleMatcher<int>.Rule
                 {
                     deviceModel = "iPhone 12",
-                    performanceLevel = 5
+                    qualityLevel = 5
                 },
-                new DevicePerformanceIndex<int>
+                new DeviceRuleMatcher<int>.Rule
                 {
                     deviceModel = "iPhone 12 Pro Max",
-                    performanceLevel = 1
+                    qualityLevel = 1
                 },
-                new DevicePerformanceIndex<int>
+                new DeviceRuleMatcher<int>.Rule
                 {
                     deviceModel = "iPhone 13 Pro Max",
-                    performanceLevel = 2
+                    qualityLevel = 2
                 }
             };
 
-            var performanceLevel = 0;
-            Assert.AreEqual(expectedResult, data.GetPerformanceLevel(stats, ref performanceLevel));
-            Assert.AreEqual(expectedPerformanceLevel, performanceLevel);
+            var qualityLevel = 0;
+            Assert.AreEqual(expectedResult, matcher.Match(stats, ref qualityLevel));
+            Assert.AreEqual(expectedPerformanceLevel, qualityLevel);
         }
 
 
@@ -72,45 +72,39 @@ namespace MobileSupport.PerformanceIndex.Editor.Tests
                 GpuSeriesNumber = gpuSeriesNumber
             };
 
-            var data = new CombinedPerformanceIndexData<int>();
-            data.gpuPerformanceIndices = new[]
+            var matcher = new GpuRuleMatcher<int>();
+            matcher.gpuSeries = GpuSeriesEnumeration.AdrenoAny;
+            matcher.rule = new[]
             {
-                new GpuPerformanceIndex<int>
+                new GpuRuleMatcher<int>.Rule
                 {
-                    gpuSeries = GpuSeriesEnumeration.AdrenoAny,
-                    gpuSeriesNumberRanges = new[]
-                    {
-                        new GpuPerformanceIndex<int>.SeriesNumberRange
-                        {
-                            gpuSeriesNumberMin = 500,
-                            gpuSeriesNumberMax = 599,
-                            performanceLevel = 5
-                        },
-                        new GpuPerformanceIndex<int>.SeriesNumberRange
-                        {
-                            gpuSeriesNumberMin = 600,
-                            gpuSeriesNumberMax = 799,
-                            performanceLevel = 10
-                        },
-                        new GpuPerformanceIndex<int>.SeriesNumberRange
-                        {
-                            gpuSeriesNumberMin = 200,
-                            gpuSeriesNumberMax = 299,
-                            performanceLevel = 1
-                        },
-                        new GpuPerformanceIndex<int>.SeriesNumberRange
-                        {
-                            gpuSeriesNumberMin = 300,
-                            gpuSeriesNumberMax = 499,
-                            performanceLevel = 3
-                        }
-                    }
+                    gpuSeriesNumberMin = 500,
+                    gpuSeriesNumberMax = 599,
+                    qualityLevel = 5
+                },
+                new GpuRuleMatcher<int>.Rule
+                {
+                    gpuSeriesNumberMin = 600,
+                    gpuSeriesNumberMax = 799,
+                    qualityLevel = 10
+                },
+                new GpuRuleMatcher<int>.Rule
+                {
+                    gpuSeriesNumberMin = 200,
+                    gpuSeriesNumberMax = 299,
+                    qualityLevel = 1
+                },
+                new GpuRuleMatcher<int>.Rule
+                {
+                    gpuSeriesNumberMin = 300,
+                    gpuSeriesNumberMax = 499,
+                    qualityLevel = 3
                 }
             };
 
-            var performanceLevel = 0;
-            Assert.AreEqual(expectedResult, data.GetPerformanceLevel(stats, ref performanceLevel));
-            Assert.AreEqual(expectedPerformanceLevel, performanceLevel);
+            var qualityLevel = 0;
+            Assert.AreEqual(expectedResult, matcher.Match(stats, ref qualityLevel));
+            Assert.AreEqual(expectedPerformanceLevel, qualityLevel);
         }
     }
 }
