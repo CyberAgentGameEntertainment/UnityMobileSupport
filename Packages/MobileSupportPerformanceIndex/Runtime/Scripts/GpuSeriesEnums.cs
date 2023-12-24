@@ -195,13 +195,13 @@ namespace MobileSupport.PerformanceIndex
         public static readonly GpuSeriesEnumeration Maleoon = new(GpuMajorSeries.Maleoon, GpuMinorSeries.Maleoon);
 
         [SerializeField]
-        private int value;
+        protected int value;
 
         [SerializeField]
-        private GpuMajorSeries gpuMajorSeries;
+        protected GpuMajorSeries gpuMajorSeries;
 
         [SerializeField]
-        private GpuMinorSeries gpuMinorSeries;
+        protected GpuMinorSeries gpuMinorSeries;
 
         protected GpuSeriesEnumeration(GpuMajorSeries gpuMajorSeries, GpuMinorSeries gpuMinorSeries)
         {
@@ -245,6 +245,11 @@ namespace MobileSupport.PerformanceIndex
 
         public static IEnumerable<T> GetAll<T>() where T : GpuSeriesEnumeration
         {
+            return TypeCache<T>.Enums;
+        }
+
+        private static IEnumerable<T> _GetAll<T>() where T : GpuSeriesEnumeration
+        {
             return typeof(T).GetFields(BindingFlags.Public |
                                        BindingFlags.Static |
                                        BindingFlags.DeclaredOnly)
@@ -254,7 +259,7 @@ namespace MobileSupport.PerformanceIndex
 
         public static T FromValue<T>(int value) where T : GpuSeriesEnumeration
         {
-            var matchingItem = GetAll<T>().FirstOrDefault(item => item.value == value);
+            var matchingItem = TypeCache<T>.Enums.FirstOrDefault(item => item.value == value);
 
             if (matchingItem == null)
                 throw new ArgumentException($"'{value}' is not a valid value in {typeof(T)}");
@@ -265,7 +270,7 @@ namespace MobileSupport.PerformanceIndex
         public static T FromGpuSeries<T>(GpuMajorSeries gpuMajorSeries, GpuMinorSeries gpuMinorSeries)
             where T : GpuSeriesEnumeration
         {
-            var matchingItem = GetAll<T>().FirstOrDefault(item =>
+            var matchingItem = TypeCache<T>.Enums.FirstOrDefault(item =>
                 item.gpuMajorSeries == gpuMajorSeries && item.gpuMinorSeries == gpuMinorSeries);
 
             if (matchingItem == null)
@@ -280,15 +285,23 @@ namespace MobileSupport.PerformanceIndex
             if (obj is not GpuSeriesEnumeration otherValue)
                 return false;
 
-            var typeMatches = GetType().Equals(obj.GetType());
-            var valueMatches = value.Equals(otherValue.value);
-
-            return typeMatches && valueMatches;
+            // type matches and value matches
+            return GetType().Equals(obj.GetType()) && value.Equals(otherValue.value);
         }
 
         public override int GetHashCode()
         {
             return value.GetHashCode();
+        }
+
+        protected static class TypeCache<T> where T : GpuSeriesEnumeration
+        {
+            public static readonly T[] Enums;
+
+            static TypeCache()
+            {
+                Enums = _GetAll<T>().ToArray();
+            }
         }
     }
 }

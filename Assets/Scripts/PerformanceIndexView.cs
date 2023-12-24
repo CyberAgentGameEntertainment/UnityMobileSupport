@@ -1,11 +1,9 @@
 using System.Text;
 using MobileSupport.PerformanceIndex;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class PerformanceIndexView : MonoBehaviour
 {
-    [FormerlySerializedAs("sampleQualityLevelMatcher")]
     [SerializeField]
     private SampleQualityLevelSelector sampleQualityLevelSelector;
 
@@ -30,9 +28,9 @@ public class PerformanceIndexView : MonoBehaviour
         else
         {
             if (sampleQualityLevelSelector.GetQualityLevel(stats, out var qualityLevel))
-                Debug.Log($"PerformanceLevel: {qualityLevel}");
+                Debug.Log($"QualityLevel: {qualityLevel}");
             else
-                Debug.Log("PerformanceLevel: Unknown");
+                Debug.Log("QualityLevel: Unknown");
         }
     }
 }

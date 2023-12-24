@@ -18,7 +18,7 @@ namespace MobileSupport.PerformanceIndex.Editor.Tests
         [TestCase("iPhone 100", false, 0)]
         [TestCase("", false, 0)]
         public void PerformanceIndexDataTests_OnlyDeviceData(string deviceModel, bool expectedResult,
-            int expectedPerformanceLevel)
+            int expectedQualityLevel)
         {
             var stats = new HardwareStats
             {
@@ -50,9 +50,8 @@ namespace MobileSupport.PerformanceIndex.Editor.Tests
                 }
             };
 
-            var qualityLevel = 0;
-            Assert.AreEqual(expectedResult, matcher.Match(stats, ref qualityLevel));
-            Assert.AreEqual(expectedPerformanceLevel, qualityLevel);
+            Assert.AreEqual(expectedResult, matcher.Match(stats, out var qualityLevel));
+            Assert.AreEqual(expectedQualityLevel, qualityLevel);
         }
 
 
@@ -63,7 +62,7 @@ namespace MobileSupport.PerformanceIndex.Editor.Tests
         [TestCase(GpuMajorSeries.Adreno, GpuMinorSeries.Adreno400, 400, true, 3)]
         [TestCase(GpuMajorSeries.Apple, GpuMinorSeries.AppleA, 12, false, 0)]
         public void PerformanceIndexDataTests_OnlyGpuData(GpuMajorSeries gpuMajorSeries, GpuMinorSeries gpuMinorSeries,
-            int gpuSeriesNumber, bool expectedResult, int expectedPerformanceLevel)
+            int gpuSeriesNumber, bool expectedResult, int expectedQualityLevel)
         {
             var stats = new HardwareStats
             {
@@ -72,39 +71,84 @@ namespace MobileSupport.PerformanceIndex.Editor.Tests
                 GpuSeriesNumber = gpuSeriesNumber
             };
 
-            var matcher = new GpuRuleMatcher<int>();
-            matcher.gpuSeries = GpuSeriesEnumeration.AdrenoAny;
-            matcher.rule = new[]
+            var matcher = new GpuRuleMatcher<int, GpuSeriesEnumeration>();
+            matcher.rules = new[]
             {
-                new GpuRuleMatcher<int>.Rule
+                new GpuRuleMatcher<int, GpuSeriesEnumeration>.Rule
                 {
+                    gpuSeries = GpuSeriesEnumeration.AdrenoAny,
                     gpuSeriesNumberMin = 500,
                     gpuSeriesNumberMax = 599,
                     qualityLevel = 5
                 },
-                new GpuRuleMatcher<int>.Rule
+                new GpuRuleMatcher<int, GpuSeriesEnumeration>.Rule
                 {
+                    gpuSeries = GpuSeriesEnumeration.AdrenoAny,
                     gpuSeriesNumberMin = 600,
                     gpuSeriesNumberMax = 799,
                     qualityLevel = 10
                 },
-                new GpuRuleMatcher<int>.Rule
+                new GpuRuleMatcher<int, GpuSeriesEnumeration>.Rule
                 {
+                    gpuSeries = GpuSeriesEnumeration.AdrenoAny,
                     gpuSeriesNumberMin = 200,
                     gpuSeriesNumberMax = 299,
                     qualityLevel = 1
                 },
-                new GpuRuleMatcher<int>.Rule
+                new GpuRuleMatcher<int, GpuSeriesEnumeration>.Rule
                 {
+                    gpuSeries = GpuSeriesEnumeration.AdrenoAny,
                     gpuSeriesNumberMin = 300,
                     gpuSeriesNumberMax = 499,
                     qualityLevel = 3
                 }
             };
 
-            var qualityLevel = 0;
-            Assert.AreEqual(expectedResult, matcher.Match(stats, ref qualityLevel));
-            Assert.AreEqual(expectedPerformanceLevel, qualityLevel);
+            Assert.AreEqual(expectedResult, matcher.Match(stats, out var qualityLevel));
+            Assert.AreEqual(expectedQualityLevel, qualityLevel);
+        }
+
+        // test for SystemMemoryRuleMatcher
+        [Test]
+        [TestCase(0, true, 1)]
+        [TestCase(1024, true, 1)]
+        [TestCase(1025, true, 5)]
+        [TestCase(2048, true, 5)]
+        [TestCase(4096, true, 5)]
+        [TestCase(4097, true, 10)]
+        [TestCase(8192, true, 10)]
+        [TestCase(8193, false, 0)]
+        public void SystemMemoryRuleMatcherTests(int systemMemorySize, bool expectedResult, int expectedQualityLevel)
+        {
+            var stats = HardwareStats.CreateDefault();
+            stats.SystemMemorySizeMb = systemMemorySize;
+
+            var matcher = new SystemMemoryRuleMatcher<int>();
+            matcher.rules = new[]
+            {
+                new SystemMemoryRuleMatcher<int>.Rule
+                {
+                    systemMemoryMin = 0,
+                    systemMemoryMax = 1024,
+                    qualityLevel = 1
+                },
+                new SystemMemoryRuleMatcher<int>.Rule
+                {
+                    systemMemoryMin = 1025,
+                    systemMemoryMax = 4096,
+                    qualityLevel = 5
+                },
+                new SystemMemoryRuleMatcher<int>.Rule
+                {
+                    systemMemoryMin = 4097,
+                    systemMemoryMax = 8192,
+                    qualityLevel = 10
+                }
+            };
+
+
+            Assert.AreEqual(expectedResult, matcher.Match(stats, out var qualityLevel));
+            Assert.AreEqual(expectedQualityLevel, qualityLevel);
         }
     }
 }

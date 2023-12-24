@@ -23,17 +23,54 @@ MonoBehaviour:
     - rid: 7788121728397082629
       type: {class: SampleDeviceRuleMatcher, ns: , asm: Assembly-CSharp}
       data:
-        rules: []
+        rules:
+        - deviceModel: MacBookPro18,2
+          qualityLevel: 2
     - rid: 7788121728397082630
       type: {class: SampleGpuRuleMatcher, ns: , asm: Assembly-CSharp}
       data:
-        gpuSeries:
-          value: 12
-          gpuMajorSeries: 1
-          gpuMinorSeries: 12
-        rule:
-        - gpuSeriesNumberMin: 0
+        rules:
+        - gpuSeries:
+            value: 12
+            gpuMajorSeries: 1
+            gpuMinorSeries: 12
+          gpuSeriesNumberMin: 0
           gpuSeriesNumberMax: 9999
+          qualityLevel: 2
+        - gpuSeries:
+            value: 11
+            gpuMajorSeries: 1
+            gpuMinorSeries: 11
+          gpuSeriesNumberMin: 0
+          gpuSeriesNumberMax: 10
+          qualityLevel: 1
+        - gpuSeries:
+            value: 11
+            gpuMajorSeries: 1
+            gpuMinorSeries: 11
+          gpuSeriesNumberMin: 11
+          gpuSeriesNumberMax: 99
+          qualityLevel: 1
+        - gpuSeries:
+            value: 20
+            gpuMajorSeries: 2
+            gpuMinorSeries: 0
+          gpuSeriesNumberMin: 0
+          gpuSeriesNumberMax: 540
+          qualityLevel: 0
+        - gpuSeries:
+            value: 20
+            gpuMajorSeries: 2
+            gpuMinorSeries: 0
+          gpuSeriesNumberMin: 541
+          gpuSeriesNumberMax: 629
+          qualityLevel: 1
+        - gpuSeries:
+            value: 20
+            gpuMajorSeries: 2
+            gpuMinorSeries: 0
+          gpuSeriesNumberMin: 630
+          gpuSeriesNumberMax: 999
           qualityLevel: 2
     - rid: 7788121728397082633
       type: {class: SampleSystemMemoryRuleMatcher, ns: , asm: Assembly-CSharp}

@@ -13,7 +13,11 @@ namespace MobileSupport.PerformanceIndex.Editor
     ///     Draw GpuSeriesEnumeration as popup
     /// </summary>
     [CustomPropertyDrawer(typeof(GpuSeriesEnumeration))]
-    public class GpuSeriesEnumerationDrawer : PropertyDrawer
+    public class GpuSeriesEnumerationDrawer : GpuSeriesEnumerationDrawerBase<GpuSeriesEnumeration>
+    {
+    }
+
+    public class GpuSeriesEnumerationDrawerBase<T> : PropertyDrawer where T : GpuSeriesEnumeration
     {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
@@ -27,13 +31,13 @@ namespace MobileSupport.PerformanceIndex.Editor
             EditorGUI.indentLevel = 0;
 
             // get enum values of GpuSeriesEnumeration
-            var enums = GpuSeriesEnumeration.GetAll<GpuSeriesEnumeration>().ToArray();
+            var enums = GpuSeriesEnumeration.GetAll<T>().ToArray();
             var enumNames = enums.Select(e => e.ToString()).ToArray();
 
             // get value and index
             var valueProperty = property.FindPropertyRelative("value");
             var selectedValue = valueProperty.intValue;
-            var selectedEnum = (GpuSeriesEnumeration)selectedValue;
+            var selectedEnum = (T)selectedValue;
             var previousIndex = Array.IndexOf(enums, selectedEnum);
 
             // draw enum selection popup

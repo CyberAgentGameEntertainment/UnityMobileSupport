@@ -10,7 +10,7 @@ public class SampleDeviceRuleMatcher : DeviceRuleMatcher<SampleQualityLevel>
 {
 }
 
-public class SampleGpuRuleMatcher : GpuRuleMatcher<SampleQualityLevel>
+public class SampleGpuRuleMatcher : GpuRuleMatcher<SampleQualityLevel, GpuSeriesEnumeration>
 {
 }
 
