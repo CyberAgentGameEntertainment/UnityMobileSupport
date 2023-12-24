@@ -4,7 +4,7 @@
 
 using UnityEngine;
 
-namespace MobileSupport.PerformanceIndex
+namespace MobileSupport.QualityMapper
 {
     /// <summary>
     ///     Hardware stats to identify performance index of device

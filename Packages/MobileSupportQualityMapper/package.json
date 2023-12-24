@@ -1,9 +1,9 @@
 {
-  "name": "jp.co.cyberagent.unity-mobile-support-performance-index",
-  "displayName": "Mobile Support - Performance Index",
+  "name": "jp.co.cyberagent.unity-mobile-support-quality-mapper",
+  "displayName": "Mobile Support - Quality Mapper",
   "version": "0.1.0",
   "unity": "2021.3",
-  "description": "Tools to support getting performance index of mobile devices.",
+  "description": "Tools to support deciding quality level by hardware spec of mobile devices.",
   "keywords": [
     "ios",
     "android",

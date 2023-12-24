@@ -1,4 +1,4 @@
-# Unity Mobile Support - PerformanceIndex <!-- omit in toc -->
+# Unity Mobile Support - QualityMapper <!-- omit in toc -->
 
 [![license](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![license](https://img.shields.io/badge/PR-welcome-green.svg)](https://github.com/CyberAgentGameEntertainment/UnityMobileSupport/pulls)
@@ -27,17 +27,19 @@ This package provide information and decision tool to decide quality level.
 | Method                                                                           | Description                                             | Note                                                         | Editor Behaviour                                                           |
 |----------------------------------------------------------------------------------|---------------------------------------------------------|--------------------------------------------------------------|----------------------------------------------------------------------------|
 | HardwareInfo.GetHardwareStats()                                                  | Get hardware stats which helps to decide quality level. | Many informations is retrieved via `UnityEngine.SystemInfo`. | Same as mobile, but Windows Editor is unlikely not supported at this time. |
-| PerformanceIndexData<T>.GetQualityLevel(HardwareStats stats, out T qualityLevel) | Decide quality level by decision table you defined.     | You need to define your own PerformanceIndexData.            | Same as mobile.                                                            |
+| QualityLevelSelector<T>.GetQualityLevel(HardwareStats stats, out T qualityLevel) | Decide quality level by decision table you defined.     | You need to define your own QualityLevelSelector.            | Same as mobile.                                                            |
 
 ## Usage
 
-1. Create your own PerformanceIndexData by inheriting `PerformanceIndexData<T>` class. T is your own quality level enum,
-   integer, or something else.
-2. Create asset of your own PerformanceIndexData on editor.
-3. Set desicion table to asset as you like.
-4. Get HardwareStats and pass to PerformanceIndexData.GetQualityLevel() to decide quality level at runtime.
+1. Create your own QualityLevelSelector by inheriting `QualityLevelSelector<T>` class. T is your own quality level enum,
+   integer, enum, or something else you want to use for type of quality level.
+2. Create asset of your own QualityLevelSelector on editor.
+3. Set decision table to asset as you like.
+4. Get HardwareStats and pass to QualityLevelSelector.GetQualityLevel() to decide quality level at runtime.
 
 ### Sample
+
+[SampleQualityLevelSelector.cs](../../Assets/Scripts/SampleQualityLevelSelector.cs)
 
 ```csharp
 using System.Text;
@@ -58,13 +60,13 @@ using UnityEngine;
         sb.AppendLine($"SystemMemorySizeMb: {stats.SystemMemorySizeMb}");
         Debug.Log(sb.ToString());
 
-        if (samplePerformanceIndexData == null)
+        if (sampleQualityLevelSelector == null)
         {
-            Debug.LogError("SamplePerformanceIndexData is null");
+            Debug.LogError("SampleQualityLevelSelector is null");
         }
         else
         {
-            if (samplePerformanceIndexData.GetQualityLevel(stats, out qualityLevel))
+            if (sampleQualityLevelSelector.GetQualityLevel(stats, out var qualityLevel))
                 Debug.Log($"QualityLevel: {qualityLevel}");
             else
                 Debug.Log("QualityLevel: Unknown");
@@ -87,7 +89,7 @@ To install the software, follow the steps below.
 1. Open the Package Manager from `Window > Package Manager`
 2. `"+" button > Add package from git URL`
 3. Enter the following
-    * https://github.com/CyberAgentGameEntertainment/UnityMobileSupport.git?path=/Packages/MobileSupportPerformanceIndex
+    * https://github.com/CyberAgentGameEntertainment/UnityMobileSupport.git?path=/Packages/MobileSupportQualityMapper
 
 <p align="center">
   <img width=500 src="https://user-images.githubusercontent.com/47441314/143533003-177a51fc-3d11-4784-b9d2-d343cc622841.png" alt="Package Manager">
@@ -98,14 +100,14 @@ Or, open `Packages/manifest.json` and add the following to the dependencies bloc
 ```json
 {
     "dependencies": {
-        "jp.co.cyberagent.unity-mobile-support-storage": "https://github.com/CyberAgentGameEntertainment/UnityMobileSupport.git?path=/Packages/MobileSupportPerformanceIndex"
+        "jp.co.cyberagent.unity-mobile-support-storage": "https://github.com/CyberAgentGameEntertainment/UnityMobileSupport.git?path=/Packages/MobileSupportQualityMapper"
     }
 }
 ```
 
 If you want to set the target version, write as follows.
 
-- https://github.com/CyberAgentGameEntertainment/UnityMobileSupport.git?path=/Packages/MobileSupportPerformanceIndex#performanceindex/1.0.0
+- https://github.com/CyberAgentGameEntertainment/UnityMobileSupport.git?path=/Packages/MobileSupportQualityMapper#qualitymapper/1.0.0
 
 Note that if you get a message
 like `No 'git' executable was found. Please install Git on your system and restart Unity`, you will need to set up Git
@@ -118,8 +120,8 @@ package-lock.json file.
 ```json
 {
   "dependencies": {
-      "jp.co.cyberagent.unity-mobile-support-performanceindex": {
-      "version": "https://github.com/CyberAgentGameEntertainment/UnityMobileSupport.git?path=/Packages/MobileSupportPerformanceIndex",
+      "jp.co.cyberagent.unity-mobile-support-quality-mapper": {
+      "version": "https://github.com/CyberAgentGameEntertainment/UnityMobileSupport.git?path=/Packages/MobileSupportQualityMapper",
       "depth": 0,
       "source": "git",
       "dependencies": {},

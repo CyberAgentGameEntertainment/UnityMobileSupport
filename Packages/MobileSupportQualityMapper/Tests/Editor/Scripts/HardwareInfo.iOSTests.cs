@@ -4,7 +4,7 @@
 
 using NUnit.Framework;
 
-namespace MobileSupport.PerformanceIndex.Editor.Tests
+namespace MobileSupport.QualityMapper.Editor.Tests
 {
     public class HardwareInfoIosTests
     {

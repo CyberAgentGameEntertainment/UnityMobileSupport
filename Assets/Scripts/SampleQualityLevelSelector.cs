@@ -1,4 +1,4 @@
-using MobileSupport.PerformanceIndex;
+using MobileSupport.QualityMapper;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = nameof(SampleQualityLevelSelector), menuName = "Sample/Performance Index Data")]

@@ -6,7 +6,7 @@ using System;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-namespace MobileSupport.PerformanceIndex
+namespace MobileSupport.QualityMapper
 {
     [Serializable]
     public abstract class RuleMatcher

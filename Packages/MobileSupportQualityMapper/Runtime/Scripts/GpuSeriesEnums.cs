@@ -8,7 +8,7 @@ using System.Linq;
 using System.Reflection;
 using UnityEngine;
 
-namespace MobileSupport.PerformanceIndex
+namespace MobileSupport.QualityMapper
 {
     /// <summary>
     ///     Enum of GPU series

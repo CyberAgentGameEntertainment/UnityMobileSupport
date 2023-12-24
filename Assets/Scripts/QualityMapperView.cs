@@ -1,8 +1,8 @@
 using System.Text;
-using MobileSupport.PerformanceIndex;
+using MobileSupport.QualityMapper;
 using UnityEngine;
 
-public class PerformanceIndexView : MonoBehaviour
+public class QualityMapperView : MonoBehaviour
 {
     [SerializeField]
     private SampleQualityLevelSelector sampleQualityLevelSelector;

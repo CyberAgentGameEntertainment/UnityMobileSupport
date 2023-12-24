@@ -10,7 +10,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-namespace MobileSupport.PerformanceIndex.Editor
+namespace MobileSupport.QualityMapper.Editor
 {
     // ref: https://light11.hatenadiary.com/entry/2021/11/30/190034
     [CustomPropertyDrawer(typeof(SelectableSerializeReferenceAttribute))]

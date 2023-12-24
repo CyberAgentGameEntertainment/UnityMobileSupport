@@ -350,7 +350,7 @@ GameObject:
   - component: {fileID: 2110764689}
   - component: {fileID: 2110764688}
   m_Layer: 0
-  m_Name: PerformanceIndex
+  m_Name: QualityMapper
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -368,7 +368,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5bf0ba71edb654df5b218fdc2b883fd6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  samplePerformanceIndexData: {fileID: 11400000, guid: 6e2a7cbd15c2741478cb75a873a45f53, type: 2}
+  sampleQualityLevelSelector: {fileID: 0}
 --- !u!4 &2110764689
 Transform:
   m_ObjectHideFlags: 0

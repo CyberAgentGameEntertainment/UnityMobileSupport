@@ -1,5 +1,5 @@
 {
-    "name": "MobileSupport.PerformanceIndex.Editor.Tests",
+    "name": "MobileSupport.QualityMapper.Editor.Tests",
     "rootNamespace": "",
     "references": [
         "GUID:4e091e0e3cfb7429491abb1e7f0e08f5",

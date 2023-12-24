@@ -77,5 +77,11 @@ MonoBehaviour:
       data:
         rules:
         - systemMemoryMin: 0
-          systemMemoryMax: 0
+          systemMemoryMax: 2048
           qualityLevel: 0
+        - systemMemoryMin: 2049
+          systemMemoryMax: 4096
+          qualityLevel: 1
+        - systemMemoryMin: 4097
+          systemMemoryMax: 99999
+          qualityLevel: 2

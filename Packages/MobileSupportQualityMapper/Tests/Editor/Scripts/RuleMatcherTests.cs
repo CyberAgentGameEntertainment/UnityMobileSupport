@@ -4,9 +4,9 @@
 
 using NUnit.Framework;
 
-namespace MobileSupport.PerformanceIndex.Editor.Tests
+namespace MobileSupport.QualityMapper.Editor.Tests
 {
-    public class PerformanceIndexDataTests
+    public class RuleMatcherTests
     {
         [Test]
         [TestCase("iPhone 10", true, 3)]
@@ -17,7 +17,7 @@ namespace MobileSupport.PerformanceIndex.Editor.Tests
         [TestCase("iPhone 1", false, 0)]
         [TestCase("iPhone 100", false, 0)]
         [TestCase("", false, 0)]
-        public void PerformanceIndexDataTests_OnlyDeviceData(string deviceModel, bool expectedResult,
+        public void DeviceRuleMatcherTests(string deviceModel, bool expectedResult,
             int expectedQualityLevel)
         {
             var stats = new HardwareStats
@@ -61,7 +61,7 @@ namespace MobileSupport.PerformanceIndex.Editor.Tests
         [TestCase(GpuMajorSeries.Adreno, GpuMinorSeries.Adreno200, 299, true, 1)]
         [TestCase(GpuMajorSeries.Adreno, GpuMinorSeries.Adreno400, 400, true, 3)]
         [TestCase(GpuMajorSeries.Apple, GpuMinorSeries.AppleA, 12, false, 0)]
-        public void PerformanceIndexDataTests_OnlyGpuData(GpuMajorSeries gpuMajorSeries, GpuMinorSeries gpuMinorSeries,
+        public void GpuRuleMatcherTests(GpuMajorSeries gpuMajorSeries, GpuMinorSeries gpuMinorSeries,
             int gpuSeriesNumber, bool expectedResult, int expectedQualityLevel)
         {
             var stats = new HardwareStats

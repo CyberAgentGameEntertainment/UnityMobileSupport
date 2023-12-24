@@ -4,4 +4,4 @@
 
 using System.Runtime.CompilerServices;
 
-[assembly: InternalsVisibleTo("MobileSupport.PerformanceIndex.Editor.Tests")]
+[assembly: InternalsVisibleTo("MobileSupport.QualityMapper.Editor.Tests")]

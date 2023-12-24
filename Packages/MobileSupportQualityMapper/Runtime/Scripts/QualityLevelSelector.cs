@@ -4,7 +4,7 @@
 
 using UnityEngine;
 
-namespace MobileSupport.PerformanceIndex
+namespace MobileSupport.QualityMapper
 {
     public abstract class QualityLevelSelector<T> : ScriptableObject
     {
