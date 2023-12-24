@@ -34,7 +34,7 @@ This package provide information and decision tool to decide quality level.
 1. Create your own QualityLevelSelector by inheriting `QualityLevelSelector<T>` class. T is your own quality level enum,
    integer, enum, or something else you want to use for type of quality level.
 2. Create asset of your own QualityLevelSelector on editor.
-3. Set decision table to asset as you like.
+3. Set decision rules to asset as you like.
 4. Get HardwareStats and pass to QualityLevelSelector.GetQualityLevel() to decide quality level at runtime.
 
 ### Sample
@@ -73,6 +73,15 @@ using UnityEngine;
         }
     }
 ```
+
+![Sample Settings](Documentation~/images/sample_settings.png)
+
+### Customization
+
+#### Creating your own rules
+
+You can create your own rules by inheriting `RuleMatcher` class.
+Some samples are available in [RuleMatcher.cs](Runtime/Scripts/RuleMatcher.cs).
 
 ## Setup
 

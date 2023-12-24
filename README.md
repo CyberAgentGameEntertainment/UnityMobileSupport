@@ -10,3 +10,4 @@ Scripts ars split into multiple packages, so choose packages what you only need.
 | Storage     | Functions to retrive information about storage       | v0.2.0         | [README.md](Packages/MobileSupportStorage/README.md)     | [CHANGELOG.md](Packages/MobileSupportStorage/CHANGELOG.md)     |
 | Thermal     | Functions to retrive information about thermal       | v0.1.0         | [README.md](Packages/MobileSupportThermal/README.md)     | [CHANGELOG.md](Packages/MobileSupportThermal/CHANGELOG.md)     |
 | AndrdoiGame | Functions to integrate with Android GameManager APIs | v1.1.0         | [README.md](Packages/MobileSupportAndroidGame/README.md) | [CHANGELOG.md](Packages/MobileSupportAndroidGame/CHANGELOG.md) |
+| QualityMapper | Package to get hardware specs and tool to decide quality level | v1.0.0         | [README.md](Packages/MobileSupportQualityMapper/README.md) | [CHANGELOG.md](Packages/MobileSupportQualityMapper/CHANGELOG.md) |
