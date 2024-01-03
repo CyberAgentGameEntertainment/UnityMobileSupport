@@ -32,6 +32,7 @@ public class QualityTunerView : MonoBehaviour
         else
         {
             var sampleQualityLevelSelector = new RuleBasedQualitySelector<SampleQualityLevel>(sampleQualityRuleData);
+            // you can add new rule matcher at runtime, like deserializing from json
             var newMatcher =
                 JsonUtility.FromJson<SampleDeviceNameRuleMatcher>(
                     @"{""rules"":[{""deviceModel"":""MacBookPro18,2"",""qualityLevel"":2}]}");

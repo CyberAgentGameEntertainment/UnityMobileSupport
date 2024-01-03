@@ -24,22 +24,23 @@ This package provide information and decision tool to decide quality level.
 
 ## Supported Functions
 
-| Method                                                                           | Description                                             | Note                                                         | Editor Behaviour                                                           |
-|----------------------------------------------------------------------------------|---------------------------------------------------------|--------------------------------------------------------------|----------------------------------------------------------------------------|
-| HardwareInfo.GetHardwareStats()                                                  | Get hardware stats which helps to decide quality level. | Many informations is retrieved via `UnityEngine.SystemInfo`. | Same as mobile, but Windows Editor is unlikely not supported at this time. |
-| QualityLevelSelector<T>.GetQualityLevel(HardwareStats stats, out T qualityLevel) | Decide quality level by decision table you defined.     | You need to define your own QualityLevelSelector.            | Same as mobile.                                                            |
+| Method                                                                               | Description                                             | Note                                                        | Editor Behaviour                                                           |
+|--------------------------------------------------------------------------------------|---------------------------------------------------------|-------------------------------------------------------------|----------------------------------------------------------------------------|
+| HardwareInfo.GetHardwareStats()                                                      | Get hardware stats which helps to decide quality level. | Many information is retrieved via `UnityEngine.SystemInfo`. | Same as mobile, but Windows Editor is unlikely not supported at this time. |
+| RuleBasedQualitySelector<T>.GetQualityLevel(HardwareStats stats, out T qualityLevel) | Decide quality level by decision table you defined.     | You need to define your own QualityLevelSelector.           | Same as mobile.                                                            |
 
 ## Usage
 
-1. Create your own QualityLevelSelector by inheriting `QualityLevelSelector<T>` class. T is your own quality level enum,
-   integer, enum, or something else you want to use for type of quality level.
-2. Create asset of your own QualityLevelSelector on editor.
+1. Create your own QualityRuleData by inheriting `QualityRuleData<T>` class. T is your own quality
+   level enum, integer, or something else you want to use for type of quality level.
+2. Create asset of your own QualityRuleData on editor.
 3. Set decision rules to asset as you like.
-4. Get HardwareStats and pass to QualityLevelSelector.GetQualityLevel() to decide quality level at runtime.
+4. Instantiate RuleBasedQualitySelector<T> with your QualityRuleData. T should be same as your QualityRuleData.
+5. Get HardwareStats and pass to RuleBasedQualitySelector<T>.GetQualityLevel() to decide quality level at runtime.
 
 ### Sample
 
-[SampleQualityLevelSelector.cs](../../Assets/Scripts/SampleQualityLevelSelector.cs)
+[SampleQualityRuleData.cs](../../Assets/Scripts/SampleQualityRuleData.cs)
 
 ```csharp
 using System.Text;
@@ -60,12 +61,18 @@ using UnityEngine;
         sb.AppendLine($"SystemMemorySizeMb: {stats.SystemMemorySizeMb}");
         Debug.Log(sb.ToString());
 
-        if (sampleQualityLevelSelector == null)
+        if (sampleQualityRuleData == null)
         {
             Debug.LogError("SampleQualityLevelSelector is null");
         }
         else
         {
+            var sampleQualityLevelSelector = new RuleBasedQualitySelector<SampleQualityLevel>(sampleQualityRuleData);
+            // you can add new rule matcher at runtime, like deserializing from json
+            var newMatcher =
+                JsonUtility.FromJson<SampleDeviceNameRuleMatcher>(
+                    @"{""rules"":[{""deviceModel"":""MacBookPro18,2"",""qualityLevel"":2}]}");
+            sampleQualityLevelSelector.QualityLevelRuleMatchers.Add(newMatcher);
             if (sampleQualityLevelSelector.GetQualityLevel(stats, out var qualityLevel))
                 Debug.Log($"QualityLevel: {qualityLevel}");
             else
@@ -80,8 +87,8 @@ using UnityEngine;
 
 #### Creating your own rules
 
-You can create your own rules by inheriting `RuleMatcher` class.
-Some samples are available in [RuleMatcher.cs](Runtime/Scripts/RuleMatcher.cs).
+You can create your own rules by implementing `IMatcher` interface.
+After you create it, you can add it to `QualityLevelRuleMatchers` of `RuleBasedQualitySelector<T>`.
 
 ## Setup
 
