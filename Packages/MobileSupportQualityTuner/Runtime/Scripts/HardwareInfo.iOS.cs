@@ -5,7 +5,7 @@
 using System;
 using System.Text.RegularExpressions;
 
-namespace MobileSupport.QualityMapper
+namespace MobileSupport.QualityTuner
 {
     internal static class HardwareInfoIos
     {

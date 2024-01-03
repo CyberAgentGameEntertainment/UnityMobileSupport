@@ -4,4 +4,4 @@
 
 using System.Runtime.CompilerServices;
 
-[assembly: InternalsVisibleTo("MobileSupport.QualityMapper.Editor.Tests")]
+[assembly: InternalsVisibleTo("MobileSupport.QualityTuner.Editor.Tests")]

@@ -7,7 +7,7 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
-namespace MobileSupport.QualityMapper.Editor
+namespace MobileSupport.QualityTuner.Editor
 {
     /// <summary>
     ///     Draw GpuSeriesEnumeration as popup

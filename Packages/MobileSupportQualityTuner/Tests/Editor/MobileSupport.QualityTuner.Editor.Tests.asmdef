@@ -1,5 +1,5 @@
 {
-    "name": "MobileSupport.QualityMapper.Editor.Tests",
+    "name": "MobileSupport.QualityTuner.Editor.Tests",
     "rootNamespace": "",
     "references": [
         "GUID:4e091e0e3cfb7429491abb1e7f0e08f5",

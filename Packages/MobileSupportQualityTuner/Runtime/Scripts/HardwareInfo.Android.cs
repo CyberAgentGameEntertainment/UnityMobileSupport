@@ -6,7 +6,7 @@ using System;
 using System.Text.RegularExpressions;
 using UnityEngine;
 
-namespace MobileSupport.QualityMapper
+namespace MobileSupport.QualityTuner
 {
     internal static class HardwareInfoAndroid
     {

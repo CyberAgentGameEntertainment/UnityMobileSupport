@@ -5,7 +5,7 @@
 using System.Collections;
 using NUnit.Framework;
 
-namespace MobileSupport.QualityMapper.Editor.Tests
+namespace MobileSupport.QualityTuner.Editor.Tests
 {
     public class HardwareInfoAndroidTests
     {

@@ -4,7 +4,7 @@
 
 using NUnit.Framework;
 
-namespace MobileSupport.QualityMapper.Editor.Tests
+namespace MobileSupport.QualityTuner.Editor.Tests
 {
     public class RuleMatcherTests
     {
@@ -25,25 +25,25 @@ namespace MobileSupport.QualityMapper.Editor.Tests
                 DeviceModel = deviceModel
             };
 
-            var matcher = new DeviceRuleMatcher<int>();
+            var matcher = new DeviceNameRuleMatcherBase<int>();
             matcher.rules = new[]
             {
-                new DeviceRuleMatcher<int>.Rule
+                new DeviceNameRuleMatcherBase<int>.Rule
                 {
                     deviceModel = "iPhone 10",
                     qualityLevel = 3
                 },
-                new DeviceRuleMatcher<int>.Rule
+                new DeviceNameRuleMatcherBase<int>.Rule
                 {
                     deviceModel = "iPhone 12",
                     qualityLevel = 5
                 },
-                new DeviceRuleMatcher<int>.Rule
+                new DeviceNameRuleMatcherBase<int>.Rule
                 {
                     deviceModel = "iPhone 12 Pro Max",
                     qualityLevel = 1
                 },
-                new DeviceRuleMatcher<int>.Rule
+                new DeviceNameRuleMatcherBase<int>.Rule
                 {
                     deviceModel = "iPhone 13 Pro Max",
                     qualityLevel = 2
@@ -71,31 +71,31 @@ namespace MobileSupport.QualityMapper.Editor.Tests
                 GpuSeriesNumber = gpuSeriesNumber
             };
 
-            var matcher = new GpuRuleMatcher<int, GpuSeriesEnumeration>();
+            var matcher = new GpuSeriesRuleMatcherBase<int, GpuSeriesEnumeration>();
             matcher.rules = new[]
             {
-                new GpuRuleMatcher<int, GpuSeriesEnumeration>.Rule
+                new GpuSeriesRuleMatcherBase<int, GpuSeriesEnumeration>.Rule
                 {
                     gpuSeries = GpuSeriesEnumeration.AdrenoAny,
                     gpuSeriesNumberMin = 500,
                     gpuSeriesNumberMax = 599,
                     qualityLevel = 5
                 },
-                new GpuRuleMatcher<int, GpuSeriesEnumeration>.Rule
+                new GpuSeriesRuleMatcherBase<int, GpuSeriesEnumeration>.Rule
                 {
                     gpuSeries = GpuSeriesEnumeration.AdrenoAny,
                     gpuSeriesNumberMin = 600,
                     gpuSeriesNumberMax = 799,
                     qualityLevel = 10
                 },
-                new GpuRuleMatcher<int, GpuSeriesEnumeration>.Rule
+                new GpuSeriesRuleMatcherBase<int, GpuSeriesEnumeration>.Rule
                 {
                     gpuSeries = GpuSeriesEnumeration.AdrenoAny,
                     gpuSeriesNumberMin = 200,
                     gpuSeriesNumberMax = 299,
                     qualityLevel = 1
                 },
-                new GpuRuleMatcher<int, GpuSeriesEnumeration>.Rule
+                new GpuSeriesRuleMatcherBase<int, GpuSeriesEnumeration>.Rule
                 {
                     gpuSeries = GpuSeriesEnumeration.AdrenoAny,
                     gpuSeriesNumberMin = 300,
@@ -123,22 +123,22 @@ namespace MobileSupport.QualityMapper.Editor.Tests
             var stats = HardwareStats.CreateDefault();
             stats.SystemMemorySizeMb = systemMemorySize;
 
-            var matcher = new SystemMemoryRuleMatcher<int>();
+            var matcher = new SystemMemoryRuleMatcherBase<int>();
             matcher.rules = new[]
             {
-                new SystemMemoryRuleMatcher<int>.Rule
+                new SystemMemoryRuleMatcherBase<int>.Rule
                 {
                     systemMemoryMin = 0,
                     systemMemoryMax = 1024,
                     qualityLevel = 1
                 },
-                new SystemMemoryRuleMatcher<int>.Rule
+                new SystemMemoryRuleMatcherBase<int>.Rule
                 {
                     systemMemoryMin = 1025,
                     systemMemoryMax = 4096,
                     qualityLevel = 5
                 },
-                new SystemMemoryRuleMatcher<int>.Rule
+                new SystemMemoryRuleMatcherBase<int>.Rule
                 {
                     systemMemoryMin = 4097,
                     systemMemoryMax = 8192,

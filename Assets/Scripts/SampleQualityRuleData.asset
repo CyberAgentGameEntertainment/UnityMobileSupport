@@ -10,24 +10,24 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bbdbc7b9b2a5e46ab9f0091774f6e7bb, type: 3}
-  m_Name: SampleQualityLevelSelector
+  m_Name: SampleQualityRuleData
   m_EditorClassIdentifier: 
   defaultQualityLevel: 1
   qualityLevelRuleMatchers:
-  - rid: 7788121728397082629
-  - rid: 7788121728397082630
-  - rid: 7788121728397082633
+  - rid: 7788121862593052687
+  - rid: 7788121862593052688
+  - rid: 7788121862593052689
   references:
     version: 2
     RefIds:
-    - rid: 7788121728397082629
-      type: {class: SampleDeviceRuleMatcher, ns: , asm: Assembly-CSharp}
+    - rid: 7788121862593052687
+      type: {class: SampleDeviceNameRuleMatcher, ns: , asm: Assembly-CSharp}
       data:
         rules:
         - deviceModel: MacBookPro18,2
           qualityLevel: 2
-    - rid: 7788121728397082630
-      type: {class: SampleGpuRuleMatcher, ns: , asm: Assembly-CSharp}
+    - rid: 7788121862593052688
+      type: {class: SampleGpuSeriesRuleMatcher, ns: , asm: Assembly-CSharp}
       data:
         rules:
         - gpuSeries:
@@ -50,7 +50,7 @@ MonoBehaviour:
             gpuMinorSeries: 11
           gpuSeriesNumberMin: 11
           gpuSeriesNumberMax: 99
-          qualityLevel: 1
+          qualityLevel: 2
         - gpuSeries:
             value: 20
             gpuMajorSeries: 2
@@ -72,7 +72,7 @@ MonoBehaviour:
           gpuSeriesNumberMin: 630
           gpuSeriesNumberMax: 999
           qualityLevel: 2
-    - rid: 7788121728397082633
+    - rid: 7788121862593052689
       type: {class: SampleSystemMemoryRuleMatcher, ns: , asm: Assembly-CSharp}
       data:
         rules:

@@ -5,7 +5,7 @@
 using System;
 using UnityEngine;
 
-namespace MobileSupport.QualityMapper
+namespace MobileSupport.QualityTuner
 {
     [AttributeUsage(AttributeTargets.Field)]
     public class SelectableSerializeReferenceAttribute : PropertyAttribute

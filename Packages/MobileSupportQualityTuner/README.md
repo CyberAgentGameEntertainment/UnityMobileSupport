@@ -1,4 +1,4 @@
-# Unity Mobile Support - QualityMapper <!-- omit in toc -->
+# Unity Mobile Support - QualityTuner <!-- omit in toc -->
 
 [![license](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![license](https://img.shields.io/badge/PR-welcome-green.svg)](https://github.com/CyberAgentGameEntertainment/UnityMobileSupport/pulls)
@@ -98,7 +98,7 @@ To install the software, follow the steps below.
 1. Open the Package Manager from `Window > Package Manager`
 2. `"+" button > Add package from git URL`
 3. Enter the following
-    * https://github.com/CyberAgentGameEntertainment/UnityMobileSupport.git?path=/Packages/MobileSupportQualityMapper
+    * https://github.com/CyberAgentGameEntertainment/UnityMobileSupport.git?path=/Packages/MobileSupportQualityTuner
 
 <p align="center">
   <img width=500 src="https://user-images.githubusercontent.com/47441314/143533003-177a51fc-3d11-4784-b9d2-d343cc622841.png" alt="Package Manager">
@@ -109,14 +109,14 @@ Or, open `Packages/manifest.json` and add the following to the dependencies bloc
 ```json
 {
     "dependencies": {
-        "jp.co.cyberagent.unity-mobile-support-storage": "https://github.com/CyberAgentGameEntertainment/UnityMobileSupport.git?path=/Packages/MobileSupportQualityMapper"
+        "jp.co.cyberagent.unity-mobile-support-quality-tuner": "https://github.com/CyberAgentGameEntertainment/UnityMobileSupport.git?path=/Packages/MobileSupportQualityTuner"
     }
 }
 ```
 
 If you want to set the target version, write as follows.
 
-- https://github.com/CyberAgentGameEntertainment/UnityMobileSupport.git?path=/Packages/MobileSupportQualityMapper#qualitymapper/1.0.0
+- https://github.com/CyberAgentGameEntertainment/UnityMobileSupport.git?path=/Packages/MobileSupportQualityTuner#qualitytuner/1.0.0
 
 Note that if you get a message
 like `No 'git' executable was found. Please install Git on your system and restart Unity`, you will need to set up Git
@@ -129,8 +129,8 @@ package-lock.json file.
 ```json
 {
   "dependencies": {
-      "jp.co.cyberagent.unity-mobile-support-quality-mapper": {
-      "version": "https://github.com/CyberAgentGameEntertainment/UnityMobileSupport.git?path=/Packages/MobileSupportQualityMapper",
+      "jp.co.cyberagent.unity-mobile-support-quality-tuner": {
+      "version": "https://github.com/CyberAgentGameEntertainment/UnityMobileSupport.git?path=/Packages/MobileSupportQualityTuner",
       "depth": 0,
       "source": "git",
       "dependencies": {},

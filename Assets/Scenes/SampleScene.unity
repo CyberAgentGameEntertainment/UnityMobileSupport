@@ -368,7 +368,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5bf0ba71edb654df5b218fdc2b883fd6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sampleQualityLevelSelector: {fileID: 0}
+  sampleQualityLevelRuleData: {fileID: 11400000, guid: 6e2a7cbd15c2741478cb75a873a45f53, type: 2}
 --- !u!4 &2110764689
 Transform:
   m_ObjectHideFlags: 0

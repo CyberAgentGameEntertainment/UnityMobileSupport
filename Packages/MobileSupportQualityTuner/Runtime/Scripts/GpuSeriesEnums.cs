@@ -8,7 +8,7 @@ using System.Linq;
 using System.Reflection;
 using UnityEngine;
 
-namespace MobileSupport.QualityMapper
+namespace MobileSupport.QualityTuner
 {
     /// <summary>
     ///     Enum of GPU series

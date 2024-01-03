@@ -1,11 +1,15 @@
+// --------------------------------------------------------------
+// Copyright 2023 CyberAgent, Inc.
+// --------------------------------------------------------------
+
 using System.Text;
-using MobileSupport.QualityMapper;
+using MobileSupport.QualityTuner;
 using UnityEngine;
 
-public class QualityMapperView : MonoBehaviour
+public class QualityTunerView : MonoBehaviour
 {
     [SerializeField]
-    private SampleQualityLevelSelector sampleQualityLevelSelector;
+    private SampleQualityRuleData sampleQualityRuleData;
 
     private void Start()
     {
@@ -21,12 +25,17 @@ public class QualityMapperView : MonoBehaviour
         sb.AppendLine($"SystemMemorySizeMb: {stats.SystemMemorySizeMb}");
         Debug.Log(sb.ToString());
 
-        if (sampleQualityLevelSelector == null)
+        if (sampleQualityRuleData == null)
         {
             Debug.LogError("SampleQualityLevelSelector is null");
         }
         else
         {
+            var sampleQualityLevelSelector = new RuleBasedQualitySelector<SampleQualityLevel>(sampleQualityRuleData);
+            var newMatcher =
+                JsonUtility.FromJson<SampleDeviceNameRuleMatcher>(
+                    @"{""rules"":[{""deviceModel"":""MacBookPro18,2"",""qualityLevel"":2}]}");
+            sampleQualityLevelSelector.QualityLevelRuleMatchers.Add(newMatcher);
             if (sampleQualityLevelSelector.GetQualityLevel(stats, out var qualityLevel))
                 Debug.Log($"QualityLevel: {qualityLevel}");
             else
