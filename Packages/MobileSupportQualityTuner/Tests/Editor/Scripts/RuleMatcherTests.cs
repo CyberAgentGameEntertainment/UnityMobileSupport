@@ -50,7 +50,7 @@ namespace MobileSupport.QualityTuner.Editor.Tests
                 }
             };
 
-            Assert.AreEqual(expectedResult, matcher.Match(stats, out var qualityLevel));
+            Assert.AreEqual(expectedResult, matcher.TryMatch(stats, out var qualityLevel));
             Assert.AreEqual(expectedQualityLevel, qualityLevel);
         }
 
@@ -104,7 +104,7 @@ namespace MobileSupport.QualityTuner.Editor.Tests
                 }
             };
 
-            Assert.AreEqual(expectedResult, matcher.Match(stats, out var qualityLevel));
+            Assert.AreEqual(expectedResult, matcher.TryMatch(stats, out var qualityLevel));
             Assert.AreEqual(expectedQualityLevel, qualityLevel);
         }
 
@@ -147,7 +147,7 @@ namespace MobileSupport.QualityTuner.Editor.Tests
             };
 
 
-            Assert.AreEqual(expectedResult, matcher.Match(stats, out var qualityLevel));
+            Assert.AreEqual(expectedResult, matcher.TryMatch(stats, out var qualityLevel));
             Assert.AreEqual(expectedQualityLevel, qualityLevel);
         }
     }

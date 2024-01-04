@@ -11,32 +11,32 @@ namespace MobileSupport.QualityTuner
 {
     public interface IMatcher
     {
-        bool Match<T>(HardwareStats stats, out T qualityLevel);
+        bool TryMatch<T>(HardwareStats stats, out T qualityLevel);
     }
 
     public interface IMatcher<T>
     {
-        bool Match(HardwareStats stats, out T matchedQualityLevel);
+        bool TryMatch(HardwareStats stats, out T matchedQualityLevel);
     }
 
     public abstract class RuleMatcherBase<T> : IMatcher
     {
         protected abstract IEnumerable<IMatcher<T>> Rules { get; }
 
-        bool IMatcher.Match<TOut>(HardwareStats stats, out TOut qualityLevel)
+        bool IMatcher.TryMatch<TOut>(HardwareStats stats, out TOut qualityLevel)
         {
             Assert.AreEqual(typeof(T), typeof(TOut), "type mismatch");
 
-            var matched = Match(stats, out var matchedQualityLevel);
+            var matched = TryMatch(stats, out var matchedQualityLevel);
             qualityLevel = (TOut)Convert.ChangeType(matchedQualityLevel, typeof(TOut));
             return matched;
         }
 
-        public bool Match(HardwareStats stats, out T qualityLevel)
+        public bool TryMatch(HardwareStats stats, out T qualityLevel)
         {
             if (Rules is not null)
                 foreach (var rule in Rules)
-                    if (rule.Match(stats, out var matchedQualityLevel))
+                    if (rule.TryMatch(stats, out var matchedQualityLevel))
                     {
                         qualityLevel = matchedQualityLevel;
                         return true;
@@ -63,7 +63,7 @@ namespace MobileSupport.QualityTuner
             [Tooltip("Quality level for the device that match")]
             public T qualityLevel;
 
-            public bool Match(HardwareStats stats, out T matchedQualityLevel)
+            public bool TryMatch(HardwareStats stats, out T matchedQualityLevel)
             {
                 if (deviceModel.Equals(stats.DeviceModel, StringComparison.Ordinal))
                 {
@@ -100,7 +100,7 @@ namespace MobileSupport.QualityTuner
             [Tooltip("Performance level for the device that match")]
             public TLevel qualityLevel;
 
-            public bool Match(HardwareStats stats, out TLevel matchedQualityLevel)
+            public bool TryMatch(HardwareStats stats, out TLevel matchedQualityLevel)
             {
                 matchedQualityLevel = default;
                 if (stats.GpuMajorSeries != gpuSeries.GpuMajorSeries)
@@ -139,7 +139,7 @@ namespace MobileSupport.QualityTuner
             [Tooltip("Performance level for the device that match")]
             public T qualityLevel;
 
-            public bool Match(HardwareStats stats, out T matchedQualityLevel)
+            public bool TryMatch(HardwareStats stats, out T matchedQualityLevel)
             {
                 matchedQualityLevel = default;
                 if (stats.SystemMemorySizeMb < systemMemoryMin ||

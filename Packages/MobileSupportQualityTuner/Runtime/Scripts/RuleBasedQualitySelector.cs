@@ -32,7 +32,7 @@ namespace MobileSupport.QualityTuner
                     if (matcher == null)
                         continue;
 
-                    if (matcher.Match<T>(stats, out var matchedQualityLevel))
+                    if (matcher.TryMatch<T>(stats, out var matchedQualityLevel))
                     {
                         qualityLevel = matchedQualityLevel;
                         return true;
