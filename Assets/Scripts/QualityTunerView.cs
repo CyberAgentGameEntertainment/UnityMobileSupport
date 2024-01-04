@@ -37,7 +37,7 @@ public class QualityTunerView : MonoBehaviour
                 JsonUtility.FromJson<SampleDeviceNameRuleMatcher>(
                     @"{""rules"":[{""deviceModel"":""MacBookPro18,2"",""qualityLevel"":2}]}");
             sampleQualityLevelSelector.QualityLevelRuleMatchers.Add(newMatcher);
-            if (sampleQualityLevelSelector.GetQualityLevel(stats, out var qualityLevel))
+            if (sampleQualityLevelSelector.TryGetQualityLevel(stats, out var qualityLevel))
                 Debug.Log($"QualityLevel: {qualityLevel}");
             else
                 Debug.Log("QualityLevel: Unknown");

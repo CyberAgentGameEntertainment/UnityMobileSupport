@@ -24,7 +24,7 @@ namespace MobileSupport.QualityTuner
 
         public T DefaultQualityLevel { get; set; }
 
-        public bool GetQualityLevel(HardwareStats stats, out T qualityLevel)
+        public bool TryGetQualityLevel(HardwareStats stats, out T qualityLevel)
         {
             if (QualityLevelRuleMatchers is not null)
                 foreach (var matcher in QualityLevelRuleMatchers)

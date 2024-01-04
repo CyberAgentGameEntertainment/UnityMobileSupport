@@ -16,6 +16,8 @@ namespace MobileSupport.QualityTuner.Editor.Tests
         [TestCase("Apple A17 Pro GPU", ExpectedResult = 17)]
         [TestCase("Apple M1 GPU", ExpectedResult = 1)]
         [TestCase("Apple M1", ExpectedResult = 1)]
+        [TestCase("Apple A2147483647 GPU", ExpectedResult = int.MaxValue)]
+        [TestCase("Apple A2147483648 GPU", ExpectedResult = 0)]
         public int HardwareInfoAndroid_ParseAppleGpuSeriesNumber_Tests(string gpuName)
         {
             return HardwareInfoIos.ParseAppleGpuSeriesNumber(gpuName);

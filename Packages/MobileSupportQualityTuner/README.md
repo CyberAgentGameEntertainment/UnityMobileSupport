@@ -24,10 +24,10 @@ This package provide information and decision tool to decide quality level.
 
 ## Supported Functions
 
-| Method                                                                               | Description                                             | Note                                                        | Editor Behaviour                                                           |
-|--------------------------------------------------------------------------------------|---------------------------------------------------------|-------------------------------------------------------------|----------------------------------------------------------------------------|
-| HardwareInfo.GetHardwareStats()                                                      | Get hardware stats which helps to decide quality level. | Many information is retrieved via `UnityEngine.SystemInfo`. | Same as mobile, but Windows Editor is unlikely not supported at this time. |
-| RuleBasedQualitySelector<T>.GetQualityLevel(HardwareStats stats, out T qualityLevel) | Decide quality level by decision table you defined.     | You need to define your own QualityLevelSelector.           | Same as mobile.                                                            |
+| Method                                                                                  | Description                                             | Note                                                        | Editor Behaviour                                                           |
+|-----------------------------------------------------------------------------------------|---------------------------------------------------------|-------------------------------------------------------------|----------------------------------------------------------------------------|
+| HardwareInfo.GetHardwareStats()                                                         | Get hardware stats which helps to decide quality level. | Many information is retrieved via `UnityEngine.SystemInfo`. | Same as mobile, but Windows Editor is unlikely not supported at this time. |
+| RuleBasedQualitySelector<T>.TryGetQualityLevel(HardwareStats stats, out T qualityLevel) | Decide quality level by decision table you defined.     | You need to define your own QualityLevelSelector.           | Same as mobile.                                                            |
 
 ## Usage
 
@@ -36,7 +36,7 @@ This package provide information and decision tool to decide quality level.
 2. Create asset of your own QualityRuleData on editor.
 3. Set decision rules to asset as you like.
 4. Instantiate RuleBasedQualitySelector<T> with your QualityRuleData. T should be same as your QualityRuleData.
-5. Get HardwareStats and pass to RuleBasedQualitySelector<T>.GetQualityLevel() to decide quality level at runtime.
+5. Get HardwareStats and pass to RuleBasedQualitySelector<T>.TryGetQualityLevel() to decide quality level at runtime.
 
 ### Sample
 
@@ -73,7 +73,7 @@ using UnityEngine;
                 JsonUtility.FromJson<SampleDeviceNameRuleMatcher>(
                     @"{""rules"":[{""deviceModel"":""MacBookPro18,2"",""qualityLevel"":2}]}");
             sampleQualityLevelSelector.QualityLevelRuleMatchers.Add(newMatcher);
-            if (sampleQualityLevelSelector.GetQualityLevel(stats, out var qualityLevel))
+            if (sampleQualityLevelSelector.TryGetQualityLevel(stats, out var qualityLevel))
                 Debug.Log($"QualityLevel: {qualityLevel}");
             else
                 Debug.Log("QualityLevel: Unknown");

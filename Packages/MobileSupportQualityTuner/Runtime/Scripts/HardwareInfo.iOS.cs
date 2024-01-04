@@ -38,7 +38,8 @@ namespace MobileSupport.QualityTuner
             // ex: Apple A8 GPU, Apple A10 GPU, Apple M1
             var match = Regex.Match(gpuName, @"Apple [AM](\d+)");
             if (match.Success)
-                return int.Parse(match.Groups[1].Value);
+                if (int.TryParse(match.Groups[1].Value, out var number))
+                    return number;
 
             return 0;
         }

@@ -20,6 +20,8 @@ namespace MobileSupport.QualityTuner.Editor.Tests
                 yield return new TestCaseData("Adreno (TM) 642L").Returns((GpuMinorSeries.Adreno600, 642));
                 yield return new TestCaseData("Adreno (TM) 650 (RADV NAVI23)").Returns((GpuMinorSeries.Adreno600, 650));
                 yield return new TestCaseData("Adreno (TM) 725").Returns((GpuMinorSeries.Adreno700, 725));
+                yield return new TestCaseData("Adreno (TM) 1000").Returns((GpuMinorSeries.Unknown, 1000));
+                yield return new TestCaseData("Adreno (TM) 2147483648").Returns((GpuMinorSeries.Unknown, 0));
             }
         }
 
@@ -34,6 +36,7 @@ namespace MobileSupport.QualityTuner.Editor.Tests
                 yield return new TestCaseData("Mali-T720").Returns((GpuMinorSeries.MaliT, 720));
                 yield return new TestCaseData("Mali-T880").Returns((GpuMinorSeries.MaliT, 880));
                 yield return new TestCaseData("Mali-400").Returns((GpuMinorSeries.Mali, 400));
+                yield return new TestCaseData("Mali-2147483648").Returns((GpuMinorSeries.Unknown, 0));
             }
         }
 
@@ -47,17 +50,29 @@ namespace MobileSupport.QualityTuner.Editor.Tests
                 yield return new TestCaseData("PowerVR Rogue GE8322").Returns((GpuMinorSeries.PowerVR8XE, 8322));
                 yield return new TestCaseData("PowerVR Rogue GM9446").Returns((GpuMinorSeries.PowerVR9XM, 9446));
                 yield return new TestCaseData("PowerVR B-Series BXM-8-256").Returns((GpuMinorSeries.Unknown, 0));
+                yield return new TestCaseData("PowerVR Rogue GM2147483648").Returns((GpuMinorSeries.Unknown, 0));
             }
         }
 
         private static IEnumerable XclipseTestCases
         {
-            get { yield return new TestCaseData("Samsung Xclipse 920").Returns((GpuMinorSeries.Xclipse, 920)); }
+            get
+            {
+                yield return new TestCaseData("Samsung Xclipse 920").Returns((GpuMinorSeries.Xclipse, 920));
+                yield return new TestCaseData("Samsung Xclipse 2147483647").Returns((GpuMinorSeries.Xclipse,
+                    int.MaxValue));
+                yield return new TestCaseData("Samsung Xclipse 2147483648").Returns((GpuMinorSeries.Unknown, 0));
+            }
         }
 
         private static IEnumerable MaleoonTestCases
         {
-            get { yield return new TestCaseData("Maleoon 910").Returns((GpuMinorSeries.Maleoon, 910)); }
+            get
+            {
+                yield return new TestCaseData("Maleoon 910").Returns((GpuMinorSeries.Maleoon, 910));
+                yield return new TestCaseData("Maleoon 2147483647").Returns((GpuMinorSeries.Maleoon, int.MaxValue));
+                yield return new TestCaseData("Maleoon 2147483648").Returns((GpuMinorSeries.Unknown, 0));
+            }
         }
 
         [TestCaseSource(typeof(HardwareInfoAndroidTests), nameof(AdrenoTestCases))]

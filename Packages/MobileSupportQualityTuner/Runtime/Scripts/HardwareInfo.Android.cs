@@ -55,32 +55,20 @@ namespace MobileSupport.QualityTuner
             // ex: Adreno (TM) xxx
             var match = Regex.Match(gpuName, @"Adreno \(TM\) (\d+)");
             if (match.Success)
-            {
-                var number = int.Parse(match.Groups[1].Value);
-                switch (number / 100)
-                {
-                    case 1:
-                        return (GpuMinorSeries.Adreno100, number);
-                    case 2:
-                        return (GpuMinorSeries.Adreno200, number);
-                    case 3:
-                        return (GpuMinorSeries.Adreno300, number);
-                    case 4:
-                        return (GpuMinorSeries.Adreno400, number);
-                    case 5:
-                        return (GpuMinorSeries.Adreno500, number);
-                    case 6:
-                        return (GpuMinorSeries.Adreno600, number);
-                    case 7:
-                        return (GpuMinorSeries.Adreno700, number);
-                    case 8:
-                        return (GpuMinorSeries.Adreno800, number);
-                    case 9:
-                        return (GpuMinorSeries.Adreno900, number);
-                    default:
-                        return (GpuMinorSeries.Unknown, number);
-                }
-            }
+                if (int.TryParse(match.Groups[1].Value, out var number))
+                    return (number / 100) switch
+                    {
+                        1 => (GpuMinorSeries.Adreno100, number),
+                        2 => (GpuMinorSeries.Adreno200, number),
+                        3 => (GpuMinorSeries.Adreno300, number),
+                        4 => (GpuMinorSeries.Adreno400, number),
+                        5 => (GpuMinorSeries.Adreno500, number),
+                        6 => (GpuMinorSeries.Adreno600, number),
+                        7 => (GpuMinorSeries.Adreno700, number),
+                        8 => (GpuMinorSeries.Adreno800, number),
+                        9 => (GpuMinorSeries.Adreno900, number),
+                        _ => (GpuMinorSeries.Unknown, number)
+                    };
 
             return (GpuMinorSeries.Unknown, 0);
         }
@@ -91,16 +79,14 @@ namespace MobileSupport.QualityTuner
             // ex: Mali-Gxx, Mali-Txxx
             var match = Regex.Match(gpuName, @"Mali-([GT]?)(\d+)");
             if (match.Success)
-            {
-                var number = int.Parse(match.Groups[2].Value);
-                return match.Groups[1].Value switch
-                {
-                    "G" => (GpuMinorSeries.MaliG, number),
-                    "T" => (GpuMinorSeries.MaliT, number),
-                    "" => (GpuMinorSeries.Mali, number),
-                    _ => (GpuMinorSeries.Unknown, number)
-                };
-            }
+                if (int.TryParse(match.Groups[2].Value, out var number))
+                    return match.Groups[1].Value switch
+                    {
+                        "G" => (GpuMinorSeries.MaliG, number),
+                        "T" => (GpuMinorSeries.MaliT, number),
+                        "" => (GpuMinorSeries.Mali, number),
+                        _ => (GpuMinorSeries.Unknown, number)
+                    };
 
             return (GpuMinorSeries.Unknown, 0);
         }
@@ -111,16 +97,14 @@ namespace MobileSupport.QualityTuner
             // ex: PowerVR Rogue GExxxx, PowerVR Rogue G?xxxx
             var match = Regex.Match(gpuName, @"PowerVR Rogue (G[A-Z])(\d)(\d+)");
             if (match.Success)
-            {
-                var number = int.Parse(match.Groups[2].Value + match.Groups[3].Value);
-                return (match.Groups[1].Value + match.Groups[2].Value) switch
-                {
-                    "GX6" => (GpuMinorSeries.PowerVR6XT, number),
-                    "GE8" => (GpuMinorSeries.PowerVR8XE, number),
-                    "GM9" => (GpuMinorSeries.PowerVR9XM, number),
-                    _ => (GpuMinorSeries.Unknown, number)
-                };
-            }
+                if (int.TryParse(match.Groups[2].Value + match.Groups[3].Value, out var number))
+                    return (match.Groups[1].Value + match.Groups[2].Value) switch
+                    {
+                        "GX6" => (GpuMinorSeries.PowerVR6XT, number),
+                        "GE8" => (GpuMinorSeries.PowerVR8XE, number),
+                        "GM9" => (GpuMinorSeries.PowerVR9XM, number),
+                        _ => (GpuMinorSeries.Unknown, number)
+                    };
 
 
             return (GpuMinorSeries.Unknown, 0);
@@ -132,10 +116,8 @@ namespace MobileSupport.QualityTuner
             // ex: Samsung Xclipse xxx
             var match = Regex.Match(gpuName, @"Samsung Xclipse (\d+)");
             if (match.Success)
-            {
-                var number = int.Parse(match.Groups[1].Value);
-                return (GpuMinorSeries.Xclipse, number);
-            }
+                if (int.TryParse(match.Groups[1].Value, out var number))
+                    return (GpuMinorSeries.Xclipse, number);
 
             return (GpuMinorSeries.Unknown, 0);
         }
@@ -146,10 +128,8 @@ namespace MobileSupport.QualityTuner
             // ex: Maleoon xxx
             var match = Regex.Match(gpuName, @"Maleoon (\d+)");
             if (match.Success)
-            {
-                var number = int.Parse(match.Groups[1].Value);
-                return (GpuMinorSeries.Maleoon, number);
-            }
+                if (int.TryParse(match.Groups[1].Value, out var number))
+                    return (GpuMinorSeries.Maleoon, number);
 
             return (GpuMinorSeries.Unknown, 0);
         }
