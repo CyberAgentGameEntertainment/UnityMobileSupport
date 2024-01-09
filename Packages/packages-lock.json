@@ -184,7 +184,7 @@
       "dependencies": {}
     },
     "jp.co.cyberagent.unity-mobile-support-quality-tuner": {
-      "version": "file:MobileSupportQualityMapper",
+      "version": "file:MobileSupportQualityTuner",
       "depth": 0,
       "source": "embedded",
       "dependencies": {}
