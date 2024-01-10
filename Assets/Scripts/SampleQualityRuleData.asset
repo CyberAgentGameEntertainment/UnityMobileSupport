@@ -1,0 +1,87 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbdbc7b9b2a5e46ab9f0091774f6e7bb, type: 3}
+  m_Name: SampleQualityRuleData
+  m_EditorClassIdentifier: 
+  defaultQualityLevel: 1
+  qualityLevelRuleMatchers:
+  - rid: 7788121862593052687
+  - rid: 7788121862593052688
+  - rid: 7788121862593052689
+  references:
+    version: 2
+    RefIds:
+    - rid: 7788121862593052687
+      type: {class: SampleDeviceNameRuleMatcher, ns: , asm: Assembly-CSharp}
+      data:
+        rules:
+        - deviceModel: MacBookPro18,2
+          qualityLevel: 2
+    - rid: 7788121862593052688
+      type: {class: SampleGpuSeriesRuleMatcher, ns: , asm: Assembly-CSharp}
+      data:
+        rules:
+        - gpuSeries:
+            value: 12
+            gpuMajorSeries: 1
+            gpuMinorSeries: 12
+          gpuSeriesNumberMin: 0
+          gpuSeriesNumberMax: 9999
+          qualityLevel: 2
+        - gpuSeries:
+            value: 11
+            gpuMajorSeries: 1
+            gpuMinorSeries: 11
+          gpuSeriesNumberMin: 0
+          gpuSeriesNumberMax: 10
+          qualityLevel: 1
+        - gpuSeries:
+            value: 11
+            gpuMajorSeries: 1
+            gpuMinorSeries: 11
+          gpuSeriesNumberMin: 11
+          gpuSeriesNumberMax: 99
+          qualityLevel: 2
+        - gpuSeries:
+            value: 20
+            gpuMajorSeries: 2
+            gpuMinorSeries: 0
+          gpuSeriesNumberMin: 0
+          gpuSeriesNumberMax: 540
+          qualityLevel: 0
+        - gpuSeries:
+            value: 20
+            gpuMajorSeries: 2
+            gpuMinorSeries: 0
+          gpuSeriesNumberMin: 541
+          gpuSeriesNumberMax: 629
+          qualityLevel: 1
+        - gpuSeries:
+            value: 20
+            gpuMajorSeries: 2
+            gpuMinorSeries: 0
+          gpuSeriesNumberMin: 630
+          gpuSeriesNumberMax: 999
+          qualityLevel: 2
+    - rid: 7788121862593052689
+      type: {class: SampleSystemMemoryRuleMatcher, ns: , asm: Assembly-CSharp}
+      data:
+        rules:
+        - systemMemoryMin: 0
+          systemMemoryMax: 2048
+          qualityLevel: 0
+        - systemMemoryMin: 2049
+          systemMemoryMax: 4096
+          qualityLevel: 1
+        - systemMemoryMin: 4097
+          systemMemoryMax: 99999
+          qualityLevel: 2

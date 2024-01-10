@@ -183,6 +183,12 @@
       "source": "embedded",
       "dependencies": {}
     },
+    "jp.co.cyberagent.unity-mobile-support-quality-tuner": {
+      "version": "file:MobileSupportQualityTuner",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "jp.co.cyberagent.unity-mobile-support-storage": {
       "version": "file:MobileSupportStorage",
       "depth": 0,
