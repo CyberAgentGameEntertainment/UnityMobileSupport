@@ -10,6 +10,9 @@
     "mobile",
     "thermal"
   ],
+  "author": {
+    "name": "CyberAgent"
+  },
   "dependencies": {
   },
   "repository": {
