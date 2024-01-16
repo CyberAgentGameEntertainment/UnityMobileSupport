@@ -10,6 +10,9 @@
     "mobile",
     "storage"
   ],
+  "author": {
+    "name": "CyberAgent"
+  },
   "dependencies": {
   },
   "repository": {

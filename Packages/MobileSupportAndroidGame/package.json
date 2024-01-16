@@ -12,6 +12,9 @@
     "game mode",
     "game state"
   ],
+  "author": {
+    "name": "CyberAgent"
+  },
   "dependencies": {},
   "repository": {
     "url": "https://github.com/CyberAgentGameEntertainment/UnityMobileSupport",
