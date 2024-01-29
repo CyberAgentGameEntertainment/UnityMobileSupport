@@ -13,7 +13,7 @@ namespace MobileSupport.QualityTuner
         {
             // only works with iOS, iPadOS and macOS, including editor
 #if UNITY_EDITOR && !UNITY_EDITOR_OSX
-            if (Application.isEditor)
+            if (UnityEngine.Application.isEditor)
                 return;
 #endif
             stats.GpuMajorSeries = GpuMajorSeries.Apple;
