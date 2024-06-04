@@ -12,9 +12,12 @@ public class ThermalView : MonoBehaviour
 {
     private void Start()
     {
+#if UNITY_ANDROID
+        Thermal.OnBatteryTemperatureChanged += value => Debug.Log($"Battery Temperature: {value}");
+#endif
+
 #if UNITY_ANDROID || UNITY_IOS
         Thermal.OnThermalStatusChanged += status => Debug.Log($"Thermal Status: {status}");
-        Thermal.OnBatteryTemperatureChanged += value => Debug.Log($"Battery Temperature: {value}");
         Thermal.StartMonitoring();
 #endif
 
