@@ -32,7 +32,7 @@ namespace MobileSupport
                     case "toString":
                         return new AndroidJavaObject("java.lang.String", toString());
                     case "equals":
-                        return new AndroidJavaObject("java.lang.Boolean",equals((AndroidJavaObject)args[0]));
+                        return new AndroidJavaObject("java.lang.Boolean", equals((AndroidJavaObject)args[0]));
                     case "onThermalStatusChanged":
                         _callback?.Invoke((int)args[0]);
                         return null;
@@ -110,6 +110,12 @@ namespace MobileSupport
         /// </summary>
         public static int? LatestBatteryTemperature { get; private set; }
 
+        private static float? _latestThermalHeadroom;
+        private static DateTime? _latestThermalHeadroomTime;
+        private static int _latestThermalHeadroomForecastSeconds;
+
+        private static readonly object ThermalHeadroomLocker = new();
+
         private static bool _isMonitoring;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
@@ -154,26 +160,62 @@ namespace MobileSupport
             _isMonitoring = false;
         }
 
-        public static float GetThermalHeadroom(int forecastSeconds)
+        /// <summary>
+        ///     Tries to get the thermal headroom through android.os.PowerManager.getThermalHeadroom().
+        ///     Calling this method multiple times within a second will return the cached value even if the forecastSeconds is different.
+        /// </summary>
+        /// <param name="forecastSeconds">how many seconds in the future to forecast</param>
+        /// <param name="result">the thermal headroom value</param>
+        /// <param name="resultForecastSeconds">the forecast seconds of the result. It maybe different from requested value when the cached value is returned.</param>
+        /// <param name="isLatestValue">whether if it succeeded to get the latest value.</param>
+        public static void GetThermalHeadroom(int forecastSeconds, out float result, out int resultForecastSeconds,
+            out bool isLatestValue)
         {
 #if UNITY_EDITOR
-            if (Application.isEditor) return float.NaN;
+            if (Application.isEditor)
+            {
+                result = float.NaN;
+                resultForecastSeconds = 0;
+                isLatestValue = true;
+                return;
+            }
 #endif
+            var time = DateTime.UtcNow;
 
-            using var playerClass = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
-            using var activity = playerClass.GetStatic<AndroidJavaObject>("currentActivity");
-            using var staticContext = new AndroidJavaClass("android.content.Context");
-            using var service = staticContext.GetStatic<AndroidJavaObject>("POWER_SERVICE");
-            using var powerManager = activity.Call<AndroidJavaObject>("getSystemService", service);
+            lock (ThermalHeadroomLocker)
+            {
+                if (_latestThermalHeadroom.HasValue &&
+                    _latestThermalHeadroomTime.HasValue &&
+                    time - _latestThermalHeadroomTime < TimeSpan.FromSeconds(1.0))
+                {
+                    result = _latestThermalHeadroom.Value;
+                    resultForecastSeconds = _latestThermalHeadroomForecastSeconds;
+                    isLatestValue = false;
+                    return;
+                }
 
-            return powerManager.Call<float>("getThermalHeadroom", forecastSeconds);
+                using var playerClass = GetUnityPlayerClass();
+                using var activity = GetCurrentActivity(playerClass);
+                using var staticContext = GetContextClass();
+                using var service = GetPowerService(staticContext);
+                using var powerManager = GetSystemService(activity, service);
+
+                result = powerManager.Call<float>("getThermalHeadroom", forecastSeconds);
+
+                _latestThermalHeadroomTime = DateTime.UtcNow;
+                _latestThermalHeadroom = result;
+                resultForecastSeconds = _latestThermalHeadroomForecastSeconds = forecastSeconds;
+                isLatestValue = true;
+
+                return;
+            }
         }
 
         private static void StartReceiveBatteryTemperature()
         {
-            using var playerClass = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
-            using var activity = playerClass.GetStatic<AndroidJavaObject>("currentActivity");
-            using var context = activity.Call<AndroidJavaObject>("getApplicationContext");
+            using var playerClass = GetUnityPlayerClass();
+            using var activity = GetCurrentActivity(playerClass);
+            using var context = GetApplicationContext(activity);
 
             BatteryChangedBroadcastReceiverInstance.Call("registerToContext", context);
             BatteryChangedBroadcastReceiverInstance.Call("addReceiver", BatteryTemperatureReceiverInstance);
@@ -181,9 +223,9 @@ namespace MobileSupport
 
         private static void StopReceiveBatteryTemperature()
         {
-            using var playerClass = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
-            using var activity = playerClass.GetStatic<AndroidJavaObject>("currentActivity");
-            using var context = activity.Call<AndroidJavaObject>("getApplicationContext");
+            using var playerClass = GetUnityPlayerClass();
+            using var activity = GetCurrentActivity(playerClass);
+            using var context = GetApplicationContext(activity);
 
             BatteryChangedBroadcastReceiverInstance.Call("removeReceiver", BatteryTemperatureReceiverInstance);
             BatteryChangedBroadcastReceiverInstance.Call("unregisterFromContext", context);
@@ -191,14 +233,30 @@ namespace MobileSupport
 
         private static void CallPowerManagerMethod(string methodName, params object[] args)
         {
-            using var playerClass = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
-            using var activity = playerClass.GetStatic<AndroidJavaObject>("currentActivity");
-            using var staticContext = new AndroidJavaClass("android.content.Context");
-            using var service = staticContext.GetStatic<AndroidJavaObject>("POWER_SERVICE");
-            using var powerManager = activity.Call<AndroidJavaObject>("getSystemService", service);
-            
+            using var playerClass = GetUnityPlayerClass();
+            using var activity = GetCurrentActivity(playerClass);
+            using var staticContext = GetContextClass();
+            using var service = GetPowerService(staticContext);
+            using var powerManager = GetSystemService(activity, service);
+
             powerManager.Call(methodName, args);
         }
+
+        private static AndroidJavaClass GetUnityPlayerClass() => new("com.unity3d.player.UnityPlayer");
+
+        private static AndroidJavaObject GetCurrentActivity(AndroidJavaClass unityPlayerClass) =>
+            unityPlayerClass.GetStatic<AndroidJavaObject>("currentActivity");
+
+        private static AndroidJavaClass GetContextClass() => new("android.content.Context");
+
+        private static AndroidJavaObject GetPowerService(AndroidJavaClass contextClass) =>
+            contextClass.GetStatic<AndroidJavaObject>("POWER_SERVICE");
+
+        private static AndroidJavaObject GetSystemService(AndroidJavaObject activity, AndroidJavaObject service) =>
+            activity.Call<AndroidJavaObject>("getSystemService", service);
+
+        private static AndroidJavaObject GetApplicationContext(AndroidJavaObject activity) =>
+            activity.Call<AndroidJavaObject>("getApplicationContext");
 
         private static void OnThermalStatusChangedCallback(int status)
         {

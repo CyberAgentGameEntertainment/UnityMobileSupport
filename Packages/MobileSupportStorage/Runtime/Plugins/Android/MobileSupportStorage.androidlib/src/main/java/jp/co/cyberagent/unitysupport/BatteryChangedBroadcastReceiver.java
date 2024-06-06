@@ -10,10 +10,11 @@ import java.util.HashSet;
 
 public class BatteryChangedBroadcastReceiver extends BroadcastReceiver {
 
+    private static final int UninitializedTemperature = -1;
     private static final IntentFilter intentFilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
     private final HashSet<BatteryTemperatureReceiver> receivers = new HashSet<>();
 
-    private int _prevTemperature = -1;
+    private int _prevTemperature = UninitializedTemperature;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -30,7 +31,7 @@ public class BatteryChangedBroadcastReceiver extends BroadcastReceiver {
 
     public void registerToContext(Context context) {
         context.registerReceiver(this, intentFilter);
-        _prevTemperature = -1;
+        _prevTemperature = UninitializedTemperature;
     }
 
     public void unregisterFromContext(Context context) {
@@ -39,7 +40,7 @@ public class BatteryChangedBroadcastReceiver extends BroadcastReceiver {
 
     public void addReceiver(BatteryTemperatureReceiver receiver) {
         receivers.add(receiver);
-        _prevTemperature = -1;
+        _prevTemperature = UninitializedTemperature;
     }
 
     public void removeReceiver(BatteryTemperatureReceiver receiver) {

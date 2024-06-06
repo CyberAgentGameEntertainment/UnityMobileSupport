@@ -32,13 +32,13 @@ public class ThermalView : MonoBehaviour
 
         while (this)
         {
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(0.5f);
 
             sw.Restart();
-            var headroom = Thermal.GetThermalHeadroom(0);
-            var elapsed = sw.ElapsedMilliseconds;
+            Thermal.GetThermalHeadroom(0, out var headroom, out var resultForecastSeconds, out var isLatestValue);
+            var elapsed = (double)sw.ElapsedTicks / Stopwatch.Frequency * 1000;
 
-            Debug.Log($"Thermal Headroom: {headroom} (obtained in {elapsed} ms)");
+            Debug.Log($"Thermal Headroom: {headroom}, isLatestValue: {isLatestValue}, resultForecastSeconds: {resultForecastSeconds} (obtained in {elapsed} ms)");
         }
     }
 }
