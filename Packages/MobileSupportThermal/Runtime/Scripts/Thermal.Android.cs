@@ -86,6 +86,8 @@ namespace MobileSupport
         private static readonly AndroidJavaObject BatteryChangedBroadcastReceiverInstance =
             new("jp.co.cyberagent.unitysupport.BatteryChangedBroadcastReceiver");
 
+        private static AndroidPowerManager _powerManager;
+
         private static SynchronizationContext _mainThreadContext;
         
         /// <summary>
@@ -134,8 +136,8 @@ namespace MobileSupport
 #endif
 
             if (_isMonitoring) return;
-            
-            CallPowerManagerMethod("addThermalStatusListener", JavaCallbackListener);
+
+            (_powerManager ??= new AndroidPowerManager()).AddThermalStatusListener(JavaCallbackListener);
 
             StartReceiveBatteryTemperature();
 
@@ -152,8 +154,8 @@ namespace MobileSupport
 #endif
 
             if (_isMonitoring == false) return;
-            
-            CallPowerManagerMethod("removeThermalStatusListener", JavaCallbackListener);
+
+            _powerManager.RemoveThermalStatusListener(JavaCallbackListener);
 
             StopReceiveBatteryTemperature();
 
@@ -194,20 +196,13 @@ namespace MobileSupport
                     return;
                 }
 
-                using var playerClass = GetUnityPlayerClass();
-                using var activity = GetCurrentActivity(playerClass);
-                using var staticContext = GetContextClass();
-                using var service = GetPowerService(staticContext);
-                using var powerManager = GetSystemService(activity, service);
-
-                result = powerManager.Call<float>("getThermalHeadroom", forecastSeconds);
+                var powerManager = _powerManager ??= new AndroidPowerManager();
+                result = powerManager.GetThermalHeadroom(forecastSeconds);
 
                 _latestThermalHeadroomTime = DateTime.UtcNow;
                 _latestThermalHeadroom = result;
                 resultForecastSeconds = _latestThermalHeadroomForecastSeconds = forecastSeconds;
                 isLatestValue = true;
-
-                return;
             }
         }
 
@@ -231,29 +226,10 @@ namespace MobileSupport
             BatteryChangedBroadcastReceiverInstance.Call("unregisterFromContext", context);
         }
 
-        private static void CallPowerManagerMethod(string methodName, params object[] args)
-        {
-            using var playerClass = GetUnityPlayerClass();
-            using var activity = GetCurrentActivity(playerClass);
-            using var staticContext = GetContextClass();
-            using var service = GetPowerService(staticContext);
-            using var powerManager = GetSystemService(activity, service);
-
-            powerManager.Call(methodName, args);
-        }
-
         private static AndroidJavaClass GetUnityPlayerClass() => new("com.unity3d.player.UnityPlayer");
 
         private static AndroidJavaObject GetCurrentActivity(AndroidJavaClass unityPlayerClass) =>
             unityPlayerClass.GetStatic<AndroidJavaObject>("currentActivity");
-
-        private static AndroidJavaClass GetContextClass() => new("android.content.Context");
-
-        private static AndroidJavaObject GetPowerService(AndroidJavaClass contextClass) =>
-            contextClass.GetStatic<AndroidJavaObject>("POWER_SERVICE");
-
-        private static AndroidJavaObject GetSystemService(AndroidJavaObject activity, AndroidJavaObject service) =>
-            activity.Call<AndroidJavaObject>("getSystemService", service);
 
         private static AndroidJavaObject GetApplicationContext(AndroidJavaObject activity) =>
             activity.Call<AndroidJavaObject>("getApplicationContext");
@@ -277,6 +253,99 @@ namespace MobileSupport
 
                 OnBatteryTemperatureChanged?.Invoke(value);
             }, null);
+        }
+
+
+        private sealed class AndroidPowerManager : IDisposable
+        {
+            [ThreadStatic] private static jvalue[] _tempSingleJValueArray;
+            [ThreadStatic] private static object[] _tempSingleObjectArray;
+
+            private static jvalue[] TempSingleJValueArray => _tempSingleJValueArray ??= new jvalue[1];
+            private static object[] TempSingleObjectArray => _tempSingleObjectArray ??= new object[1];
+
+            private static IntPtr? _getThermalHeadroomMethodId;
+            private static IntPtr? _addThermalStatusListenerMethodId;
+            private static IntPtr? _removeThermalStatusListenerMethodId;
+
+            private AndroidJavaObject _powerManager;
+
+            public AndroidPowerManager()
+            {
+                using var playerClass = GetUnityPlayerClass();
+                using var activity = GetCurrentActivity(playerClass);
+                using var staticContext = GetContextClass();
+                using var service = GetPowerService(staticContext);
+                _powerManager = GetSystemService(activity, service);
+            }
+
+            public float GetThermalHeadroom(int forecastSeconds)
+            {
+                var getThermalHeadroomMethodId = _getThermalHeadroomMethodId ??=
+                    AndroidJNIHelper.GetMethodID(_powerManager.GetRawClass(), "getThermalHeadroom", "(I)F");
+
+                TempSingleJValueArray[0] = new jvalue()
+                {
+                    i = forecastSeconds
+                };
+
+                return AndroidJNI.CallFloatMethod(_powerManager.GetRawObject(), getThermalHeadroomMethodId,
+                    TempSingleJValueArray);
+            }
+
+            public void AddThermalStatusListener(ThermalStatusListener listener)
+            {
+                var addThermalStatusListenerMethodId = _addThermalStatusListenerMethodId ??=
+                    AndroidJNIHelper.GetMethodID(_powerManager.GetRawClass(), "addThermalStatusListener",
+                        "(Landroid/os/PowerManager$OnThermalStatusChangedListener;)V");
+
+                // AndroidJavaProxy doesn't expose the raw object pointer
+                TempSingleObjectArray[0] = listener;
+                AndroidJNI.CallVoidMethod(_powerManager.GetRawObject(), addThermalStatusListenerMethodId,
+                    AndroidJNIHelper.CreateJNIArgArray(TempSingleObjectArray));
+            }
+
+            public void RemoveThermalStatusListener(ThermalStatusListener listener)
+            {
+                var removeThermalStatusListenerMethodId = _removeThermalStatusListenerMethodId ??=
+                    AndroidJNIHelper.GetMethodID(_powerManager.GetRawClass(), "removeThermalStatusListener",
+                        "(Landroid/os/PowerManager$OnThermalStatusChangedListener;)V");
+
+                // AndroidJavaProxy doesn't expose the raw object pointer
+                TempSingleObjectArray[0] = listener;
+                AndroidJNI.CallVoidMethod(_powerManager.GetRawObject(), removeThermalStatusListenerMethodId,
+                    AndroidJNIHelper.CreateJNIArgArray(TempSingleObjectArray));
+            }
+
+            private static AndroidJavaClass GetContextClass() => new("android.content.Context");
+
+            private static AndroidJavaObject GetPowerService(AndroidJavaClass contextClass) =>
+                contextClass.GetStatic<AndroidJavaObject>("POWER_SERVICE");
+
+            private static AndroidJavaObject GetSystemService(AndroidJavaObject activity, AndroidJavaObject service) =>
+                activity.Call<AndroidJavaObject>("getSystemService", service);
+
+            private void DisposeCore()
+            {
+                var powerManager = _powerManager;
+                if (powerManager == null) return;
+
+                // thread safety
+                if (Interlocked.CompareExchange(ref _powerManager, null, powerManager) == null) return;
+
+                powerManager.Dispose();
+            }
+
+            public void Dispose()
+            {
+                DisposeCore();
+                GC.SuppressFinalize(this);
+            }
+
+            ~AndroidPowerManager()
+            {
+                DisposeCore();
+            }
         }
     }
 }
