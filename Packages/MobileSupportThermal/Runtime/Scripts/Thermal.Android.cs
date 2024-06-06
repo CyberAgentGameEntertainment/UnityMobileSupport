@@ -177,7 +177,7 @@ namespace MobileSupport
             if (Application.isEditor)
             {
                 result = float.NaN;
-                resultForecastSeconds = 0;
+                resultForecastSeconds = forecastSeconds;
                 isLatestValue = true;
                 return;
             }
@@ -274,9 +274,9 @@ namespace MobileSupport
             {
                 using var playerClass = GetUnityPlayerClass();
                 using var activity = GetCurrentActivity(playerClass);
-                using var staticContext = GetContextClass();
-                using var service = GetPowerService(staticContext);
-                _powerManager = GetSystemService(activity, service);
+                using var staticContext = new AndroidJavaClass("android.content.Context");
+                using var service = staticContext.GetStatic<AndroidJavaObject>("POWER_SERVICE");
+                _powerManager = activity.Call<AndroidJavaObject>("getSystemService", service);
             }
 
             public float GetThermalHeadroom(int forecastSeconds)
@@ -316,14 +316,6 @@ namespace MobileSupport
                 AndroidJNI.CallVoidMethod(_powerManager.GetRawObject(), removeThermalStatusListenerMethodId,
                     AndroidJNIHelper.CreateJNIArgArray(TempSingleObjectArray));
             }
-
-            private static AndroidJavaClass GetContextClass() => new("android.content.Context");
-
-            private static AndroidJavaObject GetPowerService(AndroidJavaClass contextClass) =>
-                contextClass.GetStatic<AndroidJavaObject>("POWER_SERVICE");
-
-            private static AndroidJavaObject GetSystemService(AndroidJavaObject activity, AndroidJavaObject service) =>
-                activity.Call<AndroidJavaObject>("getSystemService", service);
 
             private void DisposeCore()
             {
