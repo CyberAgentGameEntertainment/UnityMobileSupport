@@ -40,7 +40,11 @@ public class BatteryChangedBroadcastReceiver extends BroadcastReceiver {
 
     public void addReceiver(BatteryTemperatureReceiver receiver) {
         receivers.add(receiver);
-        prevTemperature = UNINITIALIZED_TEMPERATURE;
+
+        if(prevTemperature != UNINITIALIZED_TEMPERATURE)
+        {
+            receiver.onReceiveBatteryTemperature(prevTemperature);
+        }
     }
 
     public void removeReceiver(BatteryTemperatureReceiver receiver) {
