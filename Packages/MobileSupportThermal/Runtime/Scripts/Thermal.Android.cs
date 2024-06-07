@@ -301,8 +301,10 @@ namespace MobileSupport
 
                 // AndroidJavaProxy doesn't expose the raw object pointer
                 TempSingleObjectArray[0] = listener;
-                AndroidJNI.CallVoidMethod(_powerManager.GetRawObject(), addThermalStatusListenerMethodId,
-                    AndroidJNIHelper.CreateJNIArgArray(TempSingleObjectArray));
+                var argArray = AndroidJNIHelper.CreateJNIArgArray(TempSingleObjectArray);
+                AndroidJNI.CallVoidMethod(_powerManager.GetRawObject(), addThermalStatusListenerMethodId, argArray);
+
+                AndroidJNIHelper.DeleteJNIArgArray(TempSingleObjectArray, argArray);
             }
 
             public void RemoveThermalStatusListener(ThermalStatusListener listener)
@@ -313,8 +315,10 @@ namespace MobileSupport
 
                 // AndroidJavaProxy doesn't expose the raw object pointer
                 TempSingleObjectArray[0] = listener;
-                AndroidJNI.CallVoidMethod(_powerManager.GetRawObject(), removeThermalStatusListenerMethodId,
-                    AndroidJNIHelper.CreateJNIArgArray(TempSingleObjectArray));
+                var argArray = AndroidJNIHelper.CreateJNIArgArray(TempSingleObjectArray);
+                AndroidJNI.CallVoidMethod(_powerManager.GetRawObject(), removeThermalStatusListenerMethodId, argArray);
+
+                AndroidJNIHelper.DeleteJNIArgArray(TempSingleObjectArray, argArray);
             }
 
             private void DisposeCore()
