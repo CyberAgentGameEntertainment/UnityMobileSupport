@@ -47,7 +47,7 @@ namespace MobileSupport
             private readonly Action<int> _callback;
 
             public BatteryTemperatureReceiver(Action<int> callback) : base(
-                "jp.co.cyberagent.unitysupport.BatteryTemperatureReceiver")
+                "jp.co.cyberagent.unitysupport.thermal.BatteryTemperatureReceiver")
             {
                 _callback = callback;
             }
@@ -84,7 +84,7 @@ namespace MobileSupport
             new(OnBatteryTemperatureChangedCallback);
 
         private static readonly AndroidJavaObject BatteryChangedBroadcastReceiverInstance =
-            new("jp.co.cyberagent.unitysupport.BatteryChangedBroadcastReceiver");
+            new("jp.co.cyberagent.unitysupport.thermal.BatteryChangedBroadcastReceiver");
 
         private static AndroidPowerManager _powerManager;
 

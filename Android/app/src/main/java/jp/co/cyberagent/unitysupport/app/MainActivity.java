@@ -5,7 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
 
-import jp.co.cyberagent.unitysupport.Storage;
+import jp.co.cyberagent.unitysupport.storage.Storage;
+import jp.co.cyberagent.unitysupport.thermal.BatteryChangedBroadcastReceiver;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -22,5 +23,12 @@ public class MainActivity extends AppCompatActivity {
             long usableSpaceAbove0 = Storage.getInternalUsableSpaceAboveO(getApplicationContext(), -1);
             textViewUsableSpaceAboveO.setText(String.valueOf(usableSpaceAbove0));
         }
+
+        BatteryChangedBroadcastReceiver broadcastReceiver = new BatteryChangedBroadcastReceiver();
+        broadcastReceiver.registerToContext(this.getApplicationContext());
+        TextView textViewBatteryTemperature = findViewById(R.id.textViewBatteryTemperatureValue);
+        broadcastReceiver.addReceiver(new BatteryTemperatureReceiver(level -> {
+            textViewBatteryTemperature.setText(level.toString());
+        }));
     }
 }

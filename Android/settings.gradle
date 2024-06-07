@@ -17,3 +17,5 @@ include ':app'
 
 include ':MobileSupportStorage.androidlib'
 project(':MobileSupportStorage.androidlib').projectDir = new File(settingsDir, '../Packages/MobileSupportStorage/Runtime/Plugins/Android/MobileSupportStorage.androidlib')
+include ':MobileSupportThermal.androidlib'
+project(':MobileSupportThermal.androidlib').projectDir = new File(settingsDir, '../Packages/MobileSupportThermal/Runtime/Plugins/Android/MobileSupportThermal.androidlib')

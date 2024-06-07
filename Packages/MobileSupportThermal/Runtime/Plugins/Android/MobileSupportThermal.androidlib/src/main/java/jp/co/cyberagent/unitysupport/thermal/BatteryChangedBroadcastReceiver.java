@@ -1,4 +1,4 @@
-package jp.co.cyberagent.unitysupport;
+package jp.co.cyberagent.unitysupport.thermal;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -10,19 +10,19 @@ import java.util.HashSet;
 
 public class BatteryChangedBroadcastReceiver extends BroadcastReceiver {
 
-    private static final int UninitializedTemperature = -1;
+    private static final int UNINITIALIZED_TEMPERATURE = -1;
     private static final IntentFilter intentFilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
     private final HashSet<BatteryTemperatureReceiver> receivers = new HashSet<>();
 
-    private int _prevTemperature = UninitializedTemperature;
+    private int prevTemperature = UNINITIALIZED_TEMPERATURE;
 
     @Override
     public void onReceive(Context context, Intent intent) {
 
         int value = intent.getIntExtra(BatteryManager.EXTRA_TEMPERATURE, 0);
 
-        if (_prevTemperature == value) return;
-        _prevTemperature = value;
+        if (prevTemperature == value) return;
+        prevTemperature = value;
 
         for (BatteryTemperatureReceiver receiver : receivers) {
             receiver.onReceiveBatteryTemperature(value);
@@ -31,7 +31,7 @@ public class BatteryChangedBroadcastReceiver extends BroadcastReceiver {
 
     public void registerToContext(Context context) {
         context.registerReceiver(this, intentFilter);
-        _prevTemperature = UninitializedTemperature;
+        prevTemperature = UNINITIALIZED_TEMPERATURE;
     }
 
     public void unregisterFromContext(Context context) {
@@ -40,7 +40,7 @@ public class BatteryChangedBroadcastReceiver extends BroadcastReceiver {
 
     public void addReceiver(BatteryTemperatureReceiver receiver) {
         receivers.add(receiver);
-        _prevTemperature = UninitializedTemperature;
+        prevTemperature = UNINITIALIZED_TEMPERATURE;
     }
 
     public void removeReceiver(BatteryTemperatureReceiver receiver) {

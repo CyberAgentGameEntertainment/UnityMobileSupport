@@ -10,7 +10,7 @@ namespace MobileSupport
 {
     public static class Storage
     {
-        private static readonly string JavaClassName = "jp.co.cyberagent.unitysupport.Storage";
+        private static readonly string JavaClassName = "jp.co.cyberagent.unitysupport.storage.Storage";
 
         /// <summary>
         ///     Get usable space of internal storage.
