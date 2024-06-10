@@ -1,4 +1,4 @@
-package jp.co.cyberagent.unitysupport;
+package jp.co.cyberagent.unitysupport.storage;
 
 import android.annotation.TargetApi;
 import android.content.Context;
