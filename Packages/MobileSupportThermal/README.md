@@ -30,6 +30,12 @@ Below is an example.
 ```C#
     private void StartThermalMonitoring()
     {
+
+#if UNITY_ANDROID
+        // OnBatteryTemperatureChanged is only available on Android
+        Thermal.OnBatteryTemperatureChanged += value => Debug.Log($"Battery Temperature: {value}");
+#endif
+
 #if UNITY_ANDROID || UNITY_IOS
         Thermal.OnThermalStatusChanged += status => Debug.Log($"Thermal Status: {status}");
         Thermal.StartMonitoring();
@@ -38,6 +44,18 @@ Below is an example.
 ```
 
 If you want to stop monitoring, call `Thermal.StopStopMonitoring()`
+
+### Thermal Headroom (Android)
+
+On Android, `Thermal.GetThermalHeadroom()` is available to estimate CPU temperature.  
+Details: https://developer.android.com/reference/android/os/PowerManager#getThermalHeadroom(int)
+
+```C#
+    private void GetThermalHeadroom()
+    {
+        Thermal.GetThermalHeadroom(0, out var headroom, out var resultForecastSeconds, out var isLatestValue);
+    }
+```
 
 ## Setup
 
