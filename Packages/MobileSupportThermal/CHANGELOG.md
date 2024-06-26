@@ -1,6 +1,6 @@
 # Release notes
 
-## v0.1.1 - 2023/06/25
+## v1.0.0 - 2024/06/26
 
 - New Features :rocket:
     - Thermal: New apis to get battery temperature and thermal headroom on Android
