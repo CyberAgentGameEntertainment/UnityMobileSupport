@@ -147,16 +147,17 @@ namespace MobileSupport
 
         /// <summary>
         ///     The latest thermal status.
+        ///     This is the raw value of android.os.PowerManager.THERMAL_STATUS_XXX (0~7).
         /// </summary>
         public static int? LatestThermalStatus { get; private set; }
 
         /// <summary>
-        ///     The latest battery temperature.
+        ///     The latest battery temperature multiplied by 100 in Celsius.
         /// </summary>
         public static int? LatestBatteryTemperature { get; private set; }
 
         /// <summary>
-        ///     The latest battery level.
+        ///     The latest battery voltage in mV.
         /// </summary>
         public static int? LatestBatteryVoltage { get; private set; }
 
@@ -290,26 +291,59 @@ namespace MobileSupport
             }
         }
 
+        /// <summary>
+        ///     The value of BatteryManager's BATTERY_PROPERTY_ENERGY_COUNTER.
+        ///     Battery remaining energy in nanowatt-hours, as a long integer.
+        ///     Returns long.MinValue on unsupported devices.
+        /// </summary>
+        /// <returns></returns>
         public static long GetBatteryEnergyCounter()
         {
             return (_batteryManager ??= new AndroidBatteryManager()).GetEnergyCounter();
         }
 
+        /// <summary>
+        ///     The value of BatteryManager's BATTERY_PROPERTY_CURRENT_NOW.
+        ///     Instantaneous battery current in microamperes, as an integer. Positive values indicate net current entering the
+        ///     battery from a charge source, negative values indicate net current discharging from the battery.
+        ///     Returns int.MinValue on unsupported devices.
+        /// </summary>
+        /// <returns></returns>
         public static int GetBatteryCurrentNow()
         {
             return (_batteryManager ??= new AndroidBatteryManager()).GetCurrentNow();
         }
 
+        /// <summary>
+        ///     The value of BatteryManager's BATTERY_PROPERTY_CHARGE_COUNTER.
+        ///     Battery capacity in microampere-hours, as an integer.
+        ///     Returns int.MinValue on unsupported devices.
+        /// </summary>
+        /// <returns></returns>
         public static int GetBatteryChargeCounter()
         {
             return (_batteryManager ??= new AndroidBatteryManager()).GetChargeCounter();
         }
 
+        /// <summary>
+        ///     The value of BatteryManager's BATTERY_PROPERTY_CURRENT_AVERAGE.
+        ///     Average battery current in microamperes, as an integer. Positive values indicate net current entering the battery
+        ///     from a charge source, negative values indicate net current discharging from the battery. The time period over which
+        ///     the average is computed may depend on the fuel gauge hardware and its configuration.
+        ///     Returns int.MinValue on unsupported devices.
+        /// </summary>
+        /// <returns></returns>
         public static int GetBatteryCurrentAverage()
         {
             return (_batteryManager ??= new AndroidBatteryManager()).GetCurrentAverage();
         }
 
+        /// <summary>
+        ///     The value of BatteryManager's BATTERY_PROPERTY_CAPACITY.
+        ///     Remaining battery capacity as an integer percentage of total capacity (with no fractional part).
+        ///     Returns int.MinValue on unsupported devices.
+        /// </summary>
+        /// <returns></returns>
         public static int GetBatteryCapacity()
         {
             return (_batteryManager ??= new AndroidBatteryManager()).GetCapacity();
