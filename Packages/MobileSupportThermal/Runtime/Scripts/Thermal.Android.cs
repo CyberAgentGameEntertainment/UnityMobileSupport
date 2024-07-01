@@ -352,8 +352,6 @@ namespace MobileSupport
 
         private static void OnThermalStatusChangedCallback(int status)
         {
-            Debug.Log($"{nameof(OnThermalStatusChangedCallback)}: from thread {Environment.CurrentManagedThreadId}");
-
             _mainThreadContext.Post(_ =>
             {
                 LatestThermalStatus = status;
@@ -365,9 +363,6 @@ namespace MobileSupport
 
         private static void OnBatteryTemperatureChangedCallback(int value)
         {
-            Debug.Log(
-                $"{nameof(OnBatteryTemperatureChangedCallback)}: from thread {Environment.CurrentManagedThreadId}");
-
             _mainThreadContext.Post(_ =>
             {
                 LatestBatteryTemperature = value;
@@ -378,8 +373,6 @@ namespace MobileSupport
 
         private static void OnBatteryVoltageChangedCallback(int value)
         {
-            Debug.Log($"{nameof(OnBatteryVoltageChangedCallback)}: from thread {Environment.CurrentManagedThreadId}");
-
             _mainThreadContext.Post(_ =>
             {
                 LatestBatteryVoltage = value;
@@ -390,8 +383,6 @@ namespace MobileSupport
 
         private static void OnBatteryStatusChangedCallback(int value)
         {
-            Debug.Log($"{nameof(OnBatteryStatusChangedCallback)}: from thread {Environment.CurrentManagedThreadId}");
-
             var status = value switch
             {
                 2 => BatteryStatus.Charging,
@@ -411,8 +402,6 @@ namespace MobileSupport
 
         private static void OnBatteryLevelChangedCallback(float value)
         {
-            Debug.Log($"{nameof(OnBatteryLevelChangedCallback)}: from thread {Environment.CurrentManagedThreadId}");
-
             _mainThreadContext.Post(_ =>
             {
                 LatestBatteryLevel = value;
