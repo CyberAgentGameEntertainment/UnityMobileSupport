@@ -77,23 +77,23 @@ public class ThermalView : MonoBehaviour
 #endif
 
             sw.Restart();
-            var counter = Thermal.GetEnergyCounter();
+            var counter = Thermal.GetBatteryEnergyCounter();
             elapsed = (double)sw.ElapsedTicks / Stopwatch.Frequency * 1000;
 
             sw.Restart();
-            var currentNow = Thermal.GetCurrentNow();
+            var currentNow = Thermal.GetBatteryCurrentNow();
             elapsed = (double)sw.ElapsedTicks / Stopwatch.Frequency * 1000;
 
             sw.Restart();
-            var capacity = Thermal.GetCapacity();
+            var capacity = Thermal.GetBatteryCapacity();
             elapsed = (double)sw.ElapsedTicks / Stopwatch.Frequency * 1000;
 
             sw.Restart();
-            var chargeCounter = Thermal.GetChargeCounter();
+            var chargeCounter = Thermal.GetBatteryChargeCounter();
             elapsed = (double)sw.ElapsedTicks / Stopwatch.Frequency * 1000;
 
             sw.Restart();
-            var currentAverage = Thermal.GetCurrentAverage();
+            var currentAverage = Thermal.GetBatteryCurrentAverage();
             elapsed = (double)sw.ElapsedTicks / Stopwatch.Frequency * 1000;
 
             Debug.Log(

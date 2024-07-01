@@ -290,27 +290,27 @@ namespace MobileSupport
             }
         }
 
-        public static long GetEnergyCounter()
+        public static long GetBatteryEnergyCounter()
         {
             return (_batteryManager ??= new AndroidBatteryManager()).GetEnergyCounter();
         }
 
-        public static int GetCurrentNow()
+        public static int GetBatteryCurrentNow()
         {
             return (_batteryManager ??= new AndroidBatteryManager()).GetCurrentNow();
         }
 
-        public static int GetChargeCounter()
+        public static int GetBatteryChargeCounter()
         {
             return (_batteryManager ??= new AndroidBatteryManager()).GetChargeCounter();
         }
 
-        public static int GetCurrentAverage()
+        public static int GetBatteryCurrentAverage()
         {
             return (_batteryManager ??= new AndroidBatteryManager()).GetCurrentAverage();
         }
 
-        public static int GetCapacity()
+        public static int GetBatteryCapacity()
         {
             return (_batteryManager ??= new AndroidBatteryManager()).GetCapacity();
         }
