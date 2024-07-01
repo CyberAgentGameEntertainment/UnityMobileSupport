@@ -27,8 +27,21 @@ public class MainActivity extends AppCompatActivity {
         BatteryChangedBroadcastReceiver broadcastReceiver = new BatteryChangedBroadcastReceiver();
         broadcastReceiver.registerToContext(this.getApplicationContext());
         TextView textViewBatteryTemperature = findViewById(R.id.textViewBatteryTemperatureValue);
-        broadcastReceiver.addReceiver(new BatteryTemperatureReceiver(level -> {
-            textViewBatteryTemperature.setText(level.toString());
-        }));
+        TextView textViewBatteryVoltage = findViewById(R.id.textViewBatteryVoltageValue);
+        TextView textViewBatteryLevel = findViewById(R.id.textViewBatteryLevelValue);
+        TextView textViewBatteryStatus = findViewById(R.id.textViewBatteryStatusValue);
+        broadcastReceiver.addReceiver(new BatteryStatusReceiver(
+                temperature -> {
+                    textViewBatteryTemperature.setText(temperature.toString());
+                },
+                voltage -> {
+                    textViewBatteryVoltage.setText(voltage.toString());
+                },
+                level -> {
+                    textViewBatteryLevel.setText(level.toString());
+                },
+                status -> {
+                    textViewBatteryStatus.setText(status.toString());
+                }));
     }
 }
