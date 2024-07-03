@@ -6,6 +6,9 @@ using System;
 
 namespace MobileSupport
 {
+    /// <summary>
+    ///     Platform-specific thermal status.
+    /// </summary>
     public readonly struct ThermalStatus
     {
         public bool IsIOS => !_isAndroid;
