@@ -299,13 +299,14 @@ namespace MobileSupport
         private static jvalue[] TempSingleJValueArray => _tempSingleJValueArray ??= new jvalue[1];
         private static object[] TempSingleObjectArray => _tempSingleObjectArray ??= new object[1];
 
-        private static ThermalStatus? _latestThermalStatus;
         private static BatteryStatus? _latestBatteryStatus;
         private static float? _latestBatteryLevel;
-        
-        private static event Action<ThermalStatus> OnThermalStatusChangedInternal;
+
+        public static event Action<ThermalStatusAndroid> OnThermalStatusChanged;
         private static event Action<BatteryStatus> OnBatteryStatusChangedInternal;
         private static event Action<float> OnBatteryLevelChangedInternal;
+
+        public static ThermalStatusAndroid? LatestThermalStatus { get; private set; }
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         private static void Init()
@@ -342,8 +343,6 @@ namespace MobileSupport
 
             _isMonitoring = false;
         }
-
-        private static partial ThermalStatus? GetLatestThermalStatus() => _latestThermalStatus;
 
         private static partial BatteryStatus? GetLatestBatteryStatus() => _latestBatteryStatus;
 
@@ -388,10 +387,10 @@ namespace MobileSupport
         {
             _mainThreadContext.Post(_ =>
             {
-                _latestThermalStatus = status;
+                LatestThermalStatus = status;
 
                 // May be converted to an enum.
-                OnThermalStatusChangedInternal?.Invoke(status);
+                OnThermalStatusChanged?.Invoke(status);
             }, null);
         }
 
@@ -424,14 +423,17 @@ namespace MobileSupport
             }, null);
         }
 
-        private static partial void AddOnThermalStatusChangedListener(Action<ThermalStatus> listener) => OnThermalStatusChangedInternal += listener;
-        private static partial void RemoveOnThermalStatusChangedListener(Action<ThermalStatus> listener) => OnThermalStatusChangedInternal -= listener;
-        private static partial void AddOnBatteryStatusChangedListener(Action<BatteryStatus> listener) => OnBatteryStatusChangedInternal += listener;
-        
-        private static partial void RemoveOnBatteryStatusChangedListener(Action<BatteryStatus> listener) => OnBatteryStatusChangedInternal -= listener;
-        private static partial void AddOnBatteryLevelChangedListener(Action<float> listener) => OnBatteryLevelChangedInternal += listener;
-        
-        private static partial void RemoveOnBatteryLevelChangedListener(Action<float> listener) => OnBatteryLevelChangedInternal -= listener;
+        private static partial void AddOnBatteryStatusChangedListener(Action<BatteryStatus> listener) =>
+            OnBatteryStatusChangedInternal += listener;
+
+        private static partial void RemoveOnBatteryStatusChangedListener(Action<BatteryStatus> listener) =>
+            OnBatteryStatusChangedInternal -= listener;
+
+        private static partial void AddOnBatteryLevelChangedListener(Action<float> listener) =>
+            OnBatteryLevelChangedInternal += listener;
+
+        private static partial void RemoveOnBatteryLevelChangedListener(Action<float> listener) =>
+            OnBatteryLevelChangedInternal -= listener;
 
         #region Nested type: AndroidPowerManager
 
@@ -647,6 +649,48 @@ namespace MobileSupport
         }
 
         #endregion
+    }
+
+    /// <summary>
+    ///     Equivalent to <see href="https://developer.android.com/reference/android/os/PowerManager">PowerManager</see>'s
+    ///     THERMAL_STATUS_* values.
+    /// </summary>
+    public enum ThermalStatusAndroid
+    {
+        /// <summary>
+        ///     Not under throttling.
+        /// </summary>
+        None,
+
+        /// <summary>
+        ///     Light throttling where UX is not impacted.
+        /// </summary>
+        Light,
+
+        /// <summary>
+        ///     Moderate throttling where UX is not largely impacted.
+        /// </summary>
+        Moderate,
+
+        /// <summary>
+        ///     Severe throttling where UX is largely impacted.
+        /// </summary>
+        Severe,
+
+        /// <summary>
+        ///     Platform has done everything to reduce power.
+        /// </summary>
+        Critical,
+
+        /// <summary>
+        ///     Key components in platform are shutting down due to thermal condition. Device functionalities will be limited.
+        /// </summary>
+        Emergency,
+
+        /// <summary>
+        ///     Need shutdown immediately.
+        /// </summary>
+        Shutdown
     }
 }
 

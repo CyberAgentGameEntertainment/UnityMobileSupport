@@ -12,12 +12,6 @@ namespace MobileSupport
     public static partial class Thermal
     {
         /// <summary>
-        ///     The latest thermal status.
-        ///     StartMonitoring() is required to get the latest value.
-        /// </summary>
-        public static ThermalStatus? LatestThermalStatus => GetLatestThermalStatus();
-
-        /// <summary>
         ///     The latest battery status.
         ///     StartMonitoring() is required to get the latest value.
         /// </summary>
@@ -28,17 +22,6 @@ namespace MobileSupport
         ///     StartMonitoring() is required to get the latest value.
         /// </summary>
         public static float? LatestBatteryLevel => GetLatestBatteryLevel();
-
-        /// <summary>
-        ///     Event that is sent when the thermal status is changed.
-        ///     StartMonitoring() is required.
-        /// </summary>
-        /// <returns>The platform-dependent thermal status value.</returns>
-        public static event Action<ThermalStatus> OnThermalStatusChanged
-        {
-            add => AddOnThermalStatusChangedListener(value);
-            remove => RemoveOnThermalStatusChangedListener(value);
-        }
 
         /// <summary>
         ///     Event that is sent when the battery status is changed.
@@ -72,16 +55,12 @@ namespace MobileSupport
         /// </summary>
         public static partial void StopMonitoring();
 
-        private static partial ThermalStatus? GetLatestThermalStatus();
         private static partial BatteryStatus? GetLatestBatteryStatus();
         private static partial float? GetLatestBatteryLevel();
 
-        private static partial void AddOnThermalStatusChangedListener(Action<ThermalStatus> listener);
-        private static partial void RemoveOnThermalStatusChangedListener(Action<ThermalStatus> listener);
-        
         private static partial void AddOnBatteryStatusChangedListener(Action<BatteryStatus> listener);
         private static partial void RemoveOnBatteryStatusChangedListener(Action<BatteryStatus> listener);
-        
+
         private static partial void AddOnBatteryLevelChangedListener(Action<float> listener);
         private static partial void RemoveOnBatteryLevelChangedListener(Action<float> listener);
     }

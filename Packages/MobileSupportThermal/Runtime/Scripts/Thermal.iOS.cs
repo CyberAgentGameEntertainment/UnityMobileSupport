@@ -18,7 +18,6 @@ namespace MobileSupport
         private const string DllName = "__Internal";
 
         private static bool _isMonitoring;
-        private static ThermalStatus? _latestThermalStatus;
         private static BatteryStatus? _latestBatteryStatus;
         private static float? _latestBatteryLevel;
 
@@ -48,9 +47,20 @@ namespace MobileSupport
         [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
         private static extern void thermal_stopMonitoring();
 
-        private static event Action<ThermalStatus> OnThermalStatusChangedInternal;
+        /// <summary>
+        ///     The latest thermal status.
+        ///     StartMonitoring() is required to get the latest value.
+        /// </summary>
+        public static event Action<ThermalStatusIOS> OnThermalStatusChanged;
+
         private static event Action<BatteryStatus> OnBatteryStatusChangedInternal;
         private static event Action<float> OnBatteryLevelChangedInternal;
+
+        /// <summary>
+        ///     The latest thermal status.
+        ///     StartMonitoring() is required to get the latest value.
+        /// </summary>
+        public static ThermalStatusIOS? LatestThermalStatus { get; private set; }
 
         public static partial void StartMonitoring()
         {
@@ -79,15 +89,10 @@ namespace MobileSupport
         [MonoPInvokeCallback(typeof(CallBackDelegate))]
         private static void OnThermalStatusChangedCallback(int status)
         {
-            _latestThermalStatus = (ThermalStatusIOS)status;
+            LatestThermalStatus = (ThermalStatusIOS)status;
 
             // May be converted to an enum.
-            OnThermalStatusChangedInternal?.Invoke((ThermalStatusIOS)status);
-        }
-
-        private static partial ThermalStatus? GetLatestThermalStatus()
-        {
-            return _latestThermalStatus;
+            OnThermalStatusChanged?.Invoke((ThermalStatusIOS)status);
         }
 
         private static partial BatteryStatus? GetLatestBatteryStatus()
@@ -127,16 +132,6 @@ namespace MobileSupport
             return level;
         }
 
-        private static partial void AddOnThermalStatusChangedListener(Action<ThermalStatus> listener)
-        {
-            OnThermalStatusChangedInternal += listener;
-        }
-
-        private static partial void RemoveOnThermalStatusChangedListener(Action<ThermalStatus> listener)
-        {
-            OnThermalStatusChangedInternal -= listener;
-        }
-
         private static partial void AddOnBatteryStatusChangedListener(Action<BatteryStatus> listener)
         {
             OnBatteryStatusChangedInternal += listener;
@@ -170,6 +165,33 @@ namespace MobileSupport
         }
 
         #endregion
+    }
+
+    /// <summary>
+    ///     Equivalent to
+    ///     <see href="https://developer.apple.com/documentation/foundation/nsprocessinfothermalstate">NSProcessInfoThermalState</see>.
+    /// </summary>
+    public enum ThermalStatusIOS
+    {
+        /// <summary>
+        ///     The thermal state is within normal limits.
+        /// </summary>
+        Nominal,
+
+        /// <summary>
+        ///     The thermal state is slightly elevated.
+        /// </summary>
+        Fair,
+
+        /// <summary>
+        ///     The thermal state is high.
+        /// </summary>
+        Serious,
+
+        /// <summary>
+        ///     The thermal state is significantly impacting the performance of the system and the device needs to cool down.
+        /// </summary>
+        Critical
     }
 }
 
