@@ -37,11 +37,7 @@ public class ThermalView : MonoBehaviour
 
         Thermal.OnThermalStatusChanged += status =>
         {
-#if UNITY_ANDROID
-            Debug.Log($"Thermal Status: {status.UnwrapAsAndroid()}");
-#elif UNITY_IOS
-            Debug.Log($"Thermal Status: {status.UnwrapAsIOS()}");
-#endif
+            Debug.Log($"Thermal Status: {status}");
         };
         Thermal.StartMonitoring();
 #endif
