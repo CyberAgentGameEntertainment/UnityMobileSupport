@@ -1,6 +1,6 @@
 # Release notes
 
-## v2.0.0 - 2024/07/11
+## v2.0.0 - 2024/07/17
 
 - New Features :rocket:
     - Thermal: New apis to get battery voltage and power consumption on Android
