@@ -10,13 +10,170 @@ using UnityEngine;
 
 namespace MobileSupport
 {
-    public static class Thermal
+    partial class Thermal
     {
+        public static class Android
+        {
+            /// <summary>
+            ///     The latest battery temperature multiplied by 100 in Celsius.
+            ///     Thermal.StartMonitoring() is required to get the latest value.
+            /// </summary>
+            public static int? LatestBatteryTemperature { get; private set; }
+
+            /// <summary>
+            ///     The latest battery voltage in mV.
+            ///     Thermal.StartMonitoring() is required to get the latest value.
+            /// </summary>
+            public static int? LatestBatteryVoltage { get; private set; }
+
+            /// <summary>
+            ///     Event that is sent when the battery temperature is changed.
+            ///     Thermal.StartMonitoring() is required to get the latest value.
+            /// </summary>
+            /// <returns>The battery temperature multiplied by 100 in Celsius.</returns>
+            public static event Action<int> OnBatteryTemperatureChanged;
+
+            /// <summary>
+            ///     Event that is sent when the battery voltage is changed.
+            ///     Thermal.StartMonitoring() is required to get the latest value.
+            /// </summary>
+            /// <returns>The battery voltage in mV.</returns>
+            public static event Action<int> OnBatteryVoltageChanged;
+
+            /// <summary>
+            ///     Tries to get the thermal headroom through android.os.PowerManager.getThermalHeadroom().
+            ///     Calling this method multiple times within a second will return the cached value even if the forecastSeconds is
+            ///     different.
+            /// </summary>
+            /// <param name="forecastSeconds">how many seconds in the future to forecast</param>
+            /// <param name="result">the thermal headroom value</param>
+            /// <param name="resultForecastSeconds">
+            ///     the forecast seconds of the result. It maybe different from requested value when
+            ///     the cached value is returned.
+            /// </param>
+            /// <param name="isLatestValue">whether if it succeeded to get the latest value.</param>
+            public static void GetThermalHeadroom(int forecastSeconds, out float result, out int resultForecastSeconds,
+                out bool isLatestValue)
+            {
+#if UNITY_EDITOR
+                if (Application.isEditor)
+                {
+                    result = float.NaN;
+                    resultForecastSeconds = forecastSeconds;
+                    isLatestValue = true;
+                    return;
+                }
+#endif
+                var time = DateTime.UtcNow;
+
+                lock (ThermalHeadroomLocker)
+                {
+                    if (_latestThermalHeadroom.HasValue &&
+                        _latestThermalHeadroomTime.HasValue &&
+                        time - _latestThermalHeadroomTime < TimeSpan.FromSeconds(1.0))
+                    {
+                        result = _latestThermalHeadroom.Value;
+                        resultForecastSeconds = _latestThermalHeadroomForecastSeconds;
+                        isLatestValue = false;
+                        return;
+                    }
+
+                    var powerManager = _powerManager ??= new AndroidPowerManager();
+                    result = powerManager.GetThermalHeadroom(forecastSeconds);
+
+                    _latestThermalHeadroomTime = DateTime.UtcNow;
+                    _latestThermalHeadroom = result;
+                    resultForecastSeconds = _latestThermalHeadroomForecastSeconds = forecastSeconds;
+                    isLatestValue = true;
+                }
+            }
+
+            /// <summary>
+            ///     The value of BatteryManager's BATTERY_PROPERTY_ENERGY_COUNTER.
+            ///     Battery remaining energy in nanowatt-hours, as a long integer.
+            ///     Returns long.MinValue on unsupported devices.
+            /// </summary>
+            /// <returns></returns>
+            public static long GetBatteryEnergyCounter()
+            {
+                return (_batteryManager ??= new AndroidBatteryManager()).GetEnergyCounter();
+            }
+
+            /// <summary>
+            ///     The value of BatteryManager's BATTERY_PROPERTY_CURRENT_NOW.
+            ///     Instantaneous battery current in microamperes, as an integer. Positive values indicate net current entering the
+            ///     battery from a charge source, negative values indicate net current discharging from the battery.
+            ///     Returns int.MinValue on unsupported devices.
+            /// </summary>
+            /// <returns></returns>
+            public static int GetBatteryCurrentNow()
+            {
+                return (_batteryManager ??= new AndroidBatteryManager()).GetCurrentNow();
+            }
+
+            /// <summary>
+            ///     The value of BatteryManager's BATTERY_PROPERTY_CHARGE_COUNTER.
+            ///     Battery capacity in microampere-hours, as an integer.
+            ///     Returns int.MinValue on unsupported devices.
+            /// </summary>
+            /// <returns></returns>
+            public static int GetBatteryChargeCounter()
+            {
+                return (_batteryManager ??= new AndroidBatteryManager()).GetChargeCounter();
+            }
+
+            /// <summary>
+            ///     The value of BatteryManager's BATTERY_PROPERTY_CURRENT_AVERAGE.
+            ///     Average battery current in microamperes, as an integer. Positive values indicate net current entering the battery
+            ///     from a charge source, negative values indicate net current discharging from the battery. The time period over which
+            ///     the average is computed may depend on the fuel gauge hardware and its configuration.
+            ///     Returns int.MinValue on unsupported devices.
+            /// </summary>
+            /// <returns></returns>
+            public static int GetBatteryCurrentAverage()
+            {
+                return (_batteryManager ??= new AndroidBatteryManager()).GetCurrentAverage();
+            }
+
+            /// <summary>
+            ///     The value of BatteryManager's BATTERY_PROPERTY_CAPACITY.
+            ///     Remaining battery capacity as an integer percentage of total capacity (with no fractional part).
+            ///     Returns int.MinValue on unsupported devices.
+            /// </summary>
+            /// <returns></returns>
+            public static int GetBatteryCapacity()
+            {
+                return (_batteryManager ??= new AndroidBatteryManager()).GetCapacity();
+            }
+
+            internal static void OnBatteryTemperatureChangedCallback(int value)
+            {
+                _mainThreadContext.Post(_ =>
+                {
+                    LatestBatteryTemperature = value;
+
+                    OnBatteryTemperatureChanged?.Invoke(value);
+                }, null);
+            }
+
+            internal static void OnBatteryVoltageChangedCallback(int value)
+            {
+                _mainThreadContext.Post(_ =>
+                {
+                    LatestBatteryVoltage = value;
+
+                    OnBatteryVoltageChanged?.Invoke(value);
+                }, null);
+            }
+        }
+
+        #region Nested type: ThermalStatusListener
+
         private class ThermalStatusListener : AndroidJavaProxy
         {
-            private readonly Action<int> _callback;
-            
-            public ThermalStatusListener(Action<int> callback)
+            private readonly Action<ThermalStatusAndroid> _callback;
+
+            public ThermalStatusListener(Action<ThermalStatusAndroid> callback)
                 : base("android.os.PowerManager$OnThermalStatusChangedListener")
             {
                 _callback = callback;
@@ -34,7 +191,7 @@ namespace MobileSupport
                     case "equals":
                         return new AndroidJavaObject("java.lang.Boolean", equals((AndroidJavaObject)args[0]));
                     case "onThermalStatusChanged":
-                        _callback?.Invoke((int)args[0]);
+                        _callback?.Invoke((ThermalStatusAndroid)(int)args[0]);
                         return null;
                     default:
                         return base.Invoke(methodName, args);
@@ -42,19 +199,45 @@ namespace MobileSupport
             }
         }
 
-        private class BatteryTemperatureReceiver : AndroidJavaProxy
-        {
-            private readonly Action<int> _callback;
+        #endregion
 
-            public BatteryTemperatureReceiver(Action<int> callback) : base(
-                "jp.co.cyberagent.unitysupport.thermal.BatteryTemperatureReceiver")
+        #region Nested type: BatteryStatusReceiver
+
+        private class BatteryStatusReceiver : AndroidJavaProxy
+        {
+            private readonly Action<float> _onLevelReceived;
+            private readonly Action<int> _onStatusReceived;
+            private readonly Action<int> _onTemperatureReceived;
+            private readonly Action<int> _onVoltgageReceived;
+
+            public BatteryStatusReceiver(Action<int> onTemperatureReceived, Action<int> onVoltgageReceived,
+                Action<int> onStatusReceived, Action<float> onLevelReceived) : base(
+                "jp.co.cyberagent.unitysupport.thermal.BatteryStatusReceiver")
             {
-                _callback = callback;
+                _onTemperatureReceived = onTemperatureReceived;
+                _onVoltgageReceived = onVoltgageReceived;
+                _onStatusReceived = onStatusReceived;
+                _onLevelReceived = onLevelReceived;
             }
 
             private void OnReceiveBatteryTemperature(int temperature)
             {
-                _callback?.Invoke(temperature);
+                _onTemperatureReceived?.Invoke(temperature);
+            }
+
+            private void OnReceiveVoltage(int voltage)
+            {
+                _onVoltgageReceived?.Invoke(voltage);
+            }
+
+            private void OnReceiveStatus(int status)
+            {
+                _onStatusReceived?.Invoke(status);
+            }
+
+            private void OnReceiveLevel(float level)
+            {
+                _onLevelReceived?.Invoke(level);
             }
 
             public override AndroidJavaObject Invoke(string methodName, object[] args)
@@ -71,46 +254,40 @@ namespace MobileSupport
                     case "onReceiveBatteryTemperature":
                         OnReceiveBatteryTemperature((int)args[0]);
                         return null;
+                    case "onReceiveVoltage":
+                        OnReceiveVoltage((int)args[0]);
+                        return null;
+                    case "onReceiveStatus":
+                        OnReceiveStatus((int)args[0]);
+                        return null;
+                    case "onReceiveLevel":
+                        OnReceiveLevel((float)args[0]);
+                        return null;
                     default:
                         return base.Invoke(methodName, args);
                 }
             }
         }
 
-        private static readonly ThermalStatusListener JavaCallbackListener =
-            new ThermalStatusListener(OnThermalStatusChangedCallback);
+        #endregion
 
-        private static readonly BatteryTemperatureReceiver BatteryTemperatureReceiverInstance =
-            new(OnBatteryTemperatureChangedCallback);
+        private static readonly ThermalStatusListener JavaCallbackListener = new(OnThermalStatusChangedCallback);
+
+        private static readonly BatteryStatusReceiver BatteryTemperatureReceiverInstance =
+            new(Android.OnBatteryTemperatureChangedCallback, Android.OnBatteryVoltageChangedCallback, OnBatteryStatusChangedCallback,
+                OnBatteryLevelChangedCallback);
 
         private static readonly AndroidJavaObject BatteryChangedBroadcastReceiverInstance =
             new("jp.co.cyberagent.unitysupport.thermal.BatteryChangedBroadcastReceiver");
 
         private static AndroidPowerManager _powerManager;
 
+        private static AndroidBatteryManager _batteryManager;
+
         private static SynchronizationContext _mainThreadContext;
-        
-        /// <summary>
-        ///     Event that is sent when the thermal status is changed.
-        /// </summary>
-        /// <returns>The raw value of android.os.PowerManager.THERMAL_STATUS_XXX (0~7).</returns>
-        public static event Action<int> OnThermalStatusChanged;
 
-        /// <summary>
-        ///     Event that is sent when the battery temperature is changed.
-        /// </summary>
-        /// <returns>The battery temperature multiplied by 100 in Celsius.</returns>
-        public static event Action<int> OnBatteryTemperatureChanged;
-
-        /// <summary>
-        ///     The latest thermal status.
-        /// </summary>
-        public static int? LatestThermalStatus { get; private set; }
-
-        /// <summary>
-        ///     The latest battery temperature.
-        /// </summary>
-        public static int? LatestBatteryTemperature { get; private set; }
+        [ThreadStatic] private static jvalue[] _tempSingleJValueArray;
+        [ThreadStatic] private static object[] _tempSingleObjectArray;
 
         private static float? _latestThermalHeadroom;
         private static DateTime? _latestThermalHeadroomTime;
@@ -119,6 +296,17 @@ namespace MobileSupport
         private static readonly object ThermalHeadroomLocker = new();
 
         private static bool _isMonitoring;
+        private static jvalue[] TempSingleJValueArray => _tempSingleJValueArray ??= new jvalue[1];
+        private static object[] TempSingleObjectArray => _tempSingleObjectArray ??= new object[1];
+
+        private static BatteryStatus? _latestBatteryStatus;
+        private static float? _latestBatteryLevel;
+
+        public static event Action<ThermalStatusAndroid> OnThermalStatusChanged;
+        private static event Action<BatteryStatus> OnBatteryStatusChangedInternal;
+        private static event Action<float> OnBatteryLevelChangedInternal;
+
+        public static ThermalStatusAndroid? LatestThermalStatus { get; private set; }
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         private static void Init()
@@ -126,10 +314,7 @@ namespace MobileSupport
             _mainThreadContext = SynchronizationContext.Current;
         }
 
-        /// <summary>
-        ///     Start thermal status monitoring.
-        /// </summary>
-        public static void StartMonitoring()
+        public static partial void StartMonitoring()
         {
 #if UNITY_EDITOR
             if (Application.isEditor) return;
@@ -144,10 +329,7 @@ namespace MobileSupport
             _isMonitoring = true;
         }
 
-        /// <summary>
-        ///     Stop thermal status monitoring.
-        /// </summary>
-        public static void StopMonitoring()
+        public static partial void StopMonitoring()
         {
 #if UNITY_EDITOR
             if (Application.isEditor) return;
@@ -162,49 +344,9 @@ namespace MobileSupport
             _isMonitoring = false;
         }
 
-        /// <summary>
-        ///     Tries to get the thermal headroom through android.os.PowerManager.getThermalHeadroom().
-        ///     Calling this method multiple times within a second will return the cached value even if the forecastSeconds is different.
-        /// </summary>
-        /// <param name="forecastSeconds">how many seconds in the future to forecast</param>
-        /// <param name="result">the thermal headroom value</param>
-        /// <param name="resultForecastSeconds">the forecast seconds of the result. It maybe different from requested value when the cached value is returned.</param>
-        /// <param name="isLatestValue">whether if it succeeded to get the latest value.</param>
-        public static void GetThermalHeadroom(int forecastSeconds, out float result, out int resultForecastSeconds,
-            out bool isLatestValue)
-        {
-#if UNITY_EDITOR
-            if (Application.isEditor)
-            {
-                result = float.NaN;
-                resultForecastSeconds = forecastSeconds;
-                isLatestValue = true;
-                return;
-            }
-#endif
-            var time = DateTime.UtcNow;
+        private static partial BatteryStatus? GetLatestBatteryStatus() => _latestBatteryStatus;
 
-            lock (ThermalHeadroomLocker)
-            {
-                if (_latestThermalHeadroom.HasValue &&
-                    _latestThermalHeadroomTime.HasValue &&
-                    time - _latestThermalHeadroomTime < TimeSpan.FromSeconds(1.0))
-                {
-                    result = _latestThermalHeadroom.Value;
-                    resultForecastSeconds = _latestThermalHeadroomForecastSeconds;
-                    isLatestValue = false;
-                    return;
-                }
-
-                var powerManager = _powerManager ??= new AndroidPowerManager();
-                result = powerManager.GetThermalHeadroom(forecastSeconds);
-
-                _latestThermalHeadroomTime = DateTime.UtcNow;
-                _latestThermalHeadroom = result;
-                resultForecastSeconds = _latestThermalHeadroomForecastSeconds = forecastSeconds;
-                isLatestValue = true;
-            }
-        }
+        private static partial float? GetLatestBatteryLevel() => _latestBatteryLevel;
 
         private static void StartReceiveBatteryTemperature()
         {
@@ -226,44 +368,77 @@ namespace MobileSupport
             BatteryChangedBroadcastReceiverInstance.Call("unregisterFromContext", context);
         }
 
-        private static AndroidJavaClass GetUnityPlayerClass() => new("com.unity3d.player.UnityPlayer");
+        private static AndroidJavaClass GetUnityPlayerClass()
+        {
+            return new AndroidJavaClass("com.unity3d.player.UnityPlayer");
+        }
 
-        private static AndroidJavaObject GetCurrentActivity(AndroidJavaClass unityPlayerClass) =>
-            unityPlayerClass.GetStatic<AndroidJavaObject>("currentActivity");
+        private static AndroidJavaObject GetCurrentActivity(AndroidJavaClass unityPlayerClass)
+        {
+            return unityPlayerClass.GetStatic<AndroidJavaObject>("currentActivity");
+        }
 
-        private static AndroidJavaObject GetApplicationContext(AndroidJavaObject activity) =>
-            activity.Call<AndroidJavaObject>("getApplicationContext");
+        private static AndroidJavaObject GetApplicationContext(AndroidJavaObject activity)
+        {
+            return activity.Call<AndroidJavaObject>("getApplicationContext");
+        }
 
-        private static void OnThermalStatusChangedCallback(int status)
+        private static void OnThermalStatusChangedCallback(ThermalStatusAndroid status)
         {
             _mainThreadContext.Post(_ =>
             {
                 LatestThermalStatus = status;
-                
+
                 // May be converted to an enum.
                 OnThermalStatusChanged?.Invoke(status);
             }, null);
         }
 
-        private static void OnBatteryTemperatureChangedCallback(int value)
+        private static void OnBatteryStatusChangedCallback(int value)
         {
+            var status = value switch
+            {
+                2 => BatteryStatus.Charging,
+                3 => BatteryStatus.Discharging,
+                4 => BatteryStatus.NotCharging,
+                5 => BatteryStatus.Full,
+                _ => BatteryStatus.Unknown
+            };
+
             _mainThreadContext.Post(_ =>
             {
-                LatestBatteryTemperature = value;
+                _latestBatteryStatus = status;
 
-                OnBatteryTemperatureChanged?.Invoke(value);
+                OnBatteryStatusChangedInternal?.Invoke(status);
             }, null);
         }
 
+        private static void OnBatteryLevelChangedCallback(float value)
+        {
+            _mainThreadContext.Post(_ =>
+            {
+                _latestBatteryLevel = value;
+
+                OnBatteryLevelChangedInternal?.Invoke(value);
+            }, null);
+        }
+
+        private static partial void AddOnBatteryStatusChangedListener(Action<BatteryStatus> listener) =>
+            OnBatteryStatusChangedInternal += listener;
+
+        private static partial void RemoveOnBatteryStatusChangedListener(Action<BatteryStatus> listener) =>
+            OnBatteryStatusChangedInternal -= listener;
+
+        private static partial void AddOnBatteryLevelChangedListener(Action<float> listener) =>
+            OnBatteryLevelChangedInternal += listener;
+
+        private static partial void RemoveOnBatteryLevelChangedListener(Action<float> listener) =>
+            OnBatteryLevelChangedInternal -= listener;
+
+        #region Nested type: AndroidPowerManager
 
         private sealed class AndroidPowerManager : IDisposable
         {
-            [ThreadStatic] private static jvalue[] _tempSingleJValueArray;
-            [ThreadStatic] private static object[] _tempSingleObjectArray;
-
-            private static jvalue[] TempSingleJValueArray => _tempSingleJValueArray ??= new jvalue[1];
-            private static object[] TempSingleObjectArray => _tempSingleObjectArray ??= new object[1];
-
             private static IntPtr? _getThermalHeadroomMethodId;
             private static IntPtr? _addThermalStatusListenerMethodId;
             private static IntPtr? _removeThermalStatusListenerMethodId;
@@ -279,12 +454,22 @@ namespace MobileSupport
                 _powerManager = activity.Call<AndroidJavaObject>("getSystemService", service);
             }
 
+            #region IDisposable Members
+
+            public void Dispose()
+            {
+                DisposeCore();
+                GC.SuppressFinalize(this);
+            }
+
+            #endregion
+
             public float GetThermalHeadroom(int forecastSeconds)
             {
                 var getThermalHeadroomMethodId = _getThermalHeadroomMethodId ??=
                     AndroidJNIHelper.GetMethodID(_powerManager.GetRawClass(), "getThermalHeadroom", "(I)F");
 
-                TempSingleJValueArray[0] = new jvalue()
+                TempSingleJValueArray[0] = new jvalue
                 {
                     i = forecastSeconds
                 };
@@ -332,17 +517,180 @@ namespace MobileSupport
                 powerManager.Dispose();
             }
 
+            ~AndroidPowerManager()
+            {
+                DisposeCore();
+            }
+        }
+
+        #endregion
+
+        #region Nested type: AndroidBatteryManager
+
+        private sealed class AndroidBatteryManager : IDisposable
+        {
+            private static IntPtr? _getLongPropertyMethodId;
+            private static IntPtr? _getIntPropertyMethodId;
+            private static int? _batteryPropertyChargeCounter;
+            private static int? _batteryPropertyCurrentNow;
+            private static int? _batteryPropertyCurrentAverage;
+            private static int? _batteryPropertyCapacity;
+            private static int? _batteryPropertyEnergyCounter;
+
+            private AndroidJavaObject _batteryManager;
+
+            public AndroidBatteryManager()
+            {
+                using var playerClass = GetUnityPlayerClass();
+                using var activity = GetCurrentActivity(playerClass);
+                using var staticContext = new AndroidJavaClass("android.content.Context");
+                using var service = staticContext.GetStatic<AndroidJavaObject>("BATTERY_SERVICE");
+                _batteryManager = activity.Call<AndroidJavaObject>("getSystemService", service);
+            }
+
+            private int BatteryPropertyEnergyCounter => _batteryPropertyEnergyCounter ??=
+                _batteryManager.GetStatic<int>("BATTERY_PROPERTY_ENERGY_COUNTER");
+
+            private int BatteryPropertyCurrentNow => _batteryPropertyCurrentNow ??=
+                _batteryManager.GetStatic<int>("BATTERY_PROPERTY_CURRENT_NOW");
+
+            private int BatteryPropertyChargeCounter => _batteryPropertyChargeCounter ??=
+                _batteryManager.GetStatic<int>("BATTERY_PROPERTY_CHARGE_COUNTER");
+
+            private int BatteryPropertyCurrentAverage => _batteryPropertyCurrentAverage ??=
+                _batteryManager.GetStatic<int>("BATTERY_PROPERTY_CURRENT_AVERAGE");
+
+            private int BatteryPropertyCapacity => _batteryPropertyCapacity ??=
+                _batteryManager.GetStatic<int>("BATTERY_PROPERTY_CAPACITY");
+
+            #region IDisposable Members
+
             public void Dispose()
             {
                 DisposeCore();
                 GC.SuppressFinalize(this);
             }
 
-            ~AndroidPowerManager()
+            #endregion
+
+            private long GetLongProperty(int id)
+            {
+                var getLongPropertyMethodId = _getLongPropertyMethodId ??=
+                    AndroidJNIHelper.GetMethodID(_batteryManager.GetRawClass(), "getLongProperty", "(I)J");
+
+                TempSingleJValueArray[0] = new jvalue
+                {
+                    i = id
+                };
+
+                return AndroidJNI.CallLongMethod(_batteryManager.GetRawObject(), getLongPropertyMethodId,
+                    TempSingleJValueArray);
+            }
+
+            private int GetIntProperty(int id)
+            {
+                var getIntPropertyMethodId = _getIntPropertyMethodId ??=
+                    AndroidJNIHelper.GetMethodID(_batteryManager.GetRawClass(), "getIntProperty", "(I)I");
+
+                TempSingleJValueArray[0] = new jvalue
+                {
+                    i = id
+                };
+
+                return AndroidJNI.CallIntMethod(_batteryManager.GetRawObject(), getIntPropertyMethodId,
+                    TempSingleJValueArray);
+            }
+
+            public long GetEnergyCounter()
+            {
+                return GetLongProperty(BatteryPropertyEnergyCounter);
+            }
+
+            public int GetCurrentNow()
+            {
+                return GetIntProperty(BatteryPropertyCurrentNow);
+            }
+
+            public int GetChargeCounter()
+            {
+                return GetIntProperty(BatteryPropertyChargeCounter);
+            }
+
+            public int GetCurrentAverage()
+            {
+                return GetIntProperty(BatteryPropertyCurrentAverage);
+            }
+
+            public int GetCapacity()
+            {
+                return GetIntProperty(BatteryPropertyCapacity);
+            }
+
+            public int GetVoltage()
+            {
+                return GetIntProperty(BatteryPropertyCapacity);
+            }
+
+            private void DisposeCore()
+            {
+                var batteryManager = _batteryManager;
+                if (batteryManager == null) return;
+
+                // thread safety
+                if (Interlocked.CompareExchange(ref _batteryManager, null, batteryManager) == null) return;
+
+                batteryManager.Dispose();
+            }
+
+            ~AndroidBatteryManager()
             {
                 DisposeCore();
             }
         }
+
+        #endregion
+    }
+
+    /// <summary>
+    ///     Equivalent to <see href="https://developer.android.com/reference/android/os/PowerManager">PowerManager</see>'s
+    ///     THERMAL_STATUS_* values.
+    /// </summary>
+    public enum ThermalStatusAndroid
+    {
+        /// <summary>
+        ///     Not under throttling.
+        /// </summary>
+        None,
+
+        /// <summary>
+        ///     Light throttling where UX is not impacted.
+        /// </summary>
+        Light,
+
+        /// <summary>
+        ///     Moderate throttling where UX is not largely impacted.
+        /// </summary>
+        Moderate,
+
+        /// <summary>
+        ///     Severe throttling where UX is largely impacted.
+        /// </summary>
+        Severe,
+
+        /// <summary>
+        ///     Platform has done everything to reduce power.
+        /// </summary>
+        Critical,
+
+        /// <summary>
+        ///     Key components in platform are shutting down due to thermal condition. Device functionalities will be limited.
+        /// </summary>
+        Emergency,
+
+        /// <summary>
+        ///     Need shutdown immediately.
+        /// </summary>
+        Shutdown
     }
 }
 
