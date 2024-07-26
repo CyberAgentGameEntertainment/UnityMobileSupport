@@ -15,7 +15,7 @@ namespace MobileSupport
         public static class Android
         {
             /// <summary>
-            ///     The latest battery temperature multiplied by 100 in Celsius.
+            ///     The latest battery temperature multiplied by 10 in Celsius.
             ///     Thermal.StartMonitoring() is required to get the latest value.
             /// </summary>
             public static int? LatestBatteryTemperature { get; private set; }
@@ -30,7 +30,7 @@ namespace MobileSupport
             ///     Event that is sent when the battery temperature is changed.
             ///     Thermal.StartMonitoring() is required to get the latest value.
             /// </summary>
-            /// <returns>The battery temperature multiplied by 100 in Celsius.</returns>
+            /// <returns>The battery temperature multiplied by 10 in Celsius.</returns>
             public static event Action<int> OnBatteryTemperatureChanged;
 
             /// <summary>
