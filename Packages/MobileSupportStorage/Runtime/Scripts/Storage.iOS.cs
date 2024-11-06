@@ -18,9 +18,9 @@ namespace MobileSupport
         /// <summary>
         /// Get usable space of internal storage.
         /// </summary>
-        /// <param name="includeDeletableCaches">Set <c>true</c> to include size of deletable caches. Value showed at System are included.</param>
+        /// <param name="includeDeletableCaches">Set <c>false</c> to exclude size of deletable caches. To get value showed at System, set to <c>true</c>.</param>
         /// <returns>Bytes of usable space. It will return -1 for internal error and in Unity editor.</returns>
-        public static long GetInternalUsableSpace(bool includeDeletableCaches = false)
+        public static long GetInternalUsableSpace(bool includeDeletableCaches = true)
         {
 #if UNITY_EDITOR
             if (Application.isEditor)
