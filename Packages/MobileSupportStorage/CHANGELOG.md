@@ -1,5 +1,10 @@
 # Release notes
 
+## v1.0.0 - 2024/11/06
+
+- Behaviour changes :warning:
+  - iOS: includeDeletableCaches parameter of `GetInternalUsableSpace()` was previously set to `false` by default, but now set to `true` by default
+
 ## v0.2.0 - 2022/08/16
 
 - New Features :rocket:
