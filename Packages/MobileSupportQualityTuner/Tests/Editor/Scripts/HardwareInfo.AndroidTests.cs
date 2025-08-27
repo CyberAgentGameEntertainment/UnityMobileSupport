@@ -84,6 +84,7 @@ namespace MobileSupport.QualityTuner.Editor.Tests
                 yield return new TestCaseData("ARM Immortalis-G925 MP16").Returns((GpuMinorSeries.ImmortalisG, 925));
                 yield return new TestCaseData("ARM Immortalis-G925 MP12").Returns((GpuMinorSeries.ImmortalisG, 925));
                 yield return new TestCaseData("ARM Immortalis-G2147483647").Returns((GpuMinorSeries.ImmortalisG, int.MaxValue));
+                // Test integer overflow: 2147483648 is int.MaxValue + 1
                 yield return new TestCaseData("ARM Immortalis-G2147483648").Returns((GpuMinorSeries.Unknown, 0));
             }
         }
