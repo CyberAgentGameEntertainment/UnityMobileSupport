@@ -75,6 +75,20 @@ namespace MobileSupport.QualityTuner.Editor.Tests
             }
         }
 
+        private static IEnumerable ImmortalisTestCases
+        {
+            get
+            {
+                yield return new TestCaseData("ARM Immortalis-G720 MP12").Returns((GpuMinorSeries.ImmortalisG, 720));
+                yield return new TestCaseData("ARM Immortalis-G720 MP7").Returns((GpuMinorSeries.ImmortalisG, 720));
+                yield return new TestCaseData("ARM Immortalis-G925 MP16").Returns((GpuMinorSeries.ImmortalisG, 925));
+                yield return new TestCaseData("ARM Immortalis-G925 MP12").Returns((GpuMinorSeries.ImmortalisG, 925));
+                yield return new TestCaseData("ARM Immortalis-G2147483647").Returns((GpuMinorSeries.ImmortalisG, int.MaxValue));
+                // Test integer overflow: 2147483648 is int.MaxValue + 1
+                yield return new TestCaseData("ARM Immortalis-G2147483648").Returns((GpuMinorSeries.Unknown, 0));
+            }
+        }
+
         [TestCaseSource(typeof(HardwareInfoAndroidTests), nameof(AdrenoTestCases))]
         public (GpuMinorSeries, int) ParseAdrenoGpuSeries_Tests(string gpuName)
         {
@@ -103,6 +117,12 @@ namespace MobileSupport.QualityTuner.Editor.Tests
         public (GpuMinorSeries, int) ParseMaleoonGpuSeries_Tests(string gpuName)
         {
             return HardwareInfoAndroid.ParseMaleoonGpuSeries(gpuName);
+        }
+
+        [TestCaseSource(typeof(HardwareInfoAndroidTests), nameof(ImmortalisTestCases))]
+        public (GpuMinorSeries, int) ParseImmortalisGpuSeries_Tests(string gpuName)
+        {
+            return HardwareInfoAndroid.ParseImmortalisGpuSeries(gpuName);
         }
     }
 }

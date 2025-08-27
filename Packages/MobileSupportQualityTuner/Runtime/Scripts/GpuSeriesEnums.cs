@@ -48,7 +48,12 @@ namespace MobileSupport.QualityTuner
         /// <summary>
         ///     Huawei Maleoon series
         /// </summary>
-        Maleoon
+        Maleoon,
+
+        /// <summary>
+        ///     ARM Immortalis series
+        /// </summary>
+        Immortalis
     }
 
     public enum GpuMinorSeries
@@ -151,7 +156,12 @@ namespace MobileSupport.QualityTuner
         /// <summary>
         ///     Huawei Maleoon series
         /// </summary>
-        Maleoon = 61
+        Maleoon = 61,
+
+        /// <summary>
+        ///     ARM Immortalis-G series
+        /// </summary>
+        ImmortalisG = 71
     }
 
     [Serializable]
@@ -181,6 +191,10 @@ namespace MobileSupport.QualityTuner
         public static readonly GpuSeriesEnumeration Mali = new(GpuMajorSeries.Mali, GpuMinorSeries.Mali);
         public static readonly GpuSeriesEnumeration MaliT = new(GpuMajorSeries.Mali, GpuMinorSeries.MaliT);
         public static readonly GpuSeriesEnumeration MaliG = new(GpuMajorSeries.Mali, GpuMinorSeries.MaliG);
+
+        // ARM Immortalis
+        public static readonly GpuSeriesEnumeration ImmortalisAny = new(GpuMajorSeries.Immortalis, GpuMinorSeries.Unknown);
+        public static readonly GpuSeriesEnumeration ImmortalisG = new(GpuMajorSeries.Immortalis, GpuMinorSeries.ImmortalisG);
 
         // PowerVR
         public static readonly GpuSeriesEnumeration PowerVRAny = new(GpuMajorSeries.PowerVR, GpuMinorSeries.Unknown);

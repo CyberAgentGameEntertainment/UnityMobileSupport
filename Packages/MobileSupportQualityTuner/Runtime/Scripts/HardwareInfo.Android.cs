@@ -27,6 +27,7 @@ namespace MobileSupport.QualityTuner
             {
                 GpuMajorSeries.Adreno => ParseAdrenoGpuSeries(gpuName),
                 GpuMajorSeries.Mali => ParseMaliGpuSeries(gpuName),
+                GpuMajorSeries.Immortalis => ParseImmortalisGpuSeries(gpuName),
                 GpuMajorSeries.PowerVR => ParsePowerVRGpuSeries(gpuName),
                 GpuMajorSeries.Xclipse => ParseXclipseGpuSeries(gpuName),
                 GpuMajorSeries.Maleoon => ParseMaleoonGpuSeries(gpuName),
@@ -42,6 +43,7 @@ namespace MobileSupport.QualityTuner
             {
                 { } when gpuName.StartsWith("Adreno", StringComparison.Ordinal) => GpuMajorSeries.Adreno,
                 { } when gpuName.StartsWith("Mali", StringComparison.Ordinal) => GpuMajorSeries.Mali,
+                { } when gpuName.StartsWith("ARM Immortalis", StringComparison.Ordinal) => GpuMajorSeries.Immortalis,
                 { } when gpuName.StartsWith("PowerVR", StringComparison.Ordinal) => GpuMajorSeries.PowerVR,
                 { } when gpuName.StartsWith("Samsung Xclipse", StringComparison.Ordinal) => GpuMajorSeries.Xclipse,
                 { } when gpuName.StartsWith("Maleoon", StringComparison.Ordinal) => GpuMajorSeries.Maleoon,
@@ -87,6 +89,18 @@ namespace MobileSupport.QualityTuner
                         "" => (GpuMinorSeries.Mali, number),
                         _ => (GpuMinorSeries.Unknown, number)
                     };
+
+            return (GpuMinorSeries.Unknown, 0);
+        }
+
+        public static (GpuMinorSeries, int) ParseImmortalisGpuSeries(string gpuName)
+        {
+            // parse ARM Immortalis GPU series number by regex
+            // ex: ARM Immortalis-G925 MP16
+            var match = Regex.Match(gpuName, @"Immortalis-G(\d+)");
+            if (match.Success)
+                if (int.TryParse(match.Groups[1].Value, out var number))
+                    return (GpuMinorSeries.ImmortalisG, number);
 
             return (GpuMinorSeries.Unknown, 0);
         }

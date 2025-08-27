@@ -72,6 +72,62 @@ MonoBehaviour:
           gpuSeriesNumberMin: 630
           gpuSeriesNumberMax: 999
           qualityLevel: 2
+        - gpuSeries:
+            value: 31
+            gpuMajorSeries: 3
+            gpuMinorSeries: 31
+          gpuSeriesNumberMin: 0
+          gpuSeriesNumberMax: 699
+          qualityLevel: 0
+        - gpuSeries:
+            value: 32
+            gpuMajorSeries: 3
+            gpuMinorSeries: 32
+          gpuSeriesNumberMin: 0
+          gpuSeriesNumberMax: 860
+          qualityLevel: 0
+        - gpuSeries:
+            value: 32
+            gpuMajorSeries: 3
+            gpuMinorSeries: 32
+          gpuSeriesNumberMin: 861
+          gpuSeriesNumberMax: 999
+          qualityLevel: 1
+        - gpuSeries:
+            value: 33
+            gpuMajorSeries: 3
+            gpuMinorSeries: 33
+          gpuSeriesNumberMin: 72
+          gpuSeriesNumberMax: 76
+          qualityLevel: 0
+        - gpuSeries:
+            value: 33
+            gpuMajorSeries: 3
+            gpuMinorSeries: 33
+          gpuSeriesNumberMin: 57
+          gpuSeriesNumberMax: 68
+          qualityLevel: 2
+        - gpuSeries:
+            value: 71
+            gpuMajorSeries: 7
+            gpuMinorSeries: 71
+          gpuSeriesNumberMin: 720
+          gpuSeriesNumberMax: 729
+          qualityLevel: 1
+        - gpuSeries:
+            value: 71
+            gpuMajorSeries: 7
+            gpuMinorSeries: 71
+          gpuSeriesNumberMin: 925
+          gpuSeriesNumberMax: 929
+          qualityLevel: 2
+        - gpuSeries:
+            value: 70
+            gpuMajorSeries: 7
+            gpuMinorSeries: 0
+          gpuSeriesNumberMin: 0
+          gpuSeriesNumberMax: 999
+          qualityLevel: 2
     - rid: 7788121862593052689
       type: {class: SampleSystemMemoryRuleMatcher, ns: , asm: Assembly-CSharp}
       data:
