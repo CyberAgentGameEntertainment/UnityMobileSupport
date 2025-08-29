@@ -120,6 +120,19 @@ namespace MobileSupport.QualityTuner
                         _ => (GpuMinorSeries.Unknown, number)
                     };
 
+            // parse PowerVR B-Series BXM series
+            // ex: PowerVR B-Series BXM-8-256, PowerVR B-Series BXM-4-64
+            match = Regex.Match(gpuName, @"BXM-(\d+)-(\d+)");
+            if (match.Success)
+                if (int.TryParse(match.Groups[1].Value, out var bxmNumber))
+                    return (GpuMinorSeries.PowerVRBXM, bxmNumber);
+
+            // parse PowerVR D-Series DXT series
+            // ex: PowerVR D-Series DXT-24-1024
+            match = Regex.Match(gpuName, @"DXT-(\d+)-(\d+)");
+            if (match.Success)
+                if (int.TryParse(match.Groups[1].Value, out var dxtNumber))
+                    return (GpuMinorSeries.PowerVRDXT, dxtNumber);
 
             return (GpuMinorSeries.Unknown, 0);
         }

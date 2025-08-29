@@ -1,5 +1,12 @@
 # Release notes
 
+## v1.2.0 - 2024/08/29
+
+- New Features :rocket:
+  - Support PowerVR DXT and BXM GPU series
+    - DXT series: ex: PowerVR D-Series DXT-48-1536
+    - BXM series: ex: PowerVR B-Series BXM-8-256
+
 ## v1.1.0 - 2024/08/27
 
 - New Features :rocket:
