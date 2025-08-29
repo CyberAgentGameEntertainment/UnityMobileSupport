@@ -149,6 +149,16 @@ namespace MobileSupport.QualityTuner
         PowerVR9XM = 43,
 
         /// <summary>
+        ///     PowerVR BXM series
+        /// </summary>
+        PowerVRBXM = 44,
+
+        /// <summary>
+        ///     PowerVR DXT series
+        /// </summary>
+        PowerVRDXT = 45,
+
+        /// <summary>
         ///     Samsung Xclipse series
         /// </summary>
         Xclipse = 51,
@@ -201,6 +211,8 @@ namespace MobileSupport.QualityTuner
         public static readonly GpuSeriesEnumeration PowerVR6XT = new(GpuMajorSeries.PowerVR, GpuMinorSeries.PowerVR6XT);
         public static readonly GpuSeriesEnumeration PowerVR8XE = new(GpuMajorSeries.PowerVR, GpuMinorSeries.PowerVR8XE);
         public static readonly GpuSeriesEnumeration PowerVR9XM = new(GpuMajorSeries.PowerVR, GpuMinorSeries.PowerVR9XM);
+        public static readonly GpuSeriesEnumeration PowerVRDXT = new(GpuMajorSeries.PowerVR, GpuMinorSeries.PowerVRDXT);
+        public static readonly GpuSeriesEnumeration PowerVRBXM = new(GpuMajorSeries.PowerVR, GpuMinorSeries.PowerVRBXM);
 
         // Samsung
         public static readonly GpuSeriesEnumeration Xclipse = new(GpuMajorSeries.Xclipse, GpuMinorSeries.Xclipse);
