@@ -49,7 +49,10 @@ namespace MobileSupport.QualityTuner.Editor.Tests
                 yield return new TestCaseData("PowerVR Rogue GE8320").Returns((GpuMinorSeries.PowerVR8XE, 8320));
                 yield return new TestCaseData("PowerVR Rogue GE8322").Returns((GpuMinorSeries.PowerVR8XE, 8322));
                 yield return new TestCaseData("PowerVR Rogue GM9446").Returns((GpuMinorSeries.PowerVR9XM, 9446));
-                yield return new TestCaseData("PowerVR B-Series BXM-8-256").Returns((GpuMinorSeries.Unknown, 0));
+                yield return new TestCaseData("PowerVR B-Series BXM-4-128").Returns((GpuMinorSeries.PowerVRBXM, 4));
+                yield return new TestCaseData("PowerVR B-Series BXM-8-256").Returns((GpuMinorSeries.PowerVRBXM, 8));
+                yield return new TestCaseData("PowerVR B-Series BXM-16-512").Returns((GpuMinorSeries.PowerVRBXM, 16));
+                yield return new TestCaseData("PowerVR D-Series DXT-48-1536").Returns((GpuMinorSeries.PowerVRDXT, 48));
                 yield return new TestCaseData("PowerVR Rogue GM2147483648").Returns((GpuMinorSeries.Unknown, 0));
             }
         }
