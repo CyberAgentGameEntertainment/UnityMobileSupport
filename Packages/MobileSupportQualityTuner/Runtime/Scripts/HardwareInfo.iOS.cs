@@ -24,12 +24,17 @@ namespace MobileSupport.QualityTuner
         public static GpuMinorSeries ParseGpuMinorSeries(string gpuName)
         {
             // parse GPU series by StartsWith
-            return gpuName switch
+            if (gpuName.StartsWith("Apple A", StringComparison.Ordinal))
             {
-                { } when gpuName.StartsWith("Apple A", StringComparison.Ordinal) => GpuMinorSeries.AppleA,
-                { } when gpuName.StartsWith("Apple M", StringComparison.Ordinal) => GpuMinorSeries.AppleM,
-                _ => GpuMinorSeries.Unknown
-            };
+                return gpuName.Contains("Pro") ? GpuMinorSeries.AppleAPro : GpuMinorSeries.AppleA;
+            }
+
+            if (gpuName.StartsWith("Apple M", StringComparison.Ordinal))
+            {
+                return GpuMinorSeries.AppleM;
+            }
+
+            return GpuMinorSeries.Unknown;
         }
 
         public static int ParseAppleGpuSeriesNumber(string gpuName)

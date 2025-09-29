@@ -74,6 +74,11 @@ namespace MobileSupport.QualityTuner
         AppleM = 12,
 
         /// <summary>
+        ///     Apple A-series Pro
+        /// </summary>
+        AppleAPro = 13,
+
+        /// <summary>
         ///     Qualcomm Adreno 100 series
         /// </summary>
         Adreno100 = 21,
@@ -183,6 +188,7 @@ namespace MobileSupport.QualityTuner
         public static readonly GpuSeriesEnumeration AppleAny = new(GpuMajorSeries.Apple, GpuMinorSeries.Unknown);
         public static readonly GpuSeriesEnumeration AppleA = new(GpuMajorSeries.Apple, GpuMinorSeries.AppleA);
         public static readonly GpuSeriesEnumeration AppleM = new(GpuMajorSeries.Apple, GpuMinorSeries.AppleM);
+        public static readonly GpuSeriesEnumeration AppleAPro = new(GpuMajorSeries.Apple, GpuMinorSeries.AppleAPro);
 
         // Adreno
         public static readonly GpuSeriesEnumeration AdrenoAny = new(GpuMajorSeries.Adreno, GpuMinorSeries.Unknown);
