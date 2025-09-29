@@ -1,5 +1,12 @@
 # Release notes
 
+## v1.3.0 - 2024/09/29
+
+- New Features :rocket:
+  - Support Apple A-series Pro GPU detection
+    - Added new GpuMinorSeries.AppleAPro to distinguish Pro GPUs from Non-Pro
+    - ex: Apple A17 Pro GPU, Apple A15 Pro GPU
+
 ## v1.2.0 - 2024/08/29
 
 - New Features :rocket:
