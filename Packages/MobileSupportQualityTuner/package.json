@@ -1,7 +1,7 @@
 {
   "name": "jp.co.cyberagent.unity-mobile-support-quality-tuner",
   "displayName": "Mobile Support - Quality Tuner",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "unity": "2021.3",
   "description": "Tools to support deciding quality level by hardware spec of mobile devices.",
   "keywords": [
