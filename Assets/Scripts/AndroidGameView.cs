@@ -4,6 +4,7 @@
 
 using MobileSupport;
 using UnityEngine;
+using UnityEngine.Android;
 
 public class AndroidGameView : MonoBehaviour
 {

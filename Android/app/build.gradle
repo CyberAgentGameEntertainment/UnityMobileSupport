@@ -8,7 +8,7 @@ android {
     defaultConfig {
         applicationId "jp.co.cyberagent.unitysupport.app"
         minSdk 21
-        targetSdk 31
+        targetSdk 36
         versionCode 1
         versionName "1.0"
 
@@ -25,6 +25,7 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    namespace 'jp.co.cyberagent.unitysupport.app'
 }
 
 dependencies {
