@@ -1,5 +1,10 @@
 # Release notes
 
+## v2.0.1 - 2025/10/14
+
+- Bug Fixes :bug:
+  - Android: updated `.androidlib` to make it compatible with Unity 6
+
 ## v2.0.0 - 2024/07/17
 
 - New Features :rocket:
