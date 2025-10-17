@@ -20,4 +20,4 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
--keep class jp.co.cyberagent.unitysupport.* { public *; }
+-keep class jp.co.cyberagent.unitysupport.thermal.* { public *; }
