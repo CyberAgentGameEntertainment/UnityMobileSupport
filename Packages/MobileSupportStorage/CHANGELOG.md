@@ -4,6 +4,7 @@
 
 - Bug Fixes :bug:
   - Android: downgraded library's `compileSdkVersion` to 35 to reduce unnecessary SDK upgrades
+  - Android: fixed `ClassNotFoundException` when the app is minified
 
 ## v1.0.1 - 2025/10/14
 
