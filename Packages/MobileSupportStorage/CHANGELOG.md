@@ -1,5 +1,10 @@
 # Release notes
 
+## v1.0.2 - 2025/10/17
+
+- Bug Fixes :bug:
+  - Android: downgraded library's `compileSdkVersion` to 35 to reduce unnecessary SDK upgrades
+
 ## v1.0.1 - 2025/10/14
 
 - Bug Fixes :bug:
