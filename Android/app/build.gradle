@@ -3,12 +3,12 @@ plugins {
 }
 
 android {
-    compileSdkVersion 36
+    compileSdkVersion 35
 
     defaultConfig {
         applicationId "jp.co.cyberagent.unitysupport.app"
         minSdk 21
-        targetSdk 36
+        targetSdk 35
         versionCode 1
         versionName "1.0"
 
