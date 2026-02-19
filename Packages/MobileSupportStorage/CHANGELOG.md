@@ -1,5 +1,10 @@
 # Release notes
 
+## v1.1.0 - 2026/02/19
+
+- New Features :rocket:
+  - Windows: added support for Windows Standalone platform
+
 ## v1.0.2 - 2025/10/17
 
 - Bug Fixes :bug:
